@@ -85,6 +85,16 @@ function App() {
                 <Badge variant="secondary" className="bg-purple-600/20 text-purple-300">AI安全性</Badge>
                 <Badge variant="secondary" className="bg-purple-600/20 text-purple-300">リスク低減</Badge>
               </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-900/40 border border-purple-500/20 rounded-xl p-6 text-gray-300">
+                <div>
+                  <p className="text-sm text-purple-300">設立</p>
+                  <p className="text-lg font-semibold">2025年7月</p>
+                </div>
+                <div>
+                  <p className="text-sm text-purple-300">資本金</p>
+                  <p className="text-lg font-semibold">50万円</p>
+                </div>
+              </div>
             </div>
             <div className="relative h-96">
               <EnhancedGiantStar />
