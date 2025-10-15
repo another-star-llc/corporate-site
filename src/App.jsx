@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
 import { Separator } from '@/components/ui/separator.jsx'
-import { Star, Shield, Brain, Zap, Users, Target } from 'lucide-react'
+import { Star, Shield, Brain, Users, Target, Globe } from 'lucide-react'
 import ParticleBackground from './components/ParticleBackground'
 import FloatingGeometry from './components/FloatingGeometry'
 import ShootingStars from './components/ShootingStars'
@@ -182,19 +182,24 @@ function App() {
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="bg-slate-900/50 border-purple-500/20 text-white">
               <CardHeader>
-                <Zap className="h-12 w-12 text-purple-400 mb-4" />
-                <CardTitle>AI Safety Monitor</CardTitle>
-                <CardDescription className="text-gray-400">リアルタイム監視システム</CardDescription>
+                <Globe className="h-12 w-12 text-purple-400 mb-4" />
+                <CardTitle>Browser Agent Detector</CardTitle>
+                <CardDescription className="text-gray-400">AI Agentによるブラウザ操作検知システム</CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-gray-300 mb-4">
-                  生成AIシステムのリアルタイム監視と異常検知を行うプラットフォーム。
+                  会員制サイトを対象に「会員のペルソナからの逸脱度」「操作ログやブラウザ属性」による多段検知システム
                 </p>
-                <ul className="text-sm text-gray-400 space-y-1">
-                  <li>• リアルタイム異常検知</li>
-                  <li>• コンテンツ品質評価</li>
-                  <li>• リスクスコアリング</li>
-                  <li>• アラート機能</li>
+                  <ul className="text-sm text-gray-400 space-y-1">
+                    <li>
+                      • 対象例：
+                      <div className="pl-6">
+                        <div>Comet</div>
+                        <div>Playwright MCP</div>
+                        <div>Gemini Computer Use</div>
+                      </div>
+                    </li>
+                    <li>• API提供サービス</li>
                 </ul>
               </CardContent>
             </Card>
