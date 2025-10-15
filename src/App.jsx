@@ -159,15 +159,15 @@ function App() {
                   <img src={member2} alt="佐藤美咲" className="w-full h-full object-cover" />
                 </div>
                 <CardTitle className="text-xl">齊藤 慎之介</CardTitle>
-                <CardDescription className="text-purple-300">業務執行社員 / </CardDescription>
+                <CardDescription className="text-purple-300">業務執行社員 / ソフトウェア・AIエンジニア</CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-gray-300 mb-4">
-                  千葉大学大学院情報学研究科修了。生成AIの安全性に関する研究で博士号を取得。
+                千葉大学大学院 融合理工学府を修了後、大手SIerにて全社の技術戦略や先端技術を推進。現在はデータ基盤構築やAIを活用した商用アプリ開発に従事。
                 </p>
                 <div className="space-y-2">
-                  <p className="text-sm text-gray-400"><strong>専門分野:</strong> 生成AI理論、リスク評価手法</p>
-                  <p className="text-sm text-gray-400"><strong>経歴:</strong> 研究機関でのポストドクター、国際会議での論文発表多数</p>
+                  <p className="text-sm text-gray-400"><strong>専門分野:</strong> セキュリティ、AI、データ基盤、Webアプリ開発</p>
+                  <p className="text-sm text-gray-400"><strong>経歴:</strong> AI・データ活用の戦略立案から実装まで一貫して推進</p>
                 </div>
               </CardContent>
             </Card>
