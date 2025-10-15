@@ -225,19 +225,19 @@ function App() {
 
             <Card className="bg-slate-900/50 border-purple-500/20 text-white">
               <CardHeader>
-                <Brain className="h-12 w-12 text-purple-400 mb-4" />
-                <CardTitle>Secure AI Pipeline</CardTitle>
-                <CardDescription className="text-gray-400">セキュア開発パイプライン</CardDescription>
+                <Target className="h-12 w-12 text-purple-400 mb-4" />
+                <CardTitle>AI Bias Watcher</CardTitle>
+                <CardDescription className="text-gray-400">AI検索サービスの企業バイアス検知</CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-gray-300 mb-4">
-                  セキュリティを考慮した統合開発パイプライン。
+                  PerplexityなどのAI検索サービスに企業評価クエリを定期送信し、回答の偏りを時系列で可視化する監視ダッシュボード。
                 </p>
                 <ul className="text-sm text-gray-400 space-y-1">
-                  <li>• セキュアな学習環境</li>
-                  <li>• 自動セキュリティテスト</li>
-                  <li>• 脆弱性スキャン</li>
-                  <li>• デプロイメント最適化</li>
+                  <li>• 定期クエリと自動収集</li>
+                  <li>• 指標別バイアストラッキング</li>
+                  <li>• 時系列ダッシュボード解析</li>
+                  <li>• SNS投稿＆レポート生成</li>
                 </ul>
               </CardContent>
             </Card>
@@ -255,7 +255,7 @@ function App() {
               <div className="space-y-2">
                 <Badge variant="outline" className="border-purple-500/50 text-purple-300">React</Badge>
                 <Badge variant="outline" className="border-purple-500/50 text-purple-300">TypeScript</Badge>
-                <Badge variant="outline" className="border-purple-500/50 text-purple-300">Three.js</Badge>
+                <Badge variant="outline" className="border-purple-500/50 text-purple-300">Next.js</Badge>
               </div>
             </div>
             <div className="text-center">
@@ -269,8 +269,8 @@ function App() {
             <div className="text-center">
               <h3 className="text-xl font-semibold mb-4 text-purple-300">AI/ML</h3>
               <div className="space-y-2">
+                <Badge variant="outline" className="border-purple-500/50 text-purple-300">GoogleADK</Badge>
                 <Badge variant="outline" className="border-purple-500/50 text-purple-300">PyTorch</Badge>
-                <Badge variant="outline" className="border-purple-500/50 text-purple-300">Transformers</Badge>
                 <Badge variant="outline" className="border-purple-500/50 text-purple-300">scikit-learn</Badge>
               </div>
             </div>
@@ -278,8 +278,8 @@ function App() {
               <h3 className="text-xl font-semibold mb-4 text-purple-300">インフラ</h3>
               <div className="space-y-2">
                 <Badge variant="outline" className="border-purple-500/50 text-purple-300">AWS</Badge>
+                <Badge variant="outline" className="border-purple-500/50 text-purple-300">Snowflake</Badge>
                 <Badge variant="outline" className="border-purple-500/50 text-purple-300">Docker</Badge>
-                <Badge variant="outline" className="border-purple-500/50 text-purple-300">Kubernetes</Badge>
               </div>
             </div>
           </div>
@@ -294,7 +294,7 @@ function App() {
             生成AIの安全性確保に関するご相談や、技術的なお問い合わせはお気軽にご連絡ください。
           </p>
           <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 text-lg">
-            お問い合わせはこちら
+            お問い合わせは mr.groovy.japan [@] gmail.com まで
           </Button>
         </div>
       </section>
