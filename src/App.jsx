@@ -192,7 +192,7 @@ function App() {
                 </p>
                   <ul className="text-sm text-gray-400 space-y-1">
                     <li>
-                      • 対象例：
+                      • 検知対象例：
                       <div className="pl-6">
                         <div>Comet</div>
                         <div>Playwright MCP</div>
@@ -207,18 +207,18 @@ function App() {
             <Card className="bg-slate-900/50 border-purple-500/20 text-white">
               <CardHeader>
                 <Shield className="h-12 w-12 text-purple-400 mb-4" />
-                <CardTitle>Risk Assessment Framework</CardTitle>
-                <CardDescription className="text-gray-400">包括的リスク評価</CardDescription>
+                <CardTitle>A2A Mediation Agent</CardTitle>
+                <CardDescription className="text-gray-400">ユーザーと企業エージェントの仲介</CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-gray-300 mb-4">
-                  生成AIシステムの包括的なリスク評価を行うフレームワーク。
+                  ユーザー側エージェントのリクエストを解釈し、ストアに登録された企業エージェントに最適にルーティングする仲介プラットフォーム。
                 </p>
                 <ul className="text-sm text-gray-400 space-y-1">
-                  <li>• 多次元リスク評価</li>
-                  <li>• ベンチマークテスト</li>
-                  <li>• 改善提案生成</li>
-                  <li>• レポート自動作成</li>
+                  <li>• A2Aのプロンプトインジェクション検知</li>
+                  <li>• ニーズ分析と最適マッチング</li>
+                  <li>• 裁判員制度を模したAIによるリスク評価</li>
+                  <li>• エージェントストア側へのフィードバック</li>
                 </ul>
               </CardContent>
             </Card>
