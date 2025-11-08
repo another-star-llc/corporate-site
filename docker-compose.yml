@@ -12,6 +12,8 @@ services:
       - /app/node_modules
     environment:
       - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - CHOKIDAR_INTERVAL=1000
     stdin_open: true
     tty: true
     # ファイル変更の監視を有効にする
@@ -26,4 +28,3 @@ services:
     command: pnpm run build
     profiles:
       - build
-

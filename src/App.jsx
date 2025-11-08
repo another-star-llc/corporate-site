@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
-import { Separator } from '@/components/ui/separator.jsx'
 import { Star, Shield, Brain, Users, Target, Globe } from 'lucide-react'
 import ParticleBackground from './components/ParticleBackground'
 import FloatingGeometry from './components/FloatingGeometry'
@@ -10,10 +9,65 @@ import ShootingStars from './components/ShootingStars'
 import EnhancedGiantStar from './components/EnhancedGiantStar'
 import member1 from './assets/naoya_yasuda.png'
 import member2 from './assets/saito_shinnnosuke.jpeg'
+import hiromatsuImg from './assets/hiromatsu.png'
+import hasegawaImg from './assets/Hasegawa.png'
+import satoKojiImg from './assets/sato_koji.png'
+import kannoImg from './assets/Kanno.png'
+import teamPlaceholder from './assets/team_placeholder.svg'
 import './App.css'
 
 function App() {
   const [scrollY, setScrollY] = useState(0)
+  const teamMembers = [
+    {
+      name: '広松 太一',
+      role: '要件定義・設計・開発',
+      focus: 'AI安全アーキテクト',
+      responsibilities: [
+        'SCSKのR&D部門で住友商事グループのDXプロジェクトに従事',
+        '要求分析',
+        'システム設計',
+        'リード開発'
+      ],
+      image: hiromatsuImg
+    },
+    {
+      name: '長谷川 大樹',
+      role: '要件定義・設計・開発',
+      focus: 'ソリューションエンジニア',
+      responsibilities: [
+        'アクセンチュアでブリッジエンジニア兼クラウドコンサルタントとして従事',
+        '技術検証',
+        'セキュリティ設計',
+        'PoC推進'
+      ],
+      image: hasegawaImg
+    },
+    {
+      name: '佐藤 幸治',
+      role: '要件定義・資料作成',
+      focus: '制度・ドキュメンテーション',
+      responsibilities: [
+        '複数の外資系コンサルを経て公正取引委員会のデジタルアナリストを務める',
+        'ヒアリング整理',
+        'ドキュメント作成',
+        '行政対応支援'
+      ],
+      image: satoKojiImg
+    },
+    {
+      name: '菅野 哲',
+      role: 'アドバイザー',
+      focus: 'リスク評価・戦略',
+      responsibilities: [
+        '公正取引委員会デジタルアナリスト兼GMOコネクトCTO',
+        '第三者レビュー',
+        '技術監修',
+        '意思決定支援'
+      ],
+      image: kannoImg
+    }
+  ]
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY)
@@ -35,6 +89,7 @@ function App() {
           <div className="hidden md:flex space-x-8">
             <a href="#about" className="hover:text-purple-400 transition-colors">会社概要</a>
             <a href="#members" className="hover:text-purple-400 transition-colors">メンバー</a>
+            <a href="#team" className="hover:text-purple-400 transition-colors">開発チーム</a>
             <a href="#systems" className="hover:text-purple-400 transition-colors">システム</a>
             <a href="#contact" className="hover:text-purple-400 transition-colors">お問い合わせ</a>
           </div>
@@ -181,6 +236,44 @@ function App() {
                 </div>
               </CardContent>
             </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Development Team Section */}
+      <section id="team" className="py-20 bg-slate-900/40">
+        <div className="container mx-auto px-6">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <h2 className="text-4xl font-bold mb-4 text-purple-400">開発チーム</h2>
+            <p className="text-lg text-gray-300">
+              GENIAC-PRIZEに挑むAnother Starの開発体制は、4名の専門メンバーが役割を分担しながら密に連携することで、要件定義から実装、評価までを短いスプリントで回しています。
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {teamMembers.map((member) => (
+              <Card key={member.name} className="bg-slate-800/60 border border-purple-500/20 text-white hover:transform hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
+                <CardHeader className="text-center">
+                  <div className="w-28 h-28 mx-auto mb-4 rounded-full overflow-hidden border-4 border-purple-400">
+                    <img src={member.image} alt={`${member.name}の写真`} className="w-full h-full object-cover" />
+                  </div>
+                  <CardTitle className="text-lg">{member.name}</CardTitle>
+                  <CardDescription className="text-purple-200">{member.role}</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <Badge variant="secondary" className="bg-purple-600/20 text-purple-200">
+                    {member.focus}
+                  </Badge>
+                  <ul className="text-sm text-gray-300 space-y-1">
+                    {member.responsibilities.map((item) => (
+                      <li key={item} className="flex items-center space-x-2">
+                        <Users className="h-3.5 w-3.5 text-purple-300" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
