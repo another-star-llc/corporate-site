@@ -246,7 +246,7 @@ function App() {
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-4xl font-bold mb-4 text-purple-400">開発チーム</h2>
             <p className="text-lg text-gray-300">
-              GENIAC-PRIZEに挑むAnother Starの開発体制は、4名の専門メンバーが役割を分担しながら密に連携することで、要件定義から実装、評価までを短いスプリントで回しています。
+              GENIAC-PRIZEに挑むAnother Starの開発体制は、社員2名と4名の専門メンバーが役割を分担しながら密に連携することで、要件定義から実装、評価までを短いスプリントで回しています。
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
