@@ -288,7 +288,7 @@ function App() {
               <CardHeader>
                 <Globe className="h-12 w-12 text-purple-400 mb-4" />
                 <CardTitle>Browser Agent Detector</CardTitle>
-                <CardDescription className="text-gray-400">AI Agentによるブラウザ操作検知システム</CardDescription>
+                <CardDescription className="text-gray-400">機械学習モデルによるブラウザ操作検知システム</CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-gray-300 mb-4">
@@ -298,7 +298,7 @@ function App() {
                     <li>
                       • 検知対象例：
                       <div className="pl-6">
-                        <div>Comet</div>
+                        <div>Comet / ChatGPT Atlas</div>
                         <div>Playwright MCP</div>
                         <div>Gemini Computer Use</div>
                       </div>
