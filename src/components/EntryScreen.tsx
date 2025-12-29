@@ -342,13 +342,23 @@ export function EntryScreen({ onEnter }: EntryScreenProps) {
           <motion.h1
             className="text-7xl mb-2 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent"
             style={{
-              textShadow: '0 0 20px rgba(0,200,255,0.5)',
+              textShadow:
+                '0 4px 20px rgba(0,0,0,0.9), 0 0 18px rgba(0,200,255,0.6), 0 0 38px rgba(0,200,255,0.85)',
+              filter:
+                'drop-shadow(0 4px 12px rgba(0,0,0,0.55)) drop-shadow(0 2px 6px rgba(0,0,0,0.4))',
+              WebkitTextStroke: '0.75px #0a1f4d',
+              paintOrder: 'stroke fill',
             }}
             animate={{
               textShadow: [
-                '0 0 20px rgba(0,200,255,0.5)',
-                '0 0 40px rgba(0,200,255,0.8)',
-                '0 0 20px rgba(0,200,255,0.5)',
+                '0 4px 20px rgba(0,0,0,0.9), 0 0 18px rgba(0,200,255,0.6), 0 0 38px rgba(0,200,255,0.85)',
+                '0 4px 22px rgba(0,0,0,0.9), 0 0 28px rgba(0,255,255,0.85), 0 0 60px rgba(0,255,255,1)',
+                '0 4px 20px rgba(0,0,0,0.9), 0 0 18px rgba(0,200,255,0.6), 0 0 38px rgba(0,200,255,0.85)',
+              ],
+              filter: [
+                'drop-shadow(0 4px 12px rgba(0,0,0,0.55)) drop-shadow(0 2px 6px rgba(0,0,0,0.4))',
+                'drop-shadow(0 6px 16px rgba(0,0,0,0.65)) drop-shadow(0 3px 8px rgba(0,0,0,0.5))',
+                'drop-shadow(0 4px 12px rgba(0,0,0,0.55)) drop-shadow(0 2px 6px rgba(0,0,0,0.4))',
               ],
             }}
             transition={{ duration: 2, repeat: Infinity }}
