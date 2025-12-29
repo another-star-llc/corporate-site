@@ -363,9 +363,9 @@ export function EntryScreen({ onEnter }: EntryScreenProps) {
             }}
             transition={{ duration: 2, repeat: Infinity }}
           >
-            Another Star
+            Another Star LLC
           </motion.h1>
-          
+
           <motion.p
             className="text-2xl mb-3 text-cyan-300"
             initial={{ opacity: 0 }}
