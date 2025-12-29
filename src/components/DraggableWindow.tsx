@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, type ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { motion, PanInfo } from 'motion/react';
 import { X, Minimize2, Maximize2, type LucideIcon } from 'lucide-react';
 
@@ -28,9 +28,8 @@ export function DraggableWindow({
   const [position, setPosition] = useState(initialPosition);
   const [isMaximized, setIsMaximized] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
-  const constraintsRef = useRef(null);
 
-  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+  const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     // ウィンドウの概算サイズ（実際のサイズは動的だが、安全マージンを考慮）
     const windowWidth = 550;
     const windowHeight = 500;

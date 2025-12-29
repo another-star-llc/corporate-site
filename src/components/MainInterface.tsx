@@ -1,7 +1,6 @@
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { SpaceBackground } from './SpaceBackground';
-import { CircularMenu } from './CircularMenu';
 import { DraggableWindow } from './DraggableWindow';
 import { HUD } from './HUD';
 import { ControlPanel } from './ControlPanel';
@@ -16,6 +15,14 @@ import {
   type LucideIcon
 } from 'lucide-react';
 
+// メンバー画像のインポート
+import naoyaYasudaImg from '../assets/naoya_yasuda.png';
+import saitoImg from '../assets/saito_shinnnosuke.jpeg';
+import hiromatsuImg from '../assets/hiromatsu.png';
+import hasegawaImg from '../assets/Hasegawa.png';
+import satoKojiImg from '../assets/sato_koji.png';
+import kannoImg from '../assets/Kanno.png';
+
 interface WindowState {
   id: string;
   title: string;
@@ -27,8 +34,7 @@ interface WindowState {
 
 export function MainInterface() {
   const [windows, setWindows] = useState<WindowState[]>([]);
-  const [highestZIndex, setHighestZIndex] = useState(100); // 10 → 100 に変更（最前面）
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [highestZIndex, setHighestZIndex] = useState(100);
   const [hoveredPlanet, setHoveredPlanet] = useState<string | null>(null);
 
   // 惑星ホバーハンドラをメモ化
@@ -55,7 +61,7 @@ export function MainInterface() {
         </div>
         <h2 class="text-3xl bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">会社概要</h2>
       </div>
-      
+
       <div class="space-y-4">
         <p class="text-gray-300 leading-relaxed">
           Another Star合同会社は、生成AIの安全性確保という重要な社会課題に取り組むために設立されたテクノロジー企業です。
@@ -82,10 +88,10 @@ export function MainInterface() {
         </div>
       </div>
     </div>`,
-    
+
     mission: `<div class="space-y-6">
       <h2 class="text-3xl bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent mb-6">私たちのミッション</h2>
-      
+
       <div class="space-y-4">
         <div class="p-5 bg-gradient-to-br from-purple-500/10 to-pink-500/5 border border-purple-500/30 rounded-lg hover:border-purple-500/50 transition-all group">
           <div class="flex items-start gap-4">
@@ -124,16 +130,16 @@ export function MainInterface() {
         </div>
       </div>
     </div>`,
-    
+
     members: `<div class="space-y-6">
       <h2 class="text-3xl bg-gradient-to-r from-blue-400 to-cyan-500 bg-clip-text text-transparent mb-6">メンバー紹介</h2>
-      
+
       <div class="space-y-6">
         <!-- メンバー1 -->
         <div class="p-5 bg-gradient-to-br from-blue-500/10 to-cyan-500/5 border border-blue-500/30 rounded-lg">
           <div class="flex items-start gap-4 mb-4">
-            <div class="w-20 h-20 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-full flex items-center justify-center flex-shrink-0">
-              <span class="text-3xl">👨‍💻</span>
+            <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-blue-400 flex-shrink-0">
+              <img src="${naoyaYasudaImg}" alt="安田 直也" class="w-full h-full object-cover" />
             </div>
             <div>
               <h3 class="text-2xl text-blue-400 mb-1">安田 直也</h3>
@@ -161,18 +167,18 @@ export function MainInterface() {
         <!-- メンバー2 -->
         <div class="p-5 bg-gradient-to-br from-purple-500/10 to-pink-500/5 border border-purple-500/30 rounded-lg">
           <div class="flex items-start gap-4 mb-4">
-            <div class="w-20 h-20 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0">
-              <span class="text-3xl">👨‍💼</span>
+            <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-purple-400 flex-shrink-0">
+              <img src="${saitoImg}" alt="齊藤 慎之介" class="w-full h-full object-cover" />
             </div>
             <div>
-              <h3 class="text-2xl text-purple-400 mb-1">齊藤 慶之介</h3>
+              <h3 class="text-2xl text-purple-400 mb-1">齊藤 慎之介</h3>
               <p class="text-pink-400 text-sm mb-2">業務執行社員 / ソフトウェア・AIエンジニア</p>
             </div>
           </div>
           <div class="space-y-3 text-sm">
             <div class="p-3 bg-purple-500/10 border border-purple-500/20 rounded">
               <div class="text-xs text-gray-500 mb-1">経歴</div>
-              <p class="text-gray-300">千葉大学大学院 融合理工学府を修了後、大手SIerにて全社の技術戦略や先端技術を推進。現在はデータ基盤構築やAIを活用した商用アプリ開発に従事。</p>
+              <p class="text-gray-300">千葉大学大学院 融合理工学部を修了後、大手SIerにて全社の技術戦略や先端技術を推進。現在はデータ基盤構築やAIを活用した商用アプリ開発に従事。</p>
             </div>
             <div class="grid grid-cols-2 gap-3">
               <div class="p-3 bg-purple-500/10 border border-purple-500/20 rounded">
@@ -188,10 +194,10 @@ export function MainInterface() {
         </div>
       </div>
     </div>`,
-    
+
     team: `<div class="space-y-6">
       <h2 class="text-3xl bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent mb-4">開発チーム</h2>
-      
+
       <div class="p-4 bg-green-500/10 border border-green-500/30 rounded-lg mb-6">
         <p class="text-gray-300 text-sm leading-relaxed">
           GENIAC-PRIZEに挑むAnother Starの開発体制は、社員2名と4名の専門メンバーが役割を分担しながら密に連携することで、要件定義から実装、評価までを短いスプリントで回しています。
@@ -200,66 +206,66 @@ export function MainInterface() {
 
       <div class="space-y-4">
         <!-- チームメンバー1 -->
-        <div class="p-4 bg-gradient-to-br from-green-500/10 to-emerald-500/5 border border-green-500/30 rounded-lg hover:border-green-500/50 transition-all">
-          <div class="flex items-start gap-3 mb-3">
-            <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-500 rounded-lg flex items-center justify-center flex-shrink-0">
-              <span class="text-xl">🏗️</span>
+        <div class="p-5 bg-gradient-to-br from-green-500/10 to-emerald-500/5 border border-green-500/30 rounded-lg hover:border-green-500/50 transition-all">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-green-400 flex-shrink-0">
+              <img src="${hiromatsuImg}" alt="広松 太一" class="w-full h-full object-cover" />
             </div>
             <div>
-              <h3 class="text-lg text-green-400">広松 太一</h3>
-              <p class="text-xs text-emerald-400">要件定義・設計・開発 | AI安全アーキテクト</p>
+              <h3 class="text-2xl text-green-400 mb-1">広松 太一</h3>
+              <p class="text-sm text-emerald-400">要件定義・設計・開発 | AI安全アーキテクト</p>
             </div>
           </div>
           <p class="text-gray-400 text-sm">SCSKのR&D部門で住友商事グループのDXプロジェクトに従事 / 要求分析 / システム設計 / リード開発</p>
         </div>
 
         <!-- チームメンバー2 -->
-        <div class="p-4 bg-gradient-to-br from-teal-500/10 to-cyan-500/5 border border-teal-500/30 rounded-lg hover:border-teal-500/50 transition-all">
-          <div class="flex items-start gap-3 mb-3">
-            <div class="w-12 h-12 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-lg flex items-center justify-center flex-shrink-0">
-              <span class="text-xl">⚙️</span>
+        <div class="p-5 bg-gradient-to-br from-teal-500/10 to-cyan-500/5 border border-teal-500/30 rounded-lg hover:border-teal-500/50 transition-all">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-teal-400 flex-shrink-0">
+              <img src="${hasegawaImg}" alt="長谷川 大樹" class="w-full h-full object-cover" />
             </div>
             <div>
-              <h3 class="text-lg text-teal-400">長谷川 大樹</h3>
-              <p class="text-xs text-cyan-400">要件定義・設計・開発 | ソリューションエンジニア</p>
+              <h3 class="text-2xl text-teal-400 mb-1">長谷川 大樹</h3>
+              <p class="text-sm text-cyan-400">要件定義・設計・開発 | ソリューションエンジニア</p>
             </div>
           </div>
           <p class="text-gray-400 text-sm">アクセンチュアでブリッジエンジニア兼クラウドコンサルタントとして従事 / 技術検証 / セキュリティ設計 / PoC推進</p>
         </div>
 
         <!-- チームメンバー3 -->
-        <div class="p-4 bg-gradient-to-br from-blue-500/10 to-indigo-500/5 border border-blue-500/30 rounded-lg hover:border-blue-500/50 transition-all">
-          <div class="flex items-start gap-3 mb-3">
-            <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-lg flex items-center justify-center flex-shrink-0">
-              <span class="text-xl">📋</span>
+        <div class="p-5 bg-gradient-to-br from-blue-500/10 to-indigo-500/5 border border-blue-500/30 rounded-lg hover:border-blue-500/50 transition-all">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-blue-400 flex-shrink-0">
+              <img src="${satoKojiImg}" alt="佐藤 幸治" class="w-full h-full object-cover" />
             </div>
             <div>
-              <h3 class="text-lg text-blue-400">佐藤 幸治</h3>
-              <p class="text-xs text-indigo-400">要件定義・資料作成 | 制度・ドキュメンテーション</p>
+              <h3 class="text-2xl text-blue-400 mb-1">佐藤 幸治</h3>
+              <p class="text-sm text-indigo-400">要件定義・資料作成 | 制度・ドキュメンテーション</p>
             </div>
           </div>
           <p class="text-gray-400 text-sm">複数の外資系コンサルを経て公正取引委員会のデジタルアナリストを務める / ヒアリング整理 / ドキュメント作成 / 行政対応支援</p>
         </div>
 
         <!-- チームメンバー4 -->
-        <div class="p-4 bg-gradient-to-br from-purple-500/10 to-violet-500/5 border border-purple-500/30 rounded-lg hover:border-purple-500/50 transition-all">
-          <div class="flex items-start gap-3 mb-3">
-            <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-violet-500 rounded-lg flex items-center justify-center flex-shrink-0">
-              <span class="text-xl">🎯</span>
+        <div class="p-5 bg-gradient-to-br from-purple-500/10 to-violet-500/5 border border-purple-500/30 rounded-lg hover:border-purple-500/50 transition-all">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-purple-400 flex-shrink-0">
+              <img src="${kannoImg}" alt="菅野 哲" class="w-full h-full object-cover" />
             </div>
             <div>
-              <h3 class="text-lg text-purple-400">菅野 哲</h3>
-              <p class="text-xs text-violet-400">アドバイザー | リスク評価・戦略</p>
+              <h3 class="text-2xl text-purple-400 mb-1">菅野 哲</h3>
+              <p class="text-sm text-violet-400">アドバイザー | リスク評価・戦略</p>
             </div>
           </div>
           <p class="text-gray-400 text-sm">公正取引委員会デジタルアナリスト兼GMOコネクトCTO / 第三者レビュー / 技術監修 / 意思決定支援</p>
         </div>
       </div>
     </div>`,
-    
+
     systems: `<div class="space-y-6">
       <h2 class="text-3xl bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent mb-6">システム・技術紹介</h2>
-      
+
       <div class="space-y-6">
         <!-- システム1 -->
         <div class="p-5 bg-gradient-to-br from-orange-500/10 to-red-500/5 border border-orange-500/30 rounded-lg">
@@ -357,10 +363,10 @@ export function MainInterface() {
         </div>
       </div>
     </div>`,
-    
+
     contact: `<div class="space-y-6">
       <h2 class="text-3xl bg-gradient-to-r from-pink-400 to-purple-500 bg-clip-text text-transparent mb-6">お問い合わせ</h2>
-      
+
       <p class="text-gray-300 leading-relaxed">
         Another Star合同会社へのお問い合わせは、以下の連絡先までお気軽にどうぞ。
       </p>
@@ -419,7 +425,7 @@ export function MainInterface() {
     const windowOffset = windows.length * 15; // 15pxずつずらす
     const centerX = 0; // 画面中央からの相対位置
     const centerY = 0;
-    
+
     // 最大オフセット（あまり広がりすぎないように）
     const maxOffset = 100;
     const clampedOffsetX = Math.min(windowOffset, maxOffset);
@@ -430,9 +436,9 @@ export function MainInterface() {
       title: item.label,
       content: contentMap[itemId],
       icon: item.icon,
-      position: { 
-        x: centerX + clampedOffsetX, 
-        y: centerY + clampedOffsetY 
+      position: {
+        x: centerX + clampedOffsetX,
+        y: centerY + clampedOffsetY
       },
       zIndex: highestZIndex + 1,
     };
@@ -446,14 +452,14 @@ export function MainInterface() {
   };
 
   const bringToFront = (id: string) => {
-    setWindows(windows.map(w => 
+    setWindows(windows.map(w =>
       w.id === id ? { ...w, zIndex: highestZIndex + 1 } : w
     ));
     setHighestZIndex(highestZIndex + 1);
   };
 
   const updateWindowPosition = (id: string, position: { x: number; y: number }) => {
-    setWindows(windows.map(w => 
+    setWindows(windows.map(w =>
       w.id === id ? { ...w, position } : w
     ));
   };
@@ -465,18 +471,18 @@ export function MainInterface() {
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
     >
-      <SpaceBackground 
-        onPlanetClick={openWindow} 
+      <SpaceBackground
+        onPlanetClick={openWindow}
         onPlanetHover={handlePlanetHover}
       />
-      
+
       <HUD />
 
       {/* ホログラム・グリッチエフェクト */}
       <HologramGlitch />
 
       {/* 制御パネル（中央下部） */}
-      <ControlPanel 
+      <ControlPanel
         hoveredPlanet={hoveredPlanet}
         planets={[
           { id: 'about', name: 'ABOUT', color: 0x4a9eff, position: [-15, 5, -30], size: 2.5 },
