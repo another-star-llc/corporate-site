@@ -87,6 +87,11 @@ export function MainInterface() {
           <div class="text-xl text-blue-400">50万円</div>
         </div>
       </div>
+
+      <div class="p-4 bg-slate-500/10 border border-slate-500/30 rounded-lg mt-4">
+        <div class="text-xs text-gray-500 mb-1">所在地</div>
+        <div class="text-base text-gray-300">〒120-0013 東京都足立区弘道一丁目36番5号</div>
+      </div>
     </div>`,
 
     mission: `<div class="space-y-6">
