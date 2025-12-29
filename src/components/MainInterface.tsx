@@ -329,7 +329,7 @@ export function MainInterface() {
                 <p class="text-blue-300 text-xs">裁判員制度を模したAIによるリスク評価</p>
               </div>
               <div class="p-3 bg-indigo-500/10 border border-indigo-500/20 rounded">
-                <p class="text-indigo-300 text-xs">エージ��ントストア側へのフィードバック</p>
+                <p class="text-indigo-300 text-xs">エージェントストア側へのフィードバック</p>
               </div>
             </div>
           </div>
@@ -384,7 +384,7 @@ export function MainInterface() {
             </div>
             <div>
               <div class="text-xs text-gray-500 mb-1">EMAIL</div>
-              <div class="text-pink-400">contact@anotherstar.tech</div>
+              <div class="text-pink-400">準備中</div>
             </div>
           </div>
         </div>
