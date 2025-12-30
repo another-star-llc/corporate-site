@@ -384,7 +384,7 @@ export function MainInterface() {
             </div>
             <div>
               <div class="text-xs text-gray-500 mb-1">EMAIL</div>
-              <div class="text-pink-400">準備中</div>
+              <a href="mailto:contact@another-star.jp" class="text-pink-400 hover:text-pink-300 hover:underline transition-colors">contact@another-star.jp</a>
             </div>
           </div>
         </div>
