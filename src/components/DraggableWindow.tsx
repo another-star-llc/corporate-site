@@ -30,25 +30,26 @@ export function DraggableWindow({
   const [isMinimized, setIsMinimized] = useState(false);
 
   const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    // ウィンドウの概算サイズ（実際のサイズは動的だが、安全マージンを考慮）
-    const windowWidth = 550;
-    const windowHeight = 500;
-    const margin = 50; // 画面端からのマージン
-    
+    // ウィンドウの概算サイズ（レスポンシブ対応）
+    const isMobile = window.innerWidth < 640;
+    const windowWidth = isMobile ? window.innerWidth * 0.9 : 550;
+    const windowHeight = isMobile ? window.innerHeight * 0.7 : 500;
+    const margin = isMobile ? 10 : 50;
+
     // 画面の境界を計算（画面中央が原点なので、±で範囲を計算）
     const maxX = (window.innerWidth / 2) - (windowWidth / 2) - margin;
     const minX = -(window.innerWidth / 2) + (windowWidth / 2) + margin;
     const maxY = (window.innerHeight / 2) - (windowHeight / 2) - margin;
     const minY = -(window.innerHeight / 2) + (windowHeight / 2) + margin;
-    
+
     // 新しい位置を計算
     let newX = position.x + info.offset.x;
     let newY = position.y + info.offset.y;
-    
+
     // 境界内にクランプ
     newX = Math.max(minX, Math.min(maxX, newX));
     newY = Math.max(minY, Math.min(maxY, newY));
-    
+
     const newPosition = { x: newX, y: newY };
     setPosition(newPosition);
     onPositionChange(newPosition);
@@ -89,12 +90,8 @@ export function DraggableWindow({
         boxShadow: '0 0 40px rgba(0,200,255,0.4)',
       }}
     >
-      <div 
-        className="bg-black/40 backdrop-blur-xl border border-cyan-500/40 rounded-lg overflow-hidden shadow-[0_0_30px_rgba(0,200,255,0.3)]"
-        style={{
-          minWidth: isMaximized ? 'auto' : '500px',
-          maxWidth: isMaximized ? '100%' : '600px',
-        }}
+      <div
+        className="bg-black/40 backdrop-blur-xl border border-cyan-500/40 rounded-lg overflow-hidden shadow-[0_0_30px_rgba(0,200,255,0.3)] w-[90vw] sm:w-[500px] md:w-[550px] lg:w-[600px] max-w-[95vw]"
       >
         {/* タイトルバー */}
         <div className="relative bg-gradient-to-r from-cyan-900/50 to-blue-900/50 border-b border-cyan-500/30 px-4 py-3 cursor-move flex items-center justify-between">
@@ -158,10 +155,10 @@ export function DraggableWindow({
         </div>
 
         {/* コンテンツエリア */}
-        <div 
-          className="p-6 text-gray-300 overflow-y-auto relative"
+        <div
+          className="p-4 sm:p-6 text-gray-300 overflow-y-auto relative max-h-[60vh] sm:max-h-[70vh] md:max-h-[400px]"
           style={{
-            maxHeight: isMaximized ? 'calc(85vh - 60px)' : '400px',
+            maxHeight: isMaximized ? 'calc(85vh - 60px)' : undefined,
           }}
         >
           {/* グリッドオーバーレイ */}
