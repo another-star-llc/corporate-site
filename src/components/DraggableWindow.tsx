@@ -12,6 +12,7 @@ interface DraggableWindowProps {
   onClose: () => void;
   onFocus: () => void;
   onPositionChange: (position: { x: number; y: number }) => void;
+  variant?: 'default' | 'chic';
 }
 
 export function DraggableWindow({
@@ -24,7 +25,9 @@ export function DraggableWindow({
   onClose,
   onFocus,
   onPositionChange,
+  variant = 'default',
 }: DraggableWindowProps) {
+  const isChic = variant === 'chic';
   const [position, setPosition] = useState(initialPosition);
   const [isMaximized, setIsMaximized] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
@@ -88,72 +91,100 @@ export function DraggableWindow({
       onMouseDown={onFocus}
       onClick={(e) => e.stopPropagation()}
       onPointerDown={(e) => e.stopPropagation()}
-      whileHover={{ 
-        boxShadow: '0 0 40px rgba(0,200,255,0.4)',
+      whileHover={{
+        boxShadow: isChic ? '0 0 20px rgba(100,100,100,0.2)' : '0 0 40px rgba(0,200,255,0.4)',
       }}
     >
       <div
-        className="bg-black/40 backdrop-blur-xl border border-cyan-500/40 rounded-lg overflow-hidden shadow-[0_0_30px_rgba(0,200,255,0.3)] w-[90vw] sm:w-[500px] md:w-[550px] lg:w-[600px] max-w-[95vw]"
+        className={`backdrop-blur-xl rounded-lg overflow-hidden w-[90vw] sm:w-[500px] md:w-[550px] lg:w-[600px] max-w-[95vw] ${
+          isChic
+            ? 'bg-gray-900/90 border border-gray-700/60 shadow-[0_0_30px_rgba(0,0,0,0.5)]'
+            : 'bg-black/40 border border-cyan-500/40 shadow-[0_0_30px_rgba(0,200,255,0.3)]'
+        }`}
       >
         {/* タイトルバー */}
-        <div className="relative bg-gradient-to-r from-cyan-900/50 to-blue-900/50 border-b border-cyan-500/30 px-4 py-3 cursor-move flex items-center justify-between">
-          {/* ホログラムエフェクト */}
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-transparent"
-            animate={{ x: ['-100%', '100%'] }}
-            transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
-          />
+        <div className={`relative border-b px-4 py-3 cursor-move flex items-center justify-between ${
+          isChic
+            ? 'bg-gray-800/80 border-gray-700/50'
+            : 'bg-gradient-to-r from-cyan-900/50 to-blue-900/50 border-cyan-500/30'
+        }`}>
+          {/* ホログラムエフェクト - シックモードでは非表示 */}
+          {!isChic && (
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-transparent"
+              animate={{ x: ['-100%', '100%'] }}
+              transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
+            />
+          )}
 
           <div className="flex items-center gap-3 relative z-10">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-            >
-              <Icon className="w-5 h-5 text-cyan-400" />
-            </motion.div>
-            <span className="text-cyan-300 font-mono">{title}</span>
+            {isChic ? (
+              <Icon className="w-5 h-5 text-gray-400" />
+            ) : (
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+              >
+                <Icon className="w-5 h-5 text-cyan-400" />
+              </motion.div>
+            )}
+            <span className={isChic ? "text-gray-300 font-light tracking-wide" : "text-cyan-300 font-mono"}>{title}</span>
           </div>
 
           <div className="flex items-center gap-2 relative z-10">
             {/* ミニマイズボタン */}
             <motion.button
-              className="w-8 h-8 bg-yellow-500/20 hover:bg-yellow-500/40 border border-yellow-500/50 rounded flex items-center justify-center transition-colors group"
+              className={`w-8 h-8 rounded flex items-center justify-center transition-colors group ${
+                isChic
+                  ? 'bg-gray-700/50 hover:bg-gray-600/50 border border-gray-600/50'
+                  : 'bg-yellow-500/20 hover:bg-yellow-500/40 border border-yellow-500/50'
+              }`}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={handleMinimize}
             >
-              <Minimize2 className="w-4 h-4 text-yellow-400 group-hover:text-yellow-300" />
+              <Minimize2 className={`w-4 h-4 ${isChic ? 'text-gray-400 group-hover:text-gray-300' : 'text-yellow-400 group-hover:text-yellow-300'}`} />
             </motion.button>
 
             {/* 最大化ボタン */}
             <motion.button
-              className="w-8 h-8 bg-green-500/20 hover:bg-green-500/40 border border-green-500/50 rounded flex items-center justify-center transition-colors group"
+              className={`w-8 h-8 rounded flex items-center justify-center transition-colors group ${
+                isChic
+                  ? 'bg-gray-700/50 hover:bg-gray-600/50 border border-gray-600/50'
+                  : 'bg-green-500/20 hover:bg-green-500/40 border border-green-500/50'
+              }`}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={handleMaximize}
             >
-              <Maximize2 className="w-4 h-4 text-green-400 group-hover:text-green-300" />
+              <Maximize2 className={`w-4 h-4 ${isChic ? 'text-gray-400 group-hover:text-gray-300' : 'text-green-400 group-hover:text-green-300'}`} />
             </motion.button>
 
             {/* 閉じるボタン */}
             <motion.button
-              className="w-8 h-8 bg-red-500/20 hover:bg-red-500/40 border border-red-500/50 rounded flex items-center justify-center transition-colors group"
+              className={`w-8 h-8 rounded flex items-center justify-center transition-colors group ${
+                isChic
+                  ? 'bg-gray-700/50 hover:bg-gray-600/50 border border-gray-600/50'
+                  : 'bg-red-500/20 hover:bg-red-500/40 border border-red-500/50'
+              }`}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={onClose}
             >
-              <X className="w-4 h-4 text-red-400 group-hover:text-red-300" />
+              <X className={`w-4 h-4 ${isChic ? 'text-gray-400 group-hover:text-gray-300' : 'text-red-400 group-hover:text-red-300'}`} />
             </motion.button>
           </div>
 
-          {/* デコレーションライン */}
-          <div className="absolute bottom-0 left-0 right-0 h-px overflow-hidden">
-            <motion.div
-              className="h-full w-1/3 bg-gradient-to-r from-transparent via-cyan-500 to-transparent"
-              animate={{ x: ['-100%', '300%'] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-            />
-          </div>
+          {/* デコレーションライン - シックモードでは非表示 */}
+          {!isChic && (
+            <div className="absolute bottom-0 left-0 right-0 h-px overflow-hidden">
+              <motion.div
+                className="h-full w-1/3 bg-gradient-to-r from-transparent via-cyan-500 to-transparent"
+                animate={{ x: ['-100%', '300%'] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              />
+            </div>
+          )}
         </div>
 
         {/* コンテンツエリア */}
@@ -163,61 +194,79 @@ export function DraggableWindow({
             maxHeight: isMaximized ? 'calc(85vh - 60px)' : undefined,
           }}
         >
-          {/* グリッドオーバーレイ */}
-          <div className="absolute inset-0 opacity-5 pointer-events-none">
-            <svg className="w-full h-full">
-              <defs>
-                <pattern id={`grid-${id}`} width="20" height="20" patternUnits="userSpaceOnUse">
-                  <path d="M 20 0 L 0 0 0 20" fill="none" stroke="cyan" strokeWidth="0.5" />
-                </pattern>
-              </defs>
-              <rect width="100%" height="100%" fill={`url(#grid-${id})`} />
-            </svg>
-          </div>
+          {/* グリッドオーバーレイ - シックモードでは非表示 */}
+          {!isChic && (
+            <div className="absolute inset-0 opacity-5 pointer-events-none">
+              <svg className="w-full h-full">
+                <defs>
+                  <pattern id={`grid-${id}`} width="20" height="20" patternUnits="userSpaceOnUse">
+                    <path d="M 20 0 L 0 0 0 20" fill="none" stroke="cyan" strokeWidth="0.5" />
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill={`url(#grid-${id})`} />
+              </svg>
+            </div>
+          )}
 
           <div className="relative z-10">
             {children}
           </div>
 
-          {/* スキャンラインエフェクト */}
-          <motion.div
-            className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent pointer-events-none"
-            animate={{ y: [0, 400] }}
-            transition={{ 
-              duration: 3, 
-              repeat: Infinity, 
-              ease: "linear",
-              repeatDelay: 1,
-            }}
-            style={{ top: 0 }}
-          />
+          {/* スキャンラインエフェクト - シックモードでは非表示 */}
+          {!isChic && (
+            <motion.div
+              className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent pointer-events-none"
+              animate={{ y: [0, 400] }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "linear",
+                repeatDelay: 1,
+              }}
+              style={{ top: 0 }}
+            />
+          )}
         </div>
 
         {/* フッター */}
-        <div className="bg-gradient-to-r from-cyan-900/30 to-blue-900/30 border-t border-cyan-500/30 px-4 py-2 flex items-center justify-between text-xs font-mono">
-          <div className="flex items-center gap-2">
-            <motion.div
-              className="w-2 h-2 bg-green-500 rounded-full"
-              animate={{ opacity: [1, 0.3, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-            />
-            <span className="text-green-400">ACTIVE</span>
-          </div>
-          
-          <div className="text-cyan-600">
-            MODULE ID: {id.slice(0, 8).toUpperCase()}
-          </div>
+        <div className={`border-t px-4 py-2 flex items-center justify-between text-xs ${
+          isChic
+            ? 'bg-gray-800/50 border-gray-700/50 font-light'
+            : 'bg-gradient-to-r from-cyan-900/30 to-blue-900/30 border-cyan-500/30 font-mono'
+        }`}>
+          {isChic ? (
+            <>
+              <div className="text-gray-500">Another Star LLC</div>
+              <div className="text-gray-600">{new Date().getFullYear()}</div>
+            </>
+          ) : (
+            <>
+              <div className="flex items-center gap-2">
+                <motion.div
+                  className="w-2 h-2 bg-green-500 rounded-full"
+                  animate={{ opacity: [1, 0.3, 1] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                />
+                <span className="text-green-400">ACTIVE</span>
+              </div>
+              <div className="text-cyan-600">
+                MODULE ID: {id.slice(0, 8).toUpperCase()}
+              </div>
+            </>
+          )}
         </div>
       </div>
 
-      {/* ウィンドウ周りの光エフェクト */}
-      <motion.div
-        className="absolute -inset-4 bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10 rounded-lg blur-xl -z-10"
-        animate={{
-          opacity: [0.3, 0.6, 0.3],
-        }}
-        transition={{ duration: 2, repeat: Infinity }}
-      />
+      {/* ウィンドウ周りの光エフェクト - シックモードでは非表示 */}
+      {!isChic && (
+        <motion.div
+          className="absolute -inset-4 bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10 rounded-lg blur-xl -z-10"
+          animate={{
+            opacity: [0.3, 0.6, 0.3],
+          }}
+          transition={{ duration: 2, repeat: Infinity }}
+        />
+      )}
     </motion.div>
   );
 }
