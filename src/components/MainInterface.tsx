@@ -32,6 +32,7 @@ interface WindowState {
   icon: LucideIcon;
   position: { x: number; y: number };
   zIndex: number;
+  variant?: 'default' | 'chic';
 }
 
 export function MainInterface() {
@@ -378,54 +379,32 @@ export function MainInterface() {
     </div>`,
 
     contact: `<div class="space-y-6">
-      <h2 class="text-3xl bg-gradient-to-r from-pink-400 to-purple-500 bg-clip-text text-transparent mb-6">お問い合わせ</h2>
+      <h2 class="text-2xl text-gray-200 font-light tracking-wide mb-6">お問い合わせ</h2>
 
-      <p class="text-gray-300 leading-relaxed">
-        Another Star合同会社へのお問い合わせは、以下の連絡先までお気軽にどうぞ。
+      <p class="text-gray-400 leading-relaxed text-sm">
+        受託開発のご依頼を承っております。<br/>詳細はメールにてお問い合わせください。
       </p>
 
-      <div class="space-y-4">
-        <div class="p-4 bg-pink-500/10 border border-pink-500/30 rounded-lg hover:border-pink-500/50 transition-all group">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-gradient-to-br from-pink-400 to-purple-500 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-              <span class="text-xl">📧</span>
+      <div class="space-y-4 mt-8">
+        <a href="mailto:contact@another-star.jp" class="block p-5 bg-gray-800/50 border border-gray-600/50 rounded hover:border-gray-500 hover:bg-gray-800/70 transition-all group cursor-pointer">
+          <div class="flex items-center gap-4">
+            <div class="flex-1">
+              <div class="text-xs text-gray-500 mb-2 tracking-widest">EMAIL</div>
+              <div class="text-gray-300 text-base font-light group-hover:text-white transition-colors">contact@another-star.jp</div>
             </div>
-            <div>
-              <div class="text-xs text-gray-500 mb-1">EMAIL</div>
-              <a href="mailto:contact@another-star.jp" class="text-pink-400 hover:text-pink-300 hover:underline transition-colors">contact@another-star.jp</a>
-            </div>
+            <div class="text-gray-500 group-hover:text-gray-300 group-hover:translate-x-1 transition-all">→</div>
           </div>
+        </a>
+
+        <div class="p-5 bg-gray-800/30 border border-gray-700/50 rounded">
+          <div class="text-xs text-gray-500 mb-2 tracking-widest">BUSINESS</div>
+          <div class="text-gray-400 text-sm font-light">受託開発・コンサルティング・技術提携</div>
         </div>
 
-        <div class="p-4 bg-purple-500/10 border border-purple-500/30 rounded-lg hover:border-purple-500/50 transition-all group">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-500 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-              <span class="text-xl">💼</span>
-            </div>
-            <div>
-              <div class="text-xs text-gray-500 mb-1">BUSINESS INQUIRY</div>
-              <div class="text-purple-400">技術提携・協業のご相談もお待ちしております</div>
-            </div>
-          </div>
+        <div class="p-5 bg-gray-800/30 border border-gray-700/50 rounded">
+          <div class="text-xs text-gray-500 mb-2 tracking-widest">LOCATION</div>
+          <div class="text-gray-400 text-sm font-light">東京都足立区</div>
         </div>
-
-        <div class="p-4 bg-pink-500/10 border border-pink-500/30 rounded-lg hover:border-pink-500/50 transition-all group">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-gradient-to-br from-pink-400 to-purple-500 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-              <span class="text-xl">🔗</span>
-            </div>
-            <div>
-              <div class="text-xs text-gray-500 mb-1">GENIAC-PRIZE</div>
-              <div class="text-pink-400">NEDO懸賞プログラム 領域03参加企業</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mt-6 p-4 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/30 rounded-lg">
-        <p class="text-cyan-400 text-sm text-center">
-          🌟 生成AIの安全な未来を、一緒に創りましょう 🌟
-        </p>
       </div>
     </div>`,
   };
@@ -445,6 +424,7 @@ export function MainInterface() {
         y: 0
       },
       zIndex: highestZIndex + 1,
+      variant: itemId === 'contact' ? 'chic' : 'default',
     };
 
     // 既存のウィンドウを閉じて、新しいウィンドウのみを表示
@@ -529,6 +509,7 @@ export function MainInterface() {
             onClose={() => closeWindow(window.id)}
             onFocus={() => bringToFront(window.id)}
             onPositionChange={(pos) => updateWindowPosition(window.id, pos)}
+            variant={window.variant}
           >
             <div dangerouslySetInnerHTML={{ __html: window.content }} />
           </DraggableWindow>
