@@ -2,11 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { HologramGlitch } from './HologramGlitch';
 
-interface EntryScreenProps {
-  onEnter: () => void;
-}
-
-export function EntryScreen({ onEnter }: EntryScreenProps) {
+export function EntryScreen() {
   const [mousePosition, setMousePosition] = useState({ x: 0.5, y: 0.5 });
 
   useEffect(() => {
@@ -367,7 +363,7 @@ export function EntryScreen({ onEnter }: EntryScreenProps) {
           </motion.h1>
 
           <motion.p
-            className="text-2xl mb-3 text-cyan-300"
+            className="text-2xl mb-4 text-cyan-300"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.3 }}
@@ -375,47 +371,40 @@ export function EntryScreen({ onEnter }: EntryScreenProps) {
             生成AIの安全性確保技術開発
           </motion.p>
 
-          <motion.p
-            className="text-sm mb-12 text-cyan-400/80 max-w-2xl px-4 italic"
+          <motion.div
+            className="flex flex-wrap justify-center gap-4 mb-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1.5 }}
+            transition={{ delay: 1.6 }}
+          >
+            <motion.span
+              className="px-6 py-3 bg-cyan-500/30 border-2 border-cyan-400/60 rounded-full text-cyan-200 text-base font-medium shadow-[0_0_20px_rgba(0,255,255,0.3)]"
+              whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(0,255,255,0.5)' }}
+            >
+              受託開発
+            </motion.span>
+            <motion.span
+              className="px-6 py-3 bg-blue-500/30 border-2 border-blue-400/60 rounded-full text-blue-200 text-base font-medium shadow-[0_0_20px_rgba(59,130,246,0.3)]"
+              whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(59,130,246,0.5)' }}
+            >
+              コンサルティング
+            </motion.span>
+            <motion.span
+              className="px-6 py-3 bg-purple-500/30 border-2 border-purple-400/60 rounded-full text-purple-200 text-base font-medium shadow-[0_0_20px_rgba(168,85,247,0.3)]"
+              whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(168,85,247,0.5)' }}
+            >
+              研究開発
+            </motion.span>
+          </motion.div>
+
+          <motion.p
+            className="text-sm mb-8 text-cyan-400/80 max-w-2xl px-4 italic"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.9 }}
           >
             Becoming the next stellar force shaping safe, sustainable AI for society.
           </motion.p>
-
-          <motion.button
-            onClick={onEnter}
-            className="relative px-12 py-4 text-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-lg overflow-hidden group"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 2 }}
-          >
-            <span className="relative z-10">INITIALIZE SYSTEM</span>
-            
-            {/* ボタンのグローエフェクト */}
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-500"
-              animate={{
-                opacity: [0.5, 1, 0.5],
-              }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-            />
-            
-            {/* ホバー時のレーザーライン */}
-            <motion.div
-              className="absolute inset-0 opacity-0 group-hover:opacity-100"
-              initial={{ x: '-100%' }}
-              whileHover={{
-                x: '100%',
-                transition: { duration: 0.6, repeat: Infinity },
-              }}
-            >
-              <div className="absolute inset-y-0 left-0 w-1 bg-white shadow-[0_0_10px_rgba(255,255,255,1)]" />
-            </motion.div>
-          </motion.button>
 
           {/* スキャンライン */}
           <motion.div

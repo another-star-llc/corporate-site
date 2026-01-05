@@ -5,6 +5,8 @@ import { DraggableWindow } from './DraggableWindow';
 import { HUD } from './HUD';
 import { ControlPanel } from './ControlPanel';
 import { HologramGlitch } from './HologramGlitch';
+import { PlanetHint } from './PlanetHint';
+import { EarthMessage } from './EarthMessage';
 import {
   Building2,
   Target,
@@ -36,10 +38,16 @@ export function MainInterface() {
   const [windows, setWindows] = useState<WindowState[]>([]);
   const [highestZIndex, setHighestZIndex] = useState(100);
   const [hoveredPlanet, setHoveredPlanet] = useState<string | null>(null);
+  const [showEarthMessage, setShowEarthMessage] = useState(false);
 
   // 惑星ホバーハンドラをメモ化
   const handlePlanetHover = useCallback((planetId: string | null) => {
     setHoveredPlanet(planetId);
+  }, []);
+
+  // 地球クリックハンドラ
+  const handleEarthClick = useCallback(() => {
+    setShowEarthMessage(true);
   }, []);
 
   const menuItems = [
@@ -452,6 +460,12 @@ export function MainInterface() {
     setHighestZIndex(highestZIndex + 1);
   }, [windows, highestZIndex, menuItems, contentMap]);
 
+  // 地球メッセージからお問い合わせを開く
+  const handleEarthContactClick = useCallback(() => {
+    setShowEarthMessage(false);
+    openWindow('contact');
+  }, [openWindow]);
+
   const closeWindow = (id: string) => {
     setWindows(windows.filter(w => w.id !== id));
   };
@@ -479,12 +493,23 @@ export function MainInterface() {
       <SpaceBackground
         onPlanetClick={openWindow}
         onPlanetHover={handlePlanetHover}
+        onEarthClick={handleEarthClick}
+      />
+
+      {/* 地球クリック時のメッセージオーバーレイ */}
+      <EarthMessage
+        isVisible={showEarthMessage}
+        onClose={() => setShowEarthMessage(false)}
+        onContactClick={handleEarthContactClick}
       />
 
       <HUD />
 
       {/* ホログラム・グリッチエフェクト */}
       <HologramGlitch />
+
+      {/* 惑星クリックのヒントバナー */}
+      <PlanetHint />
 
       {/* 制御パネル（中央下部） */}
       <ControlPanel
