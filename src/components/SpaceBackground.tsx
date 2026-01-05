@@ -17,6 +17,7 @@ interface Planet {
 interface SpaceBackgroundProps {
   onPlanetClick?: (planetId: string) => void;
   onPlanetHover?: (planetId: string | null) => void;
+  onEarthClick?: () => void;
 }
 
 const planets: Planet[] = [
@@ -83,23 +84,27 @@ const planets: Planet[] = [
   },
 ];
 
-export function SpaceBackground({ onPlanetClick, onPlanetHover }: SpaceBackgroundProps) {
+export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick }: SpaceBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hoveredPlanet, setHoveredPlanet] = useState<string | null>(null);
   const mousePositionRef = useRef({ x: 0, y: 0 }); // ステートからrefに変更
   const raycasterRef = useRef<THREE.Raycaster>();
   const mouseRef = useRef(new THREE.Vector2());
   const planetMeshesRef = useRef<Map<string, THREE.Mesh>>(new Map());
+  const earthMeshRef = useRef<THREE.Mesh | null>(null);
   const lastHoveredPlanetRef = useRef<string | null>(null); // 前回のホバー状態を保存
-  
+  const earthOriginalScale = useRef(1);
+
   // コールバックをrefで保存（依存配列から除外するため）
   const onPlanetClickRef = useRef(onPlanetClick);
   const onPlanetHoverRef = useRef(onPlanetHover);
-  
+  const onEarthClickRef = useRef(onEarthClick);
+
   useEffect(() => {
     onPlanetClickRef.current = onPlanetClick;
     onPlanetHoverRef.current = onPlanetHover;
-  }, [onPlanetClick, onPlanetHover]);
+    onEarthClickRef.current = onEarthClick;
+  }, [onPlanetClick, onPlanetHover, onEarthClick]);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -208,20 +213,24 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover }: SpaceBackgroun
     const particles = new THREE.Points(particlesGeometry, particlesMaterial);
     scene.add(particles);
 
-    // 回転する地球（遠景）
+    // 回転する地球（遠景）- NASAの地球テクスチャ
     const earthGeometry = new THREE.SphereGeometry(8, 64, 64);
     const earthTexture = textureLoader.load(
-      'https://images.unsplash.com/photo-1727363584291-433dcd86a0fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlYXJ0aCUyMHNwYWNlJTIwcGxhbmV0fGVufDF8fHx8MTc2NjkyMTk2OHww&ixlib=rb-4.1.0&q=80&w=1080'
+      'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg'
     );
-    
-    const earthMaterial = new THREE.MeshPhongMaterial({ 
+
+    const earthMaterial = new THREE.MeshPhongMaterial({
       map: earthTexture,
       emissive: 0x112244,
-      emissiveIntensity: 0.2,
+      emissiveIntensity: 0.3,
+      shininess: 30,
     });
-    
+
     const earth = new THREE.Mesh(earthGeometry, earthMaterial);
     earth.position.set(-30, -20, -80);
+    earth.userData = { id: 'earth', name: 'EARTH', originalScale: 1 };
+    earthMeshRef.current = earth;
+    earthOriginalScale.current = 1;
     scene.add(earth);
 
     const atmosphereGeometry = new THREE.SphereGeometry(8.5, 64, 64);
@@ -348,16 +357,26 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover }: SpaceBackgroun
     };
 
     const handleClick = () => {
-      if (!raycasterRef.current || !onPlanetClickRef.current) return;
+      if (!raycasterRef.current) return;
 
       raycaster.setFromCamera(mouseRef.current, camera);
-      const intersects = raycaster.intersectObjects(Array.from(planetMeshesRef.current.values()));
 
-      if (intersects.length > 0) {
-        const clicked = intersects[0].object as THREE.Mesh;
+      // 惑星のクリック検知
+      const planetIntersects = raycaster.intersectObjects(Array.from(planetMeshesRef.current.values()));
+      if (planetIntersects.length > 0 && onPlanetClickRef.current) {
+        const clicked = planetIntersects[0].object as THREE.Mesh;
         const planetId = clicked.userData.id;
         if (planetId) {
           onPlanetClickRef.current(planetId);
+          return;
+        }
+      }
+
+      // 地球のクリック検知
+      if (earthMeshRef.current && onEarthClickRef.current) {
+        const earthIntersects = raycaster.intersectObject(earthMeshRef.current);
+        if (earthIntersects.length > 0) {
+          onEarthClickRef.current();
         }
       }
     };
@@ -452,10 +471,17 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover }: SpaceBackgroun
         mesh.scale.setScalar(mesh.userData.originalScale);
       });
 
+      // 地球のスケールをリセット
+      if (earthMeshRef.current) {
+        earthMeshRef.current.scale.setScalar(earthOriginalScale.current);
+      }
+
+      let isHoveringEarth = false;
+
       if (intersects.length > 0) {
         const hoveredMesh = intersects[0].object as THREE.Mesh;
         const planetId = hoveredMesh.userData.id;
-        
+
         // 前回と異なる惑星にホバーした場合のみ更新
         if (lastHoveredPlanetRef.current !== planetId) {
           lastHoveredPlanetRef.current = planetId;
@@ -464,11 +490,25 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover }: SpaceBackgroun
             onPlanetHoverRef.current(planetId);
           }
         }
-        
+
         hoveredMesh.scale.setScalar(1.3);
       } else {
+        // 惑星にホバーしていない場合、地球をチェック
+        if (earthMeshRef.current) {
+          const earthIntersects = raycaster.intersectObject(earthMeshRef.current);
+          if (earthIntersects.length > 0) {
+            isHoveringEarth = true;
+            earthMeshRef.current.scale.setScalar(1.15);
+
+            if (lastHoveredPlanetRef.current !== 'earth') {
+              lastHoveredPlanetRef.current = 'earth';
+              setHoveredPlanet('earth');
+            }
+          }
+        }
+
         // ホバーが外れた場合のみ更新
-        if (lastHoveredPlanetRef.current !== null) {
+        if (!isHoveringEarth && lastHoveredPlanetRef.current !== null) {
           lastHoveredPlanetRef.current = null;
           setHoveredPlanet(null);
           if (onPlanetHoverRef.current) {
@@ -543,7 +583,7 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover }: SpaceBackgroun
           >
             <div className="bg-black/80 backdrop-blur-md border border-cyan-500/50 rounded-lg px-4 py-2 shadow-[0_0_20px_rgba(0,200,255,0.5)]">
               <div className="text-cyan-400 font-mono text-sm">
-                {planets.find(p => p.id === hoveredPlanet)?.name}
+                {hoveredPlanet === 'earth' ? 'EARTH' : planets.find(p => p.id === hoveredPlanet)?.name}
               </div>
               <div className="text-cyan-600 text-xs mt-1">Click to access</div>
             </div>

@@ -1,14 +1,94 @@
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Activity, Wifi, Battery, Clock } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+
+// ログメッセージのデータ
+const logMessages = [
+  // システムログ
+  { type: 'system', color: 'blue', text: 'Interface initialized' },
+  { type: 'system', color: 'green', text: 'All systems nominal' },
+  { type: 'system', color: 'cyan', text: 'Awaiting command input' },
+  { type: 'system', color: 'green', text: 'Connection stable' },
+  { type: 'system', color: 'blue', text: 'Scanning sector...' },
+  { type: 'system', color: 'cyan', text: 'Navigation ready' },
+  // メンバー紹介
+  { type: 'member', color: 'purple', text: 'MEMBER: Naoya Yasuda - CEO / Software Engineer' },
+  { type: 'member', color: 'pink', text: 'MEMBER: Shinnosuke Saito - COO / AI Engineer' },
+  { type: 'member', color: 'teal', text: 'TEAM: Taichi Hiromatsu - AI Safety Architect' },
+  { type: 'member', color: 'emerald', text: 'TEAM: Daiki Hasegawa - Solution Engineer' },
+  { type: 'member', color: 'indigo', text: 'TEAM: Koji Sato - Documentation Specialist' },
+  { type: 'member', color: 'violet', text: 'ADVISOR: Satoshi Kanno - Risk & Strategy' },
+  // プロジェクト・案件
+  { type: 'project', color: 'orange', text: 'PROJECT: Browser Agent Detector - AI Agent Detection' },
+  { type: 'project', color: 'rose', text: 'PROJECT: A2A Mediation Agent - Agent Mediation' },
+  { type: 'project', color: 'amber', text: 'PROJECT: AI Bias Watcher - Bias Monitoring' },
+  // 実績・ニュース
+  { type: 'news', color: 'yellow', text: 'NEWS: GENIAC-PRIZE Area 03 Participant' },
+  { type: 'news', color: 'lime', text: 'TECH: Generative AI Safety Research & Development' },
+  { type: 'news', color: 'cyan', text: 'FOCUS: AI Safety for Social Implementation' },
+  // コンタクト情報
+  { type: 'contact', color: 'pink', text: 'CONTACT: contact@another-star.jp' },
+  { type: 'contact', color: 'purple', text: 'BUSINESS: Partnership & Collaboration Welcome' },
+  { type: 'contact', color: 'blue', text: 'LOCATION: Adachi-ku, Tokyo, Japan' },
+  { type: 'contact', color: 'cyan', text: 'FOUNDED: July 2025 / Capital: 500K JPY' },
+];
+
+interface LogEntry {
+  id: number;
+  timestamp: string;
+  color: string;
+  text: string;
+}
 
 export function HUD() {
   const [time, setTime] = useState(new Date());
+  const [logs, setLogs] = useState<LogEntry[]>([]);
+  const logIndexRef = useRef(0);
 
+  // 時計の更新
   useEffect(() => {
     const interval = setInterval(() => {
       setTime(new Date());
     }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // ログの初期化と定期更新
+  useEffect(() => {
+    // 初期ログ（最初の3件はシステムログ）
+    const now = new Date();
+    const initialLogs: LogEntry[] = [
+      { id: 1, timestamp: now.toLocaleTimeString(), color: 'blue', text: 'Interface initialized' },
+      { id: 2, timestamp: now.toLocaleTimeString(), color: 'green', text: 'All systems nominal' },
+      { id: 3, timestamp: now.toLocaleTimeString(), color: 'cyan', text: 'Awaiting command input' },
+    ];
+    setLogs(initialLogs);
+    logIndexRef.current = 3;
+
+    // 3秒ごとに新しいログを追加
+    const interval = setInterval(() => {
+      const newTime = new Date();
+      // ランダムにログを選択（システムログが多め）
+      const randomIndex = Math.floor(Math.random() * logMessages.length);
+      const message = logMessages[randomIndex];
+
+      const newLog: LogEntry = {
+        id: Date.now(),
+        timestamp: newTime.toLocaleTimeString(),
+        color: message.color,
+        text: message.text,
+      };
+
+      setLogs(prev => {
+        const updated = [...prev, newLog];
+        // 最大5件まで保持
+        if (updated.length > 5) {
+          return updated.slice(-5);
+        }
+        return updated;
+      });
+    }, 3500);
+
     return () => clearInterval(interval);
   }, []);
 
@@ -150,33 +230,51 @@ export function HUD() {
         transition={{ delay: 0.7 }}
       >
         <div className="bg-black/40 backdrop-blur-md border border-blue-500/30 rounded-lg p-4 w-80 shadow-[0_0_20px_rgba(59,130,246,0.3)]">
-          <div className="text-blue-400 text-xs mb-2">SYSTEM LOG</div>
-          
-          <div className="space-y-1 text-xs max-h-24 overflow-hidden">
+          <div className="text-blue-400 text-xs mb-2 flex items-center gap-2">
+            <span>SYSTEM LOG</span>
             <motion.div
-              className="text-blue-400/70"
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 1 }}
-            >
-              <span className="text-blue-500">[{time.toLocaleTimeString()}]</span> Interface initialized
-            </motion.div>
-            <motion.div
-              className="text-green-400/70"
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 1.2 }}
-            >
-              <span className="text-green-500">[{time.toLocaleTimeString()}]</span> All systems nominal
-            </motion.div>
-            <motion.div
-              className="text-cyan-400/70"
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 1.4 }}
-            >
-              <span className="text-cyan-500">[{time.toLocaleTimeString()}]</span> Awaiting command input
-            </motion.div>
+              className="w-1.5 h-1.5 rounded-full bg-green-500"
+              animate={{ opacity: [1, 0.3, 1] }}
+              transition={{ duration: 1, repeat: Infinity }}
+            />
+          </div>
+
+          <div className="space-y-1 text-xs max-h-28 overflow-hidden">
+            <AnimatePresence mode="popLayout">
+              {logs.map((log) => {
+                const colorClasses: Record<string, string> = {
+                  blue: 'text-blue-400',
+                  green: 'text-green-400',
+                  cyan: 'text-cyan-400',
+                  purple: 'text-purple-400',
+                  pink: 'text-pink-400',
+                  teal: 'text-teal-400',
+                  emerald: 'text-emerald-400',
+                  indigo: 'text-indigo-400',
+                  violet: 'text-violet-400',
+                  orange: 'text-orange-400',
+                  rose: 'text-rose-400',
+                  amber: 'text-amber-400',
+                  yellow: 'text-yellow-400',
+                  lime: 'text-lime-400',
+                };
+                const textColor = colorClasses[log.color] || 'text-blue-400';
+
+                return (
+                  <motion.div
+                    key={log.id}
+                    className={`${textColor} opacity-80`}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 0.8, x: 0 }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3 }}
+                    layout
+                  >
+                    <span className={textColor}>[{log.timestamp}]</span> {log.text}
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
           </div>
         </div>
       </motion.div>

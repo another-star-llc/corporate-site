@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { EntryScreen } from './components/EntryScreen';
 import { MainInterface } from './components/MainInterface';
@@ -8,19 +8,24 @@ export default function App() {
   const [entered, setEntered] = useState(false);
   const [hyperspace, setHyperspace] = useState(false);
 
-  const handleEnter = () => {
-    setHyperspace(true);
-    setTimeout(() => {
-      setEntered(true);
-      setHyperspace(false);
-    }, 1800);
-  };
+  // 4秒後に自動でワープ開始（タグ表示後）
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setHyperspace(true);
+      setTimeout(() => {
+        setEntered(true);
+        setHyperspace(false);
+      }, 1800);
+    }, 4000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="relative w-full h-screen overflow-hidden bg-black">
       <AnimatePresence mode="wait">
         {!entered && !hyperspace && (
-          <EntryScreen key="entry" onEnter={handleEnter} />
+          <EntryScreen key="entry" />
         )}
 
         {hyperspace && (
