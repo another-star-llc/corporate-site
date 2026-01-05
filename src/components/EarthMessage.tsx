@@ -86,6 +86,8 @@ export const EarthMessage = memo(function EarthMessage({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
+          onClick={(e) => e.stopPropagation()}
+          onPointerDown={(e) => e.stopPropagation()}
         >
           {/* 背景オーバーレイ */}
           <motion.div

@@ -86,6 +86,8 @@ export function DraggableWindow({
       dragElastic={0}
       onDragEnd={handleDragEnd}
       onMouseDown={onFocus}
+      onClick={(e) => e.stopPropagation()}
+      onPointerDown={(e) => e.stopPropagation()}
       whileHover={{ 
         boxShadow: '0 0 40px rgba(0,200,255,0.4)',
       }}
