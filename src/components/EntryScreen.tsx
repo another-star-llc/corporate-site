@@ -126,7 +126,7 @@ export function EntryScreen() {
       >
         <div className="relative w-[600px] h-[600px]">
           
-          {/* 外側セグメント化リング（12分割） */}
+          {/* リングシステム */}
           <svg className="absolute inset-0 w-full h-full" viewBox="0 0 600 600">
             <defs>
               {/* グローフィルター */}
@@ -137,54 +137,8 @@ export function EntryScreen() {
                   <feMergeNode in="SourceGraphic"/>
                 </feMerge>
               </filter>
-              
-              {/* グラデーション */}
-              <linearGradient id="segmentGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#00ffff" stopOpacity="0.3" />
-                <stop offset="50%" stopColor="#00ffff" stopOpacity="0.8" />
-                <stop offset="100%" stopColor="#00ffff" stopOpacity="0.3" />
-              </linearGradient>
             </defs>
-            
-            {/* 12分割セグメント */}
-            {[...Array(12)].map((_, i) => {
-              const startAngle = (i * 30) - 90;
-              const endAngle = startAngle + 26; // 26度（4度のギャップ）
-              const startRad = (startAngle * Math.PI) / 180;
-              const endRad = (endAngle * Math.PI) / 180;
-              const innerRadius = 280;
-              const outerRadius = 300;
-              
-              const x1 = 300 + innerRadius * Math.cos(startRad);
-              const y1 = 300 + innerRadius * Math.sin(startRad);
-              const x2 = 300 + outerRadius * Math.cos(startRad);
-              const y2 = 300 + outerRadius * Math.sin(startRad);
-              const x3 = 300 + outerRadius * Math.cos(endRad);
-              const y3 = 300 + outerRadius * Math.sin(endRad);
-              const x4 = 300 + innerRadius * Math.cos(endRad);
-              const y4 = 300 + innerRadius * Math.sin(endRad);
-              
-              return (
-                <motion.path
-                  key={`segment-${i}`}
-                  d={`M ${x1} ${y1} L ${x2} ${y2} A ${outerRadius} ${outerRadius} 0 0 1 ${x3} ${y3} L ${x4} ${y4} A ${innerRadius} ${innerRadius} 0 0 0 ${x1} ${y1} Z`}
-                  fill="url(#segmentGradient)"
-                  stroke="#00ffff"
-                  strokeWidth="1"
-                  filter="url(#glow)"
-                  initial={{ opacity: 0 }}
-                  animate={{ 
-                    opacity: [0.4, 0.8, 0.4],
-                  }}
-                  transition={{ 
-                    duration: 2,
-                    repeat: Infinity,
-                    delay: i * 0.1,
-                  }}
-                />
-              );
-            })}
-            
+
             {/* 中間リング */}
             <motion.circle
               cx="300"
@@ -254,46 +208,7 @@ export function EntryScreen() {
             animate={{ rotate: 360 }}
             transition={{ duration: 6, repeat: Infinity, ease: 'linear' }}
           />
-          
-          {/* 発光インジケーター（24個） */}
-          {[...Array(24)].map((_, i) => {
-            const angle = (i * 15) - 90;
-            const rad = (angle * Math.PI) / 180;
-            const radius = 300;
-            const x = 300 + radius * Math.cos(rad);
-            const y = 300 + radius * Math.sin(rad);
-            
-            // 色を3色で分ける
-            const colors = ['#00ffff', '#ff00ff', '#ffff00'];
-            const color = colors[i % 3];
-            const glowColor = color === '#00ffff' ? 'rgba(0,255,255,0.8)' : 
-                             color === '#ff00ff' ? 'rgba(255,0,255,0.8)' : 
-                             'rgba(255,255,0,0.8)';
-            
-            return (
-              <motion.div
-                key={`indicator-${i}`}
-                className="absolute w-3 h-3 rounded-full"
-                style={{
-                  left: `${(x / 600) * 100}%`,
-                  top: `${(y / 600) * 100}%`,
-                  backgroundColor: color,
-                  boxShadow: `0 0 10px ${glowColor}, 0 0 20px ${glowColor}`,
-                }}
-                initial={{ scale: 0.5, opacity: 0.3 }}
-                animate={{ 
-                  scale: [0.5, 1.2, 0.5],
-                  opacity: [0.3, 1, 0.3],
-                }}
-                transition={{ 
-                  duration: 2,
-                  repeat: Infinity,
-                  delay: i * 0.08,
-                }}
-              />
-            );
-          })}
-          
+
           {/* データストリーム（円周上を流れるテキスト） */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 600 600">
             <defs>

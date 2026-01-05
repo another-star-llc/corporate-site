@@ -434,31 +434,23 @@ export function MainInterface() {
     const item = menuItems.find(m => m.id === itemId);
     if (!item) return;
 
-    // 軽いカスケード配置（画面中央基準、15pxずつオフセット）
-    const windowOffset = windows.length * 15; // 15pxずつずらす
-    const centerX = 0; // 画面中央からの相対位置
-    const centerY = 0;
-
-    // 最大オフセット（あまり広がりすぎないように）
-    const maxOffset = 100;
-    const clampedOffsetX = Math.min(windowOffset, maxOffset);
-    const clampedOffsetY = Math.min(windowOffset, maxOffset);
-
+    // 新しいウィンドウを画面中央に配置
     const newWindow: WindowState = {
       id: `${itemId}-${Date.now()}`,
       title: item.label,
       content: contentMap[itemId],
       icon: item.icon,
       position: {
-        x: centerX + clampedOffsetX,
-        y: centerY + clampedOffsetY
+        x: 0,
+        y: 0
       },
       zIndex: highestZIndex + 1,
     };
 
-    setWindows([...windows, newWindow]);
+    // 既存のウィンドウを閉じて、新しいウィンドウのみを表示
+    setWindows([newWindow]);
     setHighestZIndex(highestZIndex + 1);
-  }, [windows, highestZIndex, menuItems, contentMap]);
+  }, [highestZIndex, menuItems, contentMap]);
 
   // 地球メッセージからお問い合わせを開く
   const handleEarthContactClick = useCallback(() => {
