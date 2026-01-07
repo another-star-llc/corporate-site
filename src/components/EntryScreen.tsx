@@ -199,16 +199,6 @@ export function EntryScreen() {
             })}
           </svg>
           
-          {/* 回転スキャンライン */}
-          <motion.div
-            className="absolute inset-0 rounded-full"
-            style={{
-              background: 'conic-gradient(from 0deg, transparent 0%, rgba(0,255,255,0.4) 5%, transparent 10%)',
-            }}
-            animate={{ rotate: 360 }}
-            transition={{ duration: 6, repeat: Infinity, ease: 'linear' }}
-          />
-
           {/* データストリーム（円周上を流れるテキスト） */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 600 600">
             <defs>
