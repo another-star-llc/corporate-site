@@ -488,12 +488,12 @@ export function MainInterface() {
       <ControlPanel
         hoveredPlanet={hoveredPlanet}
         planets={[
-          { id: 'about', name: 'ABOUT', color: 0x4a9eff, position: [-15, 5, -30], size: 2.5 },
-          { id: 'mission', name: 'MISSION', color: 0xa855f7, position: [10, 8, -25], size: 2.2 },
-          { id: 'members', name: 'MEMBERS', color: 0x60a5fa, position: [-8, -6, -35], size: 2.0 },
-          { id: 'team', name: 'TEAM', color: 0x34d399, position: [12, -5, -28], size: 2.3 },
-          { id: 'systems', name: 'SYSTEMS', color: 0xfb923c, position: [0, 10, -32], size: 2.6 },
-          { id: 'contact', name: 'CONTACT', color: 0xec4899, position: [-12, -8, -26], size: 2.4 },
+          { id: 'about', name: 'ABOUT', color: 0x4a9eff, position: [-22, 8, -35], size: 2.5 },
+          { id: 'mission', name: 'MISSION', color: 0xa855f7, position: [18, 12, -28], size: 2.2 },
+          { id: 'members', name: 'MEMBERS', color: 0x60a5fa, position: [-5, -12, -42], size: 2.0 },
+          { id: 'team', name: 'TEAM', color: 0x34d399, position: [20, -8, -38], size: 2.3 },
+          { id: 'systems', name: 'SYSTEMS', color: 0xfb923c, position: [-8, 15, -25], size: 2.6 },
+          { id: 'contact', name: 'CONTACT', color: 0xec4899, position: [-18, -5, -30], size: 2.4 },
         ]}
       />
 
