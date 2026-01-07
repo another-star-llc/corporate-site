@@ -48,6 +48,7 @@ export function MainInterface() {
 
   // 地球クリックハンドラ
   const handleEarthClick = useCallback(() => {
+    setWindows([]); // 既存のポップアップを閉じる
     setShowEarthMessage(true);
   }, []);
 
