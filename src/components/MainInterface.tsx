@@ -90,7 +90,7 @@ export function MainInterface() {
       <div class="grid grid-cols-2 gap-4 mt-6">
         <div class="p-4 bg-cyan-500/10 border border-cyan-500/30 rounded-lg">
           <div class="text-xs text-gray-500 mb-1">設立</div>
-          <div class="text-xl text-cyan-400">2025年7月</div>
+          <div class="text-xl text-cyan-400">2025年7月14日</div>
         </div>
         <div class="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
           <div class="text-xs text-gray-500 mb-1">資本金</div>
@@ -100,7 +100,7 @@ export function MainInterface() {
 
       <div class="p-4 bg-slate-500/10 border border-slate-500/30 rounded-lg mt-4">
         <div class="text-xs text-gray-500 mb-1">所在地</div>
-        <div class="text-base text-gray-300">〒120-0013 東京都足立区弘道一丁目36番5号</div>
+        <div class="text-base text-gray-300">〒107-0062 東京都港区南青山３丁目１番３６号青山丸竹ビル６Ｆ</div>
       </div>
     </div>`,
 
@@ -404,7 +404,7 @@ export function MainInterface() {
 
         <div class="p-5 bg-gray-800/30 border border-gray-700/50 rounded">
           <div class="text-xs text-gray-500 mb-2 tracking-widest">LOCATION</div>
-          <div class="text-gray-400 text-sm font-light">東京都足立区</div>
+          <div class="text-gray-400 text-sm font-light">東京都港区南青山</div>
         </div>
       </div>
     </div>`,
