@@ -133,22 +133,18 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
     const raycaster = new THREE.Raycaster();
     raycasterRef.current = raycaster;
 
-    // スカイボックス（球体の内側に星雲テクスチャ）
+    // 背景色を真っ黒に
+    scene.background = new THREE.Color(0x000000);
+
+    // スカイボックス（テクスチャなし、星とパーティクルのみ）
     const skyboxGeometry = new THREE.SphereGeometry(300, 64, 64);
-    const textureLoader = new THREE.TextureLoader();
-    const nebulaTexture = textureLoader.load(
-      'https://images.unsplash.com/photo-1715147286628-eaae87cc8196?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnYWxheHklMjBuZWJ1bGElMjBzdGFyc3xlbnwxfHx8fDE3NjY5NzM1NDd8MA&ixlib=rb-4.1.0&q=80&w=1080'
-    );
-    
     const skyboxMaterial = new THREE.MeshBasicMaterial({
-      map: nebulaTexture,
+      color: 0x000000,
       side: THREE.BackSide,
-      transparent: true,
-      opacity: 0.6,
     });
-    
     const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
     scene.add(skybox);
+    const textureLoader = new THREE.TextureLoader();
 
     // 星空を複数レイヤーで作成
     const starLayers: THREE.Points[] = [];
@@ -365,8 +361,8 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
       mouseRef.current.x = mouseX;
       mouseRef.current.y = mouseY;
 
-      targetRotationY = mouseX * 0.45;
-      targetRotationX = mouseY * 0.3;
+      targetRotationY = mouseX * 1.5;
+      targetRotationX = mouseY * 1.0;
 
       // パララックス効果用のカメラターゲット位置
       targetCameraX = mouseX * 5;

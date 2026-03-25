@@ -23,7 +23,9 @@ const logMessages = [
   { type: 'project', color: 'rose', text: 'PROJECT: A2A Mediation Agent - Agent Mediation' },
   { type: 'project', color: 'amber', text: 'PROJECT: AI Bias Watcher - Bias Monitoring' },
   // 実績・ニュース
-  { type: 'news', color: 'yellow', text: 'NEWS: GENIAC-PRIZE Area 03 Participant' },
+  { type: 'news', color: 'yellow', text: 'AWARD: GENIAC-PRIZE みらいビジョン賞（特別賞）受賞' },
+  { type: 'news', color: 'amber', text: 'AWARD: 領域03 生成AI安全性 - NEDO懸賞金活用型プログラム' },
+  { type: 'news', color: 'orange', text: 'AWARD: AIエージェント連携セキュリティ基盤が新規性・将来性を評価' },
   { type: 'news', color: 'lime', text: 'TECH: Generative AI Safety Research & Development' },
   { type: 'news', color: 'cyan', text: 'FOCUS: AI Safety for Social Implementation' },
   // コンタクト情報
