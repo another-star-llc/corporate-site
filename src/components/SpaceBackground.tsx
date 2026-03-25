@@ -151,41 +151,68 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
 
     // 星空を複数レイヤーで作成
     const starLayers: THREE.Points[] = [];
-    
-    for (let layer = 0; layer < 3; layer++) {
+
+    // 層ごとに密度・サイズ・明るさを変えて奥行き感を出す
+    const layerConfigs = [
+      { count: 5000, spread: 3000, size: 0.2, opacity: 0.5, zOffset: 0 },      // 遠景: 暗く細かい
+      { count: 2000, spread: 2000, size: 0.5, opacity: 0.7, zOffset: -200 },    // 中景: 中くらい
+      { count: 800, spread: 1500, size: 1.2, opacity: 1.0, zOffset: -400 },     // 近景: 明るく大きい
+    ];
+
+    for (let layer = 0; layer < layerConfigs.length; layer++) {
+      const config = layerConfigs[layer];
       const starsGeometry = new THREE.BufferGeometry();
-      const starsMaterial = new THREE.PointsMaterial({ 
-        color: 0xffffff, 
-        size: 0.3 + layer * 0.15,
-        transparent: true,
-        opacity: 0.8 - layer * 0.2,
-      });
 
       const starsVertices = [];
       const colors = [];
-      
-      for (let i = 0; i < 3000; i++) {
-        const x = (Math.random() - 0.5) * 3000;
-        const y = (Math.random() - 0.5) * 3000;
-        const z = (Math.random() - 0.5) * 3000 - layer * 200;
-        
-        starsVertices.push(x, y, z);
-        
-        const colorChoice = Math.random();
-        if (colorChoice > 0.8) {
-          colors.push(0.4, 0.8, 1);
-        } else if (colorChoice > 0.6) {
-          colors.push(0.6, 0.6, 1);
+      const sizes = [];
+
+      for (let i = 0; i < config.count; i++) {
+        // クラスター（密集地帯）を作る: 20%の星をランダムな中心に集める
+        let x, y, z;
+        if (Math.random() < 0.2) {
+          const cx = (Math.random() - 0.5) * config.spread;
+          const cy = (Math.random() - 0.5) * config.spread;
+          const cz = (Math.random() - 0.5) * config.spread + config.zOffset;
+          x = cx + (Math.random() - 0.5) * 200;
+          y = cy + (Math.random() - 0.5) * 200;
+          z = cz + (Math.random() - 0.5) * 200;
         } else {
-          colors.push(1, 1, 1);
+          x = (Math.random() - 0.5) * config.spread;
+          y = (Math.random() - 0.5) * config.spread;
+          z = (Math.random() - 0.5) * config.spread + config.zOffset;
         }
+
+        starsVertices.push(x, y, z);
+
+        // 明るさにばらつき
+        const brightness = 0.3 + Math.random() * 0.7;
+        const colorChoice = Math.random();
+        if (colorChoice > 0.9) {
+          colors.push(0.4 * brightness, 0.8 * brightness, 1 * brightness); // 青白い星
+        } else if (colorChoice > 0.8) {
+          colors.push(1 * brightness, 0.85 * brightness, 0.6 * brightness); // 暖色系
+        } else if (colorChoice > 0.7) {
+          colors.push(0.6 * brightness, 0.6 * brightness, 1 * brightness); // 青い星
+        } else {
+          colors.push(brightness, brightness, brightness); // 白
+        }
+
+        // サイズにもばらつき
+        sizes.push(config.size * (0.3 + Math.random() * 1.5));
       }
 
       starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starsVertices, 3));
       starsGeometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-      
-      starsMaterial.vertexColors = true;
-      
+
+      const starsMaterial = new THREE.PointsMaterial({
+        size: config.size,
+        transparent: true,
+        opacity: config.opacity,
+        vertexColors: true,
+        sizeAttenuation: true,
+      });
+
       const stars = new THREE.Points(starsGeometry, starsMaterial);
       scene.add(stars);
       starLayers.push(stars);
@@ -416,16 +443,16 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
       animationId = requestAnimationFrame(animate);
       const elapsedTime = clock.getElapsedTime();
 
-      // 星雲を回転（パララックス - 最遠景、最も遅い）
-      skybox.rotation.z = elapsedTime * 0.01;
-      skybox.rotation.x = currentCameraY * 0.0003;
-      skybox.rotation.y = currentCameraX * 0.0003;
+      // 星雲を回転（パララックス - 最遠景）
+      skybox.rotation.z = elapsedTime * 0.005;
+      skybox.rotation.x = currentRotationX * 0.3;
+      skybox.rotation.y = currentRotationY * 0.3;
 
-      // 星空を回転（パララックス - 遠景、中程度の速さ）
+      // 星空を回転（パララックス - 惑星グループの回転に追従）
       starLayers.forEach((stars, index) => {
-        const parallaxMultiplier = (index + 1) * 0.5; // より強い視差効果
-        stars.rotation.y = elapsedTime * 0.02 * (index + 1) + currentCameraX * 0.001 * parallaxMultiplier;
-        stars.rotation.x = elapsedTime * 0.01 * (index + 1) + currentCameraY * 0.0008 * parallaxMultiplier;
+        const depth = (index + 1) * 0.15; // 層ごとに追従量が違う
+        stars.rotation.y = elapsedTime * 0.005 * (index + 1) + currentRotationY * (0.4 + depth);
+        stars.rotation.x = elapsedTime * 0.003 * (index + 1) + currentRotationX * (0.4 + depth);
       });
 
       // 地球を回転（パララックス - 中景、最も速い）
