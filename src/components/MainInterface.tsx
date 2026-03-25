@@ -487,7 +487,7 @@ export function MainInterface() {
       {/* 惑星フォーカスナビゲーション */}
       <PlanetHint
         focusPlanetId={focusPlanetId}
-        onCyclePlanet={(planetId) => setFocusPlanetId(planetId)}
+        onCyclePlanet={(planetId) => { setFocusPlanetId(planetId); setWindows([]); }}
         planetIds={menuItems.map(m => m.id)}
         planetLabels={Object.fromEntries(menuItems.map(m => [m.id, m.label]))}
       />
