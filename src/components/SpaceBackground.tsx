@@ -277,8 +277,7 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
       side: THREE.BackSide,
     });
     const atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
-    atmosphere.position.copy(earth.position);
-    scene.add(atmosphere);
+    earth.add(atmosphere);
 
     // 惑星ナビゲーション
     const planetGroup = new THREE.Group();
@@ -457,7 +456,6 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
 
       // 地球を回転（パララックス - 中景、最も速い）
       earth.rotation.y = elapsedTime * 0.05;
-      atmosphere.rotation.y = elapsedTime * 0.05;
       earth.position.x = EARTH_CENTER[0] + currentCameraX * 0.3;
       earth.position.y = EARTH_CENTER[1] + currentCameraY * 0.3;
 
