@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { Radar, Target, Activity, Cpu, Radio } from 'lucide-react';
+import { Radar, Target } from 'lucide-react';
 import { memo } from 'react';
 
 interface Planet {
@@ -258,36 +258,6 @@ export const ControlPanel = memo(function ControlPanel({ hoveredPlanet, planets 
           </div>
         </div>
 
-        {/* 上部ステータスバー */}
-        <div className="absolute -top-16 left-0 right-0 flex items-center justify-between px-4">
-          <div className="flex items-center gap-2">
-            <Activity className="w-3 h-3 text-cyan-500" />
-            <span className="text-cyan-500 font-mono text-xs">COSMIC VISION v2.0</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Radio className="w-3 h-3 text-green-500" />
-            <motion.span 
-              className="text-green-500 font-mono text-xs"
-              animate={{ opacity: [0.5, 1, 0.5] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              ONLINE
-            </motion.span>
-          </div>
-        </div>
-
-        {/* 下部システム情報 */}
-        <div className="absolute -bottom-12 left-0 right-0 flex items-center justify-between px-4">
-          <div className="flex items-center gap-2">
-            <Cpu className="w-3 h-3 text-cyan-600" />
-            <span className="text-cyan-600 font-mono text-xs">
-              {new Date().toLocaleDateString('ja-JP', { month: '2-digit', day: '2-digit' })}
-            </span>
-          </div>
-          <div className="text-cyan-600 font-mono text-xs">
-            COORD: SOL-α-{Math.floor(Math.random() * 1000)}
-          </div>
-        </div>
 
         {/* 角のアクセント */}
         {[
