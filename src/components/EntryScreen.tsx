@@ -232,6 +232,69 @@ export function EntryScreen() {
         </div>
       </div>
 
+      {/* GENIAC-PRIZE 受賞リボンバナー（画面上部） */}
+      <motion.a
+        href="https://www.meti.go.jp/press/2025/03/20260325001/20260325001-1.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="absolute top-0 left-0 right-0 z-50 overflow-hidden cursor-pointer"
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.3, type: 'spring', stiffness: 80, damping: 15 }}
+        whileHover={{ scale: 1.02 }}
+      >
+        <div className="relative py-4 px-6 bg-gradient-to-r from-amber-900/40 via-amber-600/30 to-amber-900/40 border-b border-amber-400/50 backdrop-blur-sm">
+          {/* スキャンライン */}
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/20 to-transparent"
+            style={{ width: '30%' }}
+            animate={{ x: ['-100%', '400%'] }}
+            transition={{ duration: 3, repeat: Infinity, ease: 'linear', delay: 1 }}
+          />
+          <div className="flex items-center justify-center gap-3">
+            <motion.span
+              className="text-amber-400 text-2xl"
+              aria-hidden="true"
+              animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.2, 1] }}
+              transition={{ duration: 2, repeat: Infinity, delay: 1.5 }}
+            >
+              ★
+            </motion.span>
+            <div className="text-center">
+              <div className="text-xl font-bold text-amber-300 tracking-widest drop-shadow-[0_0_10px_rgba(245,158,11,0.8)]">
+                GENIAC-PRIZE 受賞
+              </div>
+              <div className="text-sm text-amber-200/90 mt-0.5">
+                領域03（安全性）みらいビジョン賞（特別賞）
+              </div>
+              <div className="text-xs text-amber-400/60 font-mono mt-0.5">
+                NEDO懸賞金活用型プログラム
+              </div>
+            </div>
+            <motion.span
+              className="text-amber-400 text-2xl"
+              aria-hidden="true"
+              animate={{ rotate: [0, -15, 15, 0], scale: [1, 1.2, 1] }}
+              transition={{ duration: 2, repeat: Infinity, delay: 1.5 }}
+            >
+              ★
+            </motion.span>
+          </div>
+          {/* 下部グロー */}
+          <motion.div
+            className="absolute bottom-0 left-0 right-0 h-px"
+            animate={{
+              boxShadow: [
+                '0 0 20px 2px rgba(245,158,11,0.3)',
+                '0 0 40px 4px rgba(245,158,11,0.6)',
+                '0 0 20px 2px rgba(245,158,11,0.3)',
+              ],
+            }}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+        </div>
+      </motion.a>
+
       {/* UI オーバーレイ */}
       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
         <motion.div
@@ -321,46 +384,6 @@ export function EntryScreen() {
         </motion.div>
       </div>
 
-      {/* コーナーUI装飾 */}
-      <div className="absolute top-8 left-8 text-cyan-400 text-sm font-mono">
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 1.2 }}
-        >
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-            <span>SYSTEM ONLINE</span>
-          </div>
-          <div className="text-xs text-cyan-600">
-            COORDINATES: SECTOR 7G<br />
-            VESSEL ID: AS-001<br />
-            STATUS: NOMINAL
-          </div>
-        </motion.div>
-      </div>
-
-      <div className="absolute top-8 right-8 text-cyan-400 text-sm font-mono text-right">
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 1.2 }}
-        >
-          <div className="flex items-center justify-end gap-2 mb-2">
-            <span>AWAITING INPUT</span>
-            <motion.div 
-              className="w-2 h-2 bg-orange-500 rounded-full"
-              animate={{ opacity: [1, 0.3, 1] }}
-              transition={{ duration: 1, repeat: Infinity }}
-            />
-          </div>
-          <div className="text-xs text-cyan-600">
-            DATE: 2025.12.29<br />
-            TIME: {new Date().toLocaleTimeString()}<br />
-            CLEARANCE: LEVEL 9
-          </div>
-        </motion.div>
-      </div>
     </motion.div>
   );
 }
