@@ -18,6 +18,8 @@ interface SpaceBackgroundProps {
   onPlanetClick?: (planetId: string) => void;
   onPlanetHover?: (planetId: string | null) => void;
   onEarthClick?: () => void;
+  onEmptyClick?: () => void;
+  focusPlanetId?: string | null;
 }
 
 const planets: Planet[] = [
@@ -84,7 +86,7 @@ const planets: Planet[] = [
   },
 ];
 
-export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick }: SpaceBackgroundProps) {
+export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, onEmptyClick, focusPlanetId }: SpaceBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hoveredPlanet, setHoveredPlanet] = useState<string | null>(null);
   const mousePositionRef = useRef({ x: 0, y: 0 }); // ステートからrefに変更
@@ -94,17 +96,25 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick }: 
   const earthMeshRef = useRef<THREE.Mesh | null>(null);
   const lastHoveredPlanetRef = useRef<string | null>(null); // 前回のホバー状態を保存
   const earthOriginalScale = useRef(1);
+  const focusPlanetRef = useRef<string | null>(null);
 
   // コールバックをrefで保存（依存配列から除外するため）
   const onPlanetClickRef = useRef(onPlanetClick);
   const onPlanetHoverRef = useRef(onPlanetHover);
   const onEarthClickRef = useRef(onEarthClick);
+  const onEmptyClickRef = useRef(onEmptyClick);
 
   useEffect(() => {
     onPlanetClickRef.current = onPlanetClick;
     onPlanetHoverRef.current = onPlanetHover;
     onEarthClickRef.current = onEarthClick;
-  }, [onPlanetClick, onPlanetHover, onEarthClick]);
+    onEmptyClickRef.current = onEmptyClick;
+  }, [onPlanetClick, onPlanetHover, onEarthClick, onEmptyClick]);
+
+  // フォーカス対象をrefに同期
+  useEffect(() => {
+    focusPlanetRef.current = focusPlanetId ?? null;
+  }, [focusPlanetId]);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -273,13 +283,22 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick }: 
 
       const planet = new THREE.Mesh(geometry, material);
       planet.position.set(...planetData.position);
-      planet.userData = { 
-        id: planetData.id, 
-        name: planetData.name, 
+      planet.userData = {
+        id: planetData.id,
+        name: planetData.name,
         originalScale: 1,
       };
       planetGroup.add(planet);
-      planetMeshesRef.current.set(planetData.id, planet);
+
+      // 透明なヒットボックス（クリック判定を2倍に拡大）
+      const hitboxGeometry = new THREE.SphereGeometry(planetData.size * 2, 16, 16);
+      const hitboxMaterial = new THREE.MeshBasicMaterial({
+        visible: false,
+      });
+      const hitbox = new THREE.Mesh(hitboxGeometry, hitboxMaterial);
+      hitbox.userData = { id: planetData.id, name: planetData.name, originalScale: 1 };
+      planet.add(hitbox);
+      planetMeshesRef.current.set(planetData.id, hitbox);
 
       // 大気グローエフェクト
       const glowGeometry = new THREE.SphereGeometry(planetData.size * 1.15, 32, 32);
@@ -346,12 +365,12 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick }: 
       mouseRef.current.x = mouseX;
       mouseRef.current.y = mouseY;
 
-      targetRotationY = mouseX * 0.3;
-      targetRotationX = mouseY * 0.2;
+      targetRotationY = mouseX * 0.45;
+      targetRotationX = mouseY * 0.3;
 
-      // パララックス効果用のカメラターゲット位置（効果を強く）
-      targetCameraX = mouseX * 15;
-      targetCameraY = mouseY * 15;
+      // パララックス効果用のカメラターゲット位置
+      targetCameraX = mouseX * 5;
+      targetCameraY = mouseY * 5;
 
       mousePositionRef.current = { x: event.clientX, y: event.clientY };
     };
@@ -377,7 +396,13 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick }: 
         const earthIntersects = raycaster.intersectObject(earthMeshRef.current);
         if (earthIntersects.length > 0) {
           onEarthClickRef.current();
+          return;
         }
+      }
+
+      // 何もヒットしなかった場合
+      if (onEmptyClickRef.current) {
+        onEmptyClickRef.current();
       }
     };
 
@@ -441,13 +466,14 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick }: 
       planetGroup.rotation.y = currentRotationY;
       planetGroup.rotation.x = currentRotationX;
       
-      // 惑星グループ全体にもパララックス移動を適用（前景として速く動く）
-      planetGroup.position.x = currentCameraX * 0.1;
-      planetGroup.position.y = currentCameraY * 0.1;
+      // 惑星グループ全体にもパララックス移動を適用（カメラと同期して逃げないように）
+      planetGroup.position.x = currentCameraX * 0.6;
+      planetGroup.position.y = currentCameraY * 0.6;
 
-      // 各惑星を回���＋軌道移動
+      // 各惑星を回転＋軌道移動（ヒットボックスの親＝可視メッシュを操作）
       planets.forEach((planetData) => {
-        const mesh = planetMeshesRef.current.get(planetData.id);
+        const hitbox = planetMeshesRef.current.get(planetData.id);
+        const mesh = hitbox?.parent instanceof THREE.Mesh ? hitbox.parent : hitbox;
         if (mesh) {
           mesh.rotation.y += planetData.rotationSpeed;
 
@@ -457,7 +483,7 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick }: 
           );
           const angle = elapsedTime * planetData.orbitSpeed;
           const baseAngle = Math.atan2(planetData.position[2], planetData.position[0]);
-          
+
           mesh.position.x = Math.cos(baseAngle + angle) * orbitRadius;
           mesh.position.z = Math.sin(baseAngle + angle) * orbitRadius;
         }
@@ -468,7 +494,9 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick }: 
       const intersects = raycaster.intersectObjects(Array.from(planetMeshesRef.current.values()));
 
       planetMeshesRef.current.forEach((mesh) => {
-        mesh.scale.setScalar(mesh.userData.originalScale);
+        // ヒットボックスの親（可視メッシュ）のスケールをリセット
+        const target = mesh.parent && mesh.parent instanceof THREE.Mesh ? mesh.parent : mesh;
+        target.scale.setScalar(mesh.userData.originalScale);
       });
 
       // 地球のスケールをリセット
@@ -491,7 +519,9 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick }: 
           }
         }
 
-        hoveredMesh.scale.setScalar(1.3);
+        // ヒットボックスの親（可視メッシュ）をスケール
+        const visualMesh = hoveredMesh.parent && hoveredMesh.parent instanceof THREE.Mesh ? hoveredMesh.parent : hoveredMesh;
+        visualMesh.scale.setScalar(1.3);
       } else {
         // 惑星にホバーしていない場合、地球をチェック
         if (earthMeshRef.current) {
@@ -517,16 +547,34 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick }: 
         }
       }
 
-      // カメラをマウスに追従
-      camera.position.x += (mouseX * 5 - camera.position.x) * 0.05;
-      camera.position.y += (mouseY * 5 - camera.position.y) * 0.05;
-      camera.lookAt(0, 0, 0);
+      // カメラをマウスに追従（パララックス効果統合）
+      const focusId = focusPlanetRef.current;
+      if (focusId) {
+        // フォーカス中: 惑星のワールド座標をリアルタイム取得
+        const hitbox = planetMeshesRef.current.get(focusId);
+        const planetMesh = hitbox?.parent instanceof THREE.Mesh ? hitbox.parent : hitbox;
+        if (planetMesh) {
+          const worldPos = new THREE.Vector3();
+          planetMesh.getWorldPosition(worldPos);
 
-      // パララックス効果
-      currentCameraX += (targetCameraX - currentCameraX) * 0.05;
-      currentCameraY += (targetCameraY - currentCameraY) * 0.05;
-      camera.position.x += currentCameraX;
-      camera.position.y += currentCameraY;
+          // 惑星とカメラの間の手前位置をターゲットに（惑星サイズ分の距離を確保）
+          const dir = worldPos.clone().normalize();
+          const targetPos = worldPos.clone().sub(dir.multiplyScalar(15));
+
+          camera.position.x += (targetPos.x - camera.position.x) * 0.04;
+          camera.position.y += (targetPos.y - camera.position.y) * 0.04;
+          camera.position.z += (targetPos.z - camera.position.z) * 0.04;
+          camera.lookAt(worldPos);
+
+          // フォーカス中の惑星を拡大表示
+          planetMesh.scale.setScalar(1.5);
+        }
+      } else {
+        camera.position.x += (currentCameraX - camera.position.x) * 0.05;
+        camera.position.y += (currentCameraY - camera.position.y) * 0.05;
+        camera.position.z += (30 - camera.position.z) * 0.05;
+        camera.lookAt(0, 0, 0);
+      }
 
       renderer.render(scene, camera);
     };
@@ -567,9 +615,9 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick }: 
     <>
       <canvas ref={canvasRef} className="fixed inset-0 -z-10 pointer-events-auto" />
 
-      {/* ホバー時のラベル */}
+      {/* ホバー時のラベル（フォーカス中は非表示） */}
       <AnimatePresence>
-        {hoveredPlanet && (
+        {hoveredPlanet && !focusPlanetId && (
           <motion.div
             className="fixed pointer-events-none z-20"
             style={{
