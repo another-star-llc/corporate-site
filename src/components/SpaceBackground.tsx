@@ -22,14 +22,17 @@ interface SpaceBackgroundProps {
   focusPlanetId?: string | null;
 }
 
+// 地球中心座標
+const EARTH_CENTER: [number, number, number] = [0, 0, 0];
+
 const planets: Planet[] = [
   {
     id: 'about',
     name: 'ABOUT',
     color: 0x4a9eff,
     emissive: 0x2463a8,
-    position: [-22, 8, -35],
-    size: 2.5,
+    position: [-250, 120, -130],   // 左上手前
+    size: 22,
     orbitSpeed: 0.0003,
     rotationSpeed: 0.005,
   },
@@ -38,8 +41,8 @@ const planets: Planet[] = [
     name: 'MISSION',
     color: 0xa855f7,
     emissive: 0x7c3aed,
-    position: [18, 12, -28],
-    size: 2.2,
+    position: [220, 180, -220],    // 右上奥
+    size: 20,
     orbitSpeed: 0.0004,
     rotationSpeed: 0.007,
   },
@@ -48,8 +51,8 @@ const planets: Planet[] = [
     name: 'MEMBERS',
     color: 0x60a5fa,
     emissive: 0x3b82f6,
-    position: [-5, -12, -42],
-    size: 2.0,
+    position: [-130, -220, -260],  // 左下奥
+    size: 18,
     orbitSpeed: 0.0005,
     rotationSpeed: 0.006,
   },
@@ -58,8 +61,8 @@ const planets: Planet[] = [
     name: 'TEAM',
     color: 0x34d399,
     emissive: 0x10b981,
-    position: [20, -8, -38],
-    size: 2.3,
+    position: [280, -140, -100],   // 右下手前
+    size: 21,
     orbitSpeed: 0.00035,
     rotationSpeed: 0.004,
   },
@@ -68,8 +71,8 @@ const planets: Planet[] = [
     name: 'SYSTEMS',
     color: 0xfb923c,
     emissive: 0xf97316,
-    position: [-8, 15, -25],
-    size: 2.6,
+    position: [50, 260, -70],      // 上中央手前
+    size: 24,
     orbitSpeed: 0.00045,
     rotationSpeed: 0.008,
   },
@@ -78,8 +81,8 @@ const planets: Planet[] = [
     name: 'CONTACT',
     color: 0xec4899,
     emissive: 0xdb2777,
-    position: [-18, -5, -30],
-    size: 2.4,
+    position: [-240, -100, -320],  // 左中央奥
+    size: 20,
     orbitSpeed: 0.0006,
     rotationSpeed: 0.005,
     ringColor: 0xf9a8d4,
@@ -120,7 +123,7 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
     if (!canvasRef.current) return;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 5000);
     const renderer = new THREE.WebGLRenderer({ 
       canvas: canvasRef.current, 
       antialias: true,
@@ -137,7 +140,7 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
     scene.background = new THREE.Color(0x000000);
 
     // スカイボックス（テクスチャなし、星とパーティクルのみ）
-    const skyboxGeometry = new THREE.SphereGeometry(300, 64, 64);
+    const skyboxGeometry = new THREE.SphereGeometry(3000, 64, 64);
     const skyboxMaterial = new THREE.MeshBasicMaterial({
       color: 0x000000,
       side: THREE.BackSide,
@@ -153,7 +156,7 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
       const starsGeometry = new THREE.BufferGeometry();
       const starsMaterial = new THREE.PointsMaterial({ 
         color: 0xffffff, 
-        size: 0.05 + layer * 0.02,
+        size: 0.3 + layer * 0.15,
         transparent: true,
         opacity: 0.8 - layer * 0.2,
       });
@@ -162,9 +165,9 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
       const colors = [];
       
       for (let i = 0; i < 3000; i++) {
-        const x = (Math.random() - 0.5) * 500;
-        const y = (Math.random() - 0.5) * 500;
-        const z = (Math.random() - 0.5) * 500 - layer * 50;
+        const x = (Math.random() - 0.5) * 3000;
+        const y = (Math.random() - 0.5) * 3000;
+        const z = (Math.random() - 0.5) * 3000 - layer * 200;
         
         starsVertices.push(x, y, z);
         
@@ -203,9 +206,9 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
 
     for (let i = 0; i < 200; i++) {
       particlesVertices.push(
-        (Math.random() - 0.5) * 100,
-        (Math.random() - 0.5) * 100,
-        (Math.random() - 0.5) * 100
+        (Math.random() - 0.5) * 1000,
+        (Math.random() - 0.5) * 1000,
+        (Math.random() - 0.5) * 1000
       );
       
       particleVelocities.push({
@@ -220,7 +223,7 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
     scene.add(particles);
 
     // 回転する地球（遠景）- NASAの地球テクスチャ
-    const earthGeometry = new THREE.SphereGeometry(8, 64, 64);
+    const earthGeometry = new THREE.SphereGeometry(35, 64, 64);
     const earthTexture = textureLoader.load(
       'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg'
     );
@@ -233,13 +236,13 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
     });
 
     const earth = new THREE.Mesh(earthGeometry, earthMaterial);
-    earth.position.set(-30, -20, -80);
+    earth.position.set(EARTH_CENTER[0], EARTH_CENTER[1], EARTH_CENTER[2]);
     earth.userData = { id: 'earth', name: 'EARTH', originalScale: 1 };
     earthMeshRef.current = earth;
     earthOriginalScale.current = 1;
     scene.add(earth);
 
-    const atmosphereGeometry = new THREE.SphereGeometry(8.5, 64, 64);
+    const atmosphereGeometry = new THREE.SphereGeometry(38, 64, 64);
     const atmosphereMaterial = new THREE.MeshBasicMaterial({
       color: 0x00aaff,
       transparent: true,
@@ -327,18 +330,18 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
     scene.add(ambientLight);
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    directionalLight.position.set(20, 10, 20);
+    directionalLight.position.set(200, 100, 200);
     scene.add(directionalLight);
 
     const pointLight1 = new THREE.PointLight(0x00ffff, 2, 100);
-    pointLight1.position.set(20, 20, 10);
+    pointLight1.position.set(200, 200, 100);
     scene.add(pointLight1);
 
     const pointLight2 = new THREE.PointLight(0xff00ff, 1.5, 100);
-    pointLight2.position.set(-20, -20, 10);
+    pointLight2.position.set(-200, -200, 100);
     scene.add(pointLight2);
 
-    camera.position.z = 30;
+    camera.position.z = 700;
 
     // マウス追従
     let mouseX = 0;
@@ -361,12 +364,12 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
       mouseRef.current.x = mouseX;
       mouseRef.current.y = mouseY;
 
-      targetRotationY = mouseX * 1.5;
-      targetRotationX = mouseY * 1.0;
+      targetRotationY = mouseX * 3.0;
+      targetRotationX = mouseY * 2.0;
 
       // パララックス効果用のカメラターゲット位置
-      targetCameraX = mouseX * 5;
-      targetCameraY = mouseY * 5;
+      targetCameraX = mouseX * 50;
+      targetCameraY = mouseY * 50;
 
       mousePositionRef.current = { x: event.clientX, y: event.clientY };
     };
@@ -428,8 +431,8 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
       // 地球を回転（パララックス - 中景、最も速い）
       earth.rotation.y = elapsedTime * 0.05;
       atmosphere.rotation.y = elapsedTime * 0.05;
-      earth.position.x = -30 + currentCameraX * 0.08; // より大きく動く
-      earth.position.y = -20 + currentCameraY * 0.08;
+      earth.position.x = EARTH_CENTER[0] + currentCameraX * 0.3;
+      earth.position.y = EARTH_CENTER[1] + currentCameraY * 0.3;
 
       // 粒子を動かす
       const positions = particlesGeometry.attributes.position.array as Float32Array;
@@ -445,11 +448,11 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
       particlesGeometry.attributes.position.needsUpdate = true;
 
       // ライトを動かす
-      pointLight1.position.x = Math.sin(elapsedTime) * 30;
-      pointLight1.position.y = Math.cos(elapsedTime * 0.7) * 30;
+      pointLight1.position.x = Math.sin(elapsedTime) * 300;
+      pointLight1.position.y = Math.cos(elapsedTime * 0.7) * 300;
 
-      pointLight2.position.x = Math.cos(elapsedTime * 0.8) * 30;
-      pointLight2.position.y = Math.sin(elapsedTime * 0.5) * 30;
+      pointLight2.position.x = Math.cos(elapsedTime * 0.8) * 300;
+      pointLight2.position.y = Math.sin(elapsedTime * 0.5) * 300;
 
       // パララックス用のカメラ位置イージング
       currentCameraX += (targetCameraX - currentCameraX) * 0.05;
@@ -463,8 +466,8 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
       planetGroup.rotation.x = currentRotationX;
       
       // 惑星グループ全体にもパララックス移動を適用（カメラと同期して逃げないように）
-      planetGroup.position.x = currentCameraX * 0.6;
-      planetGroup.position.y = currentCameraY * 0.6;
+      planetGroup.position.x = currentCameraX * 6;
+      planetGroup.position.y = currentCameraY * 6;
 
       // 各惑星を回転＋軌道移動（ヒットボックスの親＝可視メッシュを操作）
       planets.forEach((planetData) => {
@@ -553,9 +556,11 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
           const worldPos = new THREE.Vector3();
           planetMesh.getWorldPosition(worldPos);
 
-          // 惑星とカメラの間の手前位置をターゲットに（惑星サイズ分の距離を確保）
-          const dir = worldPos.clone().normalize();
-          const targetPos = worldPos.clone().sub(dir.multiplyScalar(15));
+          // カメラから惑星へ向かう方向に、惑星手前で止まる位置を計算
+          const planetData = planets.find(p => p.id === focusId);
+          const standoffDistance = (planetData?.size ?? 12) * 8;
+          const dirFromOrigin = worldPos.clone().normalize();
+          const targetPos = worldPos.clone().sub(dirFromOrigin.multiplyScalar(standoffDistance));
 
           camera.position.x += (targetPos.x - camera.position.x) * 0.04;
           camera.position.y += (targetPos.y - camera.position.y) * 0.04;
@@ -568,7 +573,7 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
       } else {
         camera.position.x += (currentCameraX - camera.position.x) * 0.05;
         camera.position.y += (currentCameraY - camera.position.y) * 0.05;
-        camera.position.z += (30 - camera.position.z) * 0.05;
+        camera.position.z += (700 - camera.position.z) * 0.05;
         camera.lookAt(0, 0, 0);
       }
 
