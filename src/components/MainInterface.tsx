@@ -91,7 +91,7 @@ export function MainInterface() {
       <div class="grid grid-cols-2 gap-4 mt-6">
         <div class="p-4 bg-cyan-500/10 border border-cyan-500/30 rounded-lg">
           <div class="text-xs text-gray-500 mb-1">設立</div>
-          <div class="text-xl text-cyan-400">2025年7月14日</div>
+          <div class="text-xl text-cyan-400">2025年7月22日</div>
         </div>
         <div class="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
           <div class="text-xs text-gray-500 mb-1">資本金</div>
@@ -468,7 +468,7 @@ export function MainInterface() {
         onPlanetClick={openWindow}
         onPlanetHover={handlePlanetHover}
         onEarthClick={handleEarthClick}
-        onEmptyClick={() => setFocusPlanetId(null)}
+        onEmptyClick={() => { setFocusPlanetId(null); setWindows([]); }}
         focusPlanetId={focusPlanetId}
       />
 
@@ -496,12 +496,12 @@ export function MainInterface() {
       <ControlPanel
         hoveredPlanet={hoveredPlanet}
         planets={[
-          { id: 'about', name: 'ABOUT', color: 0x4a9eff, position: [-22, 8, -35], size: 2.5 },
-          { id: 'mission', name: 'MISSION', color: 0xa855f7, position: [18, 12, -28], size: 2.2 },
-          { id: 'members', name: 'MEMBERS', color: 0x60a5fa, position: [-5, -12, -42], size: 2.0 },
-          { id: 'team', name: 'TEAM', color: 0x34d399, position: [20, -8, -38], size: 2.3 },
-          { id: 'systems', name: 'SYSTEMS', color: 0xfb923c, position: [-8, 15, -25], size: 2.6 },
-          { id: 'contact', name: 'CONTACT', color: 0xec4899, position: [-18, -5, -30], size: 2.4 },
+          { id: 'about', name: 'ABOUT', color: 0x4a9eff, position: [-250, 120, -130], size: 22 },
+          { id: 'mission', name: 'MISSION', color: 0xa855f7, position: [220, 180, -220], size: 20 },
+          { id: 'members', name: 'MEMBERS', color: 0x60a5fa, position: [-130, -220, -260], size: 18 },
+          { id: 'team', name: 'TEAM', color: 0x34d399, position: [280, -140, -100], size: 21 },
+          { id: 'systems', name: 'SYSTEMS', color: 0xfb923c, position: [50, 260, -70], size: 24 },
+          { id: 'contact', name: 'CONTACT', color: 0xec4899, position: [-240, -100, -320], size: 20 },
         ]}
       />
 
