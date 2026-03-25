@@ -8,7 +8,7 @@ export default function App() {
   const [entered, setEntered] = useState(false);
   const [hyperspace, setHyperspace] = useState(false);
 
-  // 4秒後に自動でワープ開始（タグ表示後）
+  // 7秒後に自動でワープ開始（タグ表示後）
   useEffect(() => {
     const timer = setTimeout(() => {
       setHyperspace(true);
@@ -16,7 +16,7 @@ export default function App() {
         setEntered(true);
         setHyperspace(false);
       }, 1800);
-    }, 4000);
+    }, 7000);
 
     return () => clearTimeout(timer);
   }, []);
