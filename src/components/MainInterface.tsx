@@ -40,6 +40,7 @@ export function MainInterface() {
   const [highestZIndex, setHighestZIndex] = useState(100);
   const [hoveredPlanet, setHoveredPlanet] = useState<string | null>(null);
   const [showEarthMessage, setShowEarthMessage] = useState(false);
+  const [focusPlanetId, setFocusPlanetId] = useState<string | null>(null);
 
   // 惑星ホバーハンドラをメモ化
   const handlePlanetHover = useCallback((planetId: string | null) => {
@@ -467,6 +468,8 @@ export function MainInterface() {
         onPlanetClick={openWindow}
         onPlanetHover={handlePlanetHover}
         onEarthClick={handleEarthClick}
+        onEmptyClick={() => setFocusPlanetId(null)}
+        focusPlanetId={focusPlanetId}
       />
 
       {/* 地球クリック時のメッセージオーバーレイ */}
@@ -481,8 +484,13 @@ export function MainInterface() {
       {/* ホログラム・グリッチエフェクト */}
       <HologramGlitch />
 
-      {/* 惑星クリックのヒントバナー */}
-      <PlanetHint />
+      {/* 惑星フォーカスナビゲーション */}
+      <PlanetHint
+        focusPlanetId={focusPlanetId}
+        onCyclePlanet={(planetId) => setFocusPlanetId(planetId)}
+        planetIds={menuItems.map(m => m.id)}
+        planetLabels={Object.fromEntries(menuItems.map(m => [m.id, m.label]))}
+      />
 
       {/* 制御パネル（中央下部） */}
       <ControlPanel
