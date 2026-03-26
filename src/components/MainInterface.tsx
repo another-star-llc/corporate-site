@@ -55,11 +55,11 @@ export function MainInterface() {
 
   const menuItems = [
     { id: 'about', label: 'ABOUT', icon: Target, color: 'cyan' },
-    { id: 'mission', label: 'MISSION', icon: Shield, color: 'purple' },
+    { id: 'systems', label: 'SYSTEMS', icon: UserCog, color: 'orange' },
     { id: 'members', label: 'MEMBERS', icon: Users, color: 'blue' },
     { id: 'team', label: 'TEAM', icon: Building2, color: 'green' },
-    { id: 'systems', label: 'SYSTEMS', icon: UserCog, color: 'orange' },
     { id: 'contact', label: 'CONTACT', icon: Mail, color: 'pink' },
+    { id: 'mission', label: 'MISSION', icon: Shield, color: 'purple' },
   ];
 
   const contentMap: Record<string, string> = {
@@ -282,98 +282,55 @@ export function MainInterface() {
     systems: `<div class="space-y-6">
       <h2 class="text-3xl bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent mb-6">システム・技術紹介</h2>
 
+      <div class="p-5 bg-gradient-to-br from-orange-500/10 to-yellow-500/5 border border-orange-500/40 rounded-lg mb-2">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="px-2 py-0.5 bg-orange-500/20 border border-orange-500/40 rounded-full text-orange-300 text-xs font-bold">GENIAC-PRIZE 領域3 みらいビジョン賞 受賞</span>
+        </div>
+        <h3 class="text-lg text-orange-300 font-bold mb-2">AIエージェント同士をセキュアにマッチング・連携させる国産OSSプラットフォーム</h3>
+        <p class="text-gray-300 text-sm leading-relaxed">
+          外部AIエージェントの真正性とセキュリティを多段階で評価しスコア化するエージェントストアと、ストアから安全な外部AIを選定し計画・実行・全通信監視を行う仲介エージェントを組み合わせた国産OSSプラットフォーム。計画逸脱や不正を検知した場合は即座にブロックし、ストアの信頼スコアへフィードバックする自己改善ループにより、エージェント連携の安全性を継続的に向上させます。
+        </p>
+      </div>
+
       <div class="space-y-6">
         <!-- システム1 -->
-        <div class="p-5 bg-gradient-to-br from-orange-500/10 to-red-500/5 border border-orange-500/30 rounded-lg">
-          <div class="flex items-start gap-4 mb-4">
-            <div class="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-500 rounded-lg flex items-center justify-center flex-shrink-0">
-              <span class="text-3xl">🔍</span>
-            </div>
-            <div>
-              <h3 class="text-2xl text-orange-400 mb-1">Browser Agent Detector</h3>
-              <p class="text-red-400 text-sm">機械学習モデルによるブラウザ操作検知システム</p>
-            </div>
+        <div class="p-5 bg-gradient-to-br from-orange-500/10 to-yellow-500/5 border border-orange-500/40 rounded-lg">
+          <h3 class="text-lg text-orange-300 font-bold mb-2">Browser Agent Detector</h3>
+          <p class="text-gray-400 text-sm mb-3">機械学習モデルによるブラウザ操作検知システム</p>
+          <p class="text-gray-300 text-sm leading-relaxed mb-3">
+            会員制サイトを対象に「会員のペルソナからの逸脱度」「操作ログやブラウザ属性」による多段検知システム
+          </p>
+          <div class="flex flex-wrap gap-2 mb-3">
+            <span class="px-2 py-1 bg-orange-500/20 border border-orange-500/30 rounded text-orange-300 text-xs">Comet</span>
+            <span class="px-2 py-1 bg-orange-500/20 border border-orange-500/30 rounded text-orange-300 text-xs">ChatGPT Atlas</span>
+            <span class="px-2 py-1 bg-orange-500/20 border border-orange-500/30 rounded text-orange-300 text-xs">Playwright MCP</span>
+            <span class="px-2 py-1 bg-orange-500/20 border border-orange-500/30 rounded text-orange-300 text-xs">Gemini Computer Use</span>
           </div>
-          <div class="space-y-3">
-            <p class="text-gray-300 text-sm leading-relaxed">
-              会員制サイトを対象に「会員のペルソナからの逸脱度」「操作ログやブラウザ属性」による多段検知システム
-            </p>
-            <div class="p-3 bg-orange-500/10 border border-orange-500/20 rounded">
-              <div class="text-xs text-gray-500 mb-2">検知対象例</div>
-              <div class="flex flex-wrap gap-2">
-                <span class="px-2 py-1 bg-orange-500/20 rounded text-orange-300 text-xs">Comet</span>
-                <span class="px-2 py-1 bg-red-500/20 rounded text-red-300 text-xs">ChatGPT Atlas</span>
-                <span class="px-2 py-1 bg-orange-500/20 rounded text-orange-300 text-xs">Playwright MCP</span>
-                <span class="px-2 py-1 bg-red-500/20 rounded text-red-300 text-xs">Gemini Computer Use</span>
-              </div>
-            </div>
-            <div class="p-3 bg-red-500/10 border border-red-500/20 rounded">
-              <div class="text-xs text-gray-500 mb-1">提供形態</div>
-              <p class="text-red-300 text-sm">API提供サービス</p>
-            </div>
+          <div class="p-3 bg-orange-500/10 border border-orange-500/20 rounded">
+            <div class="text-xs text-gray-500 mb-1">提供形態</div>
+            <p class="text-orange-300 text-sm">API提供サービス</p>
           </div>
         </div>
 
         <!-- システム2 -->
-        <div class="p-5 bg-gradient-to-br from-blue-500/10 to-indigo-500/5 border border-blue-500/30 rounded-lg">
-          <div class="flex items-start gap-4 mb-4">
-            <div class="w-16 h-16 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-lg flex items-center justify-center flex-shrink-0">
-              <span class="text-3xl">🤝</span>
+        <div class="p-5 bg-gradient-to-br from-orange-500/10 to-yellow-500/5 border border-orange-500/40 rounded-lg">
+          <h3 class="text-lg text-orange-300 font-bold mb-2">AI Bias Watcher</h3>
+          <p class="text-gray-400 text-sm mb-3">AI検索サービスの企業バイアス検知</p>
+          <p class="text-gray-300 text-sm leading-relaxed mb-3">
+            PerplexityなどのAI検索サービスに企業評価クエリを定期送信し、回答の偏りを時系列で可視化する監視ダッシュボード。
+          </p>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="p-3 bg-orange-500/10 border border-orange-500/20 rounded">
+              <p class="text-orange-300 text-xs">定期クエリと自動収集</p>
             </div>
-            <div>
-              <h3 class="text-2xl text-blue-400 mb-1">A2A Mediation Agent</h3>
-              <p class="text-indigo-400 text-sm">ユーザーと企業エージェントの仲介</p>
+            <div class="p-3 bg-orange-500/10 border border-orange-500/20 rounded">
+              <p class="text-orange-300 text-xs">指標別バイアストラッキング</p>
             </div>
-          </div>
-          <div class="space-y-3">
-            <p class="text-gray-300 text-sm leading-relaxed">
-              ユーザーエージェントのリクエストを解釈し、ストアに登録された企業エージェントに最適にルーティングする仲介プラットフォーム。
-            </p>
-            <div class="grid grid-cols-2 gap-3">
-              <div class="p-3 bg-blue-500/10 border border-blue-500/20 rounded">
-                <p class="text-blue-300 text-xs">A2Aのプロンプトインジェクション検知</p>
-              </div>
-              <div class="p-3 bg-indigo-500/10 border border-indigo-500/20 rounded">
-                <p class="text-indigo-300 text-xs">ニーズ分析と最適マッチング</p>
-              </div>
-              <div class="p-3 bg-blue-500/10 border border-blue-500/20 rounded">
-                <p class="text-blue-300 text-xs">裁判員制度を模したAIによるリスク評価</p>
-              </div>
-              <div class="p-3 bg-indigo-500/10 border border-indigo-500/20 rounded">
-                <p class="text-indigo-300 text-xs">エージェントストア側へのフィードバック</p>
-              </div>
+            <div class="p-3 bg-orange-500/10 border border-orange-500/20 rounded">
+              <p class="text-orange-300 text-xs">時系列ダッシュボード解析</p>
             </div>
-          </div>
-        </div>
-
-        <!-- システム3 -->
-        <div class="p-5 bg-gradient-to-br from-purple-500/10 to-pink-500/5 border border-purple-500/30 rounded-lg">
-          <div class="flex items-start gap-4 mb-4">
-            <div class="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-500 rounded-lg flex items-center justify-center flex-shrink-0">
-              <span class="text-3xl">👁️</span>
-            </div>
-            <div>
-              <h3 class="text-2xl text-purple-400 mb-1">AI Bias Watcher</h3>
-              <p class="text-pink-400 text-sm">AI検索サービスの企業バイアス検知</p>
-            </div>
-          </div>
-          <div class="space-y-3">
-            <p class="text-gray-300 text-sm leading-relaxed">
-              PerplexityなどのAI検索サービスに企業評価クエリを定期送信し、回答の偏りを時系列で可視化する監視ダッシュボード。
-            </p>
-            <div class="grid grid-cols-2 gap-3">
-              <div class="p-3 bg-purple-500/10 border border-purple-500/20 rounded">
-                <p class="text-purple-300 text-xs">定期クエリと自動収集</p>
-              </div>
-              <div class="p-3 bg-pink-500/10 border border-pink-500/20 rounded">
-                <p class="text-pink-300 text-xs">指標別バイアストラッキング</p>
-              </div>
-              <div class="p-3 bg-purple-500/10 border border-purple-500/20 rounded">
-                <p class="text-purple-300 text-xs">時系列ダッシュボード解析</p>
-              </div>
-              <div class="p-3 bg-pink-500/10 border border-pink-500/20 rounded">
-                <p class="text-pink-300 text-xs">SNS投稿&レポート生成</p>
-              </div>
+            <div class="p-3 bg-orange-500/10 border border-orange-500/20 rounded">
+              <p class="text-orange-300 text-xs">SNS投稿&レポート生成</p>
             </div>
           </div>
         </div>
