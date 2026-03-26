@@ -96,9 +96,9 @@ export function HUD() {
 
   return (
     <>
-      {/* 左上 - システム情報 */}
+      {/* 左上 - システム情報（モバイル非表示） */}
       <motion.div
-        className="fixed top-6 left-6 z-20 font-mono"
+        className="fixed top-6 left-6 z-20 font-mono hidden sm:block"
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.5 }}
@@ -140,9 +140,9 @@ export function HUD() {
         </div>
       </motion.div>
 
-      {/* 右上 - 時計とステータス */}
+      {/* 右上 - 時計とステータス（モバイル非表示） */}
       <motion.div
-        className="fixed top-6 right-6 z-20 font-mono"
+        className="fixed top-6 right-6 z-20 font-mono hidden sm:block"
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.5 }}
@@ -170,9 +170,9 @@ export function HUD() {
         </div>
       </motion.div>
 
-      {/* 左下 - レーダー風UI */}
+      {/* 左下 - レーダー風UI（モバイル非表示） */}
       <motion.div
-        className="fixed bottom-6 left-6 z-20"
+        className="fixed bottom-6 left-6 z-20 hidden sm:block"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.7 }}
@@ -224,14 +224,14 @@ export function HUD() {
         </div>
       </motion.div>
 
-      {/* 右下 - システムログ */}
+      {/* 右下 - システムログ（モバイルは下部全幅） */}
       <motion.div
-        className="fixed bottom-6 right-6 z-20 font-mono"
+        className="fixed bottom-2 left-2 right-2 sm:bottom-6 sm:right-6 sm:left-auto z-20 font-mono"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.7 }}
       >
-        <div className="bg-black/40 backdrop-blur-md border border-blue-500/30 rounded-lg p-4 w-80 shadow-[0_0_20px_rgba(59,130,246,0.3)]">
+        <div className="bg-black/40 backdrop-blur-md border border-blue-500/30 rounded-lg p-3 sm:p-4 w-full sm:w-80 shadow-[0_0_20px_rgba(59,130,246,0.3)]">
           <div className="text-blue-400 text-xs mb-2 flex items-center gap-2">
             <span>SYSTEM LOG</span>
             <motion.div
@@ -241,7 +241,7 @@ export function HUD() {
             />
           </div>
 
-          <div className="space-y-1 text-xs max-h-28 overflow-hidden">
+          <div className="space-y-1 text-xs max-h-16 sm:max-h-28 overflow-hidden">
             <AnimatePresence mode="popLayout">
               {logs.map((log) => {
                 const colorClasses: Record<string, string> = {

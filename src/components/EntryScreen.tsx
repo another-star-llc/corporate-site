@@ -19,7 +19,7 @@ export function EntryScreen() {
 
   return (
     <motion.div
-      className="fixed inset-0 bg-gradient-to-br from-gray-900 via-black to-blue-900"
+      className="fixed inset-0 bg-black sm:bg-gradient-to-br sm:from-gray-900 sm:via-black sm:to-blue-900"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -80,8 +80,8 @@ export function EntryScreen() {
           }}
         />
 
-        {/* グラデーションオーバーレイ */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-900/20 to-black/50" />
+        {/* グラデーションオーバーレイ（モバイル非表示） */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-900/20 to-black/50 hidden sm:block" />
       </div>
 
       {/* 中央の地球イメージ（前景 - 最も速い）*/}
@@ -224,7 +224,7 @@ export function EntryScreen() {
           
           {/* 内側の暗い円（地球を囲む枠） */}
           <motion.div
-            className="absolute inset-[70px] rounded-full border-4 border-gray-900/80 shadow-[inset_0_0_80px_rgba(0,0,0,0.9)]"
+            className="absolute inset-[70px] rounded-full border-4 border-gray-900/80 shadow-[inset_0_0_80px_rgba(0,0,0,0.9)] hidden sm:block"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 1.5, delay: 0.5 }}

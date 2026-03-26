@@ -131,8 +131,8 @@ export function HologramGlitch() {
         }}
       />
 
-      {/* コーナーブラケット（HUD風） */}
-      <div className="fixed inset-0 pointer-events-none z-[9998]">
+      {/* コーナーブラケット（HUD風・モバイル非表示） */}
+      <div className="fixed inset-0 pointer-events-none z-[9998] hidden sm:block">
         {/* 左上 */}
         <motion.div
           className="absolute top-4 left-4 w-12 h-12 border-l-2 border-t-2 border-cyan-500/40"
@@ -182,9 +182,9 @@ export function HologramGlitch() {
         />
       </div>
 
-      {/* ビネット効果 */}
+      {/* ビネット効果（モバイル非表示） */}
       <div
-        className="fixed inset-0 pointer-events-none z-[9997]"
+        className="fixed inset-0 pointer-events-none z-[9997] hidden sm:block"
         style={{
           background: 'radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.3) 100%)',
         }}

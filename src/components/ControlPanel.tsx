@@ -72,7 +72,7 @@ export const ControlPanel = memo(function ControlPanel({ hoveredPlanet, planets 
 
   return (
     <motion.div
-      className="fixed bottom-8 left-1/2 -translate-x-1/2 z-30 pointer-events-none"
+      className="fixed bottom-8 left-1/2 -translate-x-1/2 z-30 pointer-events-none hidden sm:block"
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.5, duration: 0.8 }}

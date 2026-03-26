@@ -29,7 +29,7 @@ export const PlanetHint = memo(function PlanetHint({
 
   return (
     <motion.div
-      className="fixed top-6 left-1/2 -translate-x-1/2 z-20"
+      className="fixed top-20 sm:top-6 left-1/2 -translate-x-1/2 z-20"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 1.5, duration: 0.6 }}
