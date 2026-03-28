@@ -21,7 +21,6 @@ import {
 import naoyaYasudaImg from '../assets/naoya_yasuda.png';
 import saitoImg from '../assets/saito_shinnnosuke.jpeg';
 import hiromatsuImg from '../assets/hiromatsu.png';
-import hasegawaImg from '../assets/Hasegawa.png';
 import satoKojiImg from '../assets/sato_koji.png';
 import kannoImg from '../assets/Kanno.png';
 
@@ -236,20 +235,6 @@ export function MainInterface() {
         </div>
 
         <!-- チームメンバー2 -->
-        <div class="p-5 bg-gradient-to-br from-teal-500/10 to-cyan-500/5 border border-teal-500/30 rounded-lg hover:border-teal-500/50 transition-all">
-          <div class="flex items-start gap-4 mb-4">
-            <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-teal-400 flex-shrink-0">
-              <img src="${hasegawaImg}" alt="長谷川 大樹" class="w-full h-full object-cover" />
-            </div>
-            <div>
-              <h3 class="text-2xl text-teal-400 mb-1">長谷川 大樹</h3>
-              <p class="text-sm text-cyan-400">要件定義・設計・開発 | ソリューションエンジニア</p>
-            </div>
-          </div>
-          <p class="text-gray-400 text-sm">アクセンチュアでブリッジエンジニア兼クラウドコンサルタントとして従事 / 技術検証 / セキュリティ設計 / PoC推進</p>
-        </div>
-
-        <!-- チームメンバー3 -->
         <div class="p-5 bg-gradient-to-br from-blue-500/10 to-indigo-500/5 border border-blue-500/30 rounded-lg hover:border-blue-500/50 transition-all">
           <div class="flex items-start gap-4 mb-4">
             <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-blue-400 flex-shrink-0">
