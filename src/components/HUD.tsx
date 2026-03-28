@@ -15,7 +15,6 @@ const logMessages = [
   { type: 'member', color: 'purple', text: 'MEMBER: Naoya Yasuda - CEO / Software Engineer' },
   { type: 'member', color: 'pink', text: 'MEMBER: Shinnosuke Saito - COO / AI Engineer' },
   { type: 'member', color: 'teal', text: 'TEAM: Taichi Hiromatsu - AI Safety Architect' },
-  { type: 'member', color: 'emerald', text: 'TEAM: Daiki Hasegawa - Solution Engineer' },
   { type: 'member', color: 'indigo', text: 'TEAM: Koji Sato - Documentation Specialist' },
   { type: 'member', color: 'violet', text: 'ADVISOR: Satoshi Kanno - Risk & Strategy' },
   // プロジェクト・案件
