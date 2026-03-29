@@ -2,10 +2,6 @@ import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { SpaceBackground } from './SpaceBackground';
 import { DraggableWindow } from './DraggableWindow';
-import { HUD } from './HUD';
-import { ControlPanel } from './ControlPanel';
-import { HologramGlitch } from './HologramGlitch';
-import { PlanetHint } from './PlanetHint';
 import { EarthMessage } from './EarthMessage';
 import {
   Building2,
@@ -37,14 +33,8 @@ interface WindowState {
 export function MainInterface() {
   const [windows, setWindows] = useState<WindowState[]>([]);
   const [highestZIndex, setHighestZIndex] = useState(100);
-  const [hoveredPlanet, setHoveredPlanet] = useState<string | null>(null);
   const [showEarthMessage, setShowEarthMessage] = useState(false);
   const [focusPlanetId, setFocusPlanetId] = useState<string | null>(null);
-
-  // 惑星ホバーハンドラをメモ化
-  const handlePlanetHover = useCallback((planetId: string | null) => {
-    setHoveredPlanet(planetId);
-  }, []);
 
   // 地球クリックハンドラ
   const handleEarthClick = useCallback(() => {
@@ -74,18 +64,16 @@ export function MainInterface() {
 
       <div class="space-y-4">
         <p class="text-gray-300 leading-relaxed">
-          Another Star合同会社は、生成AIの安全性確保という重要な社会課題に取り組むために設立されたテクノロジー企業です。
+          Another Star合同会社は、AIエージェント間の安全な連携を実現するセキュリティ基盤を開発するテクノロジー企業です。
         </p>
         <p class="text-gray-300 leading-relaxed">
-          私たちは、NEDOの懸賞プログラムであるGENIAC-PRIZEの領域03「生成AIの安全性確保に向けたリスク探索及びリスク低減技術の開発」に挑戦し、AI技術の安全で持続可能な社会実装とその事業化を目指しています。
+          2025年7月の設立からわずか8ヶ月で、NEDO主催 GENIAC-PRIZEにおいて特別賞「みらいビジョン賞」を受賞。AIエージェント同士の通信に信頼レイヤーを提供する独自のプラットフォームが、新規性・将来性の観点から高く評価されました。
+        </p>
+        <p class="text-gray-300 leading-relaxed">
+          今後は公的機関や産官学との連携を深め、AIエージェント連携のグローバルセキュリティ標準の確立を目指します。
         </p>
       </div>
 
-      <div class="flex flex-wrap gap-2 my-6">
-        <span class="px-3 py-1 bg-cyan-500/20 border border-cyan-500/40 rounded-full text-cyan-400 text-sm">GENIAC-PRIZE</span>
-        <span class="px-3 py-1 bg-blue-500/20 border border-blue-500/40 rounded-full text-blue-400 text-sm">AI安全性</span>
-        <span class="px-3 py-1 bg-purple-500/20 border border-purple-500/40 rounded-full text-purple-400 text-sm">リスク低減</span>
-      </div>
 
       <div class="grid grid-cols-2 gap-4 mt-6">
         <div class="p-4 bg-cyan-500/10 border border-cyan-500/30 rounded-lg">
@@ -105,17 +93,15 @@ export function MainInterface() {
     </div>`,
 
     mission: `<div class="space-y-6">
-      <h2 class="text-3xl bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent mb-6">私たちのミッション</h2>
-
       <div class="space-y-4">
         <div class="p-5 bg-gradient-to-br from-purple-500/10 to-pink-500/5 border border-purple-500/30 rounded-lg hover:border-purple-500/50 transition-all group">
           <div class="flex items-start gap-4">
             <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-              <span class="text-2xl">🛡️</span>
+              <span class="text-2xl">🤝</span>
             </div>
             <div>
-              <h3 class="text-xl text-purple-400 mb-2">安全性の確保</h3>
-              <p class="text-gray-400 text-sm leading-relaxed">生成AIシステムの潜在的なリスクを早期発見し、効果的な対策を提供します。</p>
+              <h3 class="text-xl text-purple-400 mb-2">安全な自律連携</h3>
+              <p class="text-gray-400 text-sm leading-relaxed">AIエージェント同士が、人間の介在なしに安心して協働できる信頼基盤を築く。</p>
             </div>
           </div>
         </div>
@@ -123,11 +109,11 @@ export function MainInterface() {
         <div class="p-5 bg-gradient-to-br from-blue-500/10 to-cyan-500/5 border border-blue-500/30 rounded-lg hover:border-blue-500/50 transition-all group">
           <div class="flex items-start gap-4">
             <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-              <span class="text-2xl">⚡</span>
+              <span class="text-2xl">🌐</span>
             </div>
             <div>
-              <h3 class="text-xl text-blue-400 mb-2">技術革新</h3>
-              <p class="text-gray-400 text-sm leading-relaxed">最先端の研究と実用的なソリューション開発を通じて技術革新を推進します。</p>
+              <h3 class="text-xl text-blue-400 mb-2">世界標準の創出</h3>
+              <p class="text-gray-400 text-sm leading-relaxed">産官学の協業を通じて、AIエージェント連携のグローバルセキュリティ標準を日本から確立する。</p>
             </div>
           </div>
         </div>
@@ -135,11 +121,11 @@ export function MainInterface() {
         <div class="p-5 bg-gradient-to-br from-cyan-500/10 to-teal-500/5 border border-cyan-500/30 rounded-lg hover:border-cyan-500/50 transition-all group">
           <div class="flex items-start gap-4">
             <div class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-teal-500 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-              <span class="text-2xl">🌍</span>
+              <span class="text-2xl">🔎</span>
             </div>
             <div>
-              <h3 class="text-xl text-cyan-400 mb-2">社会実装</h3>
-              <p class="text-gray-400 text-sm leading-relaxed">誰もが安心して生成AIを活用できる未来の実現に貢献します。</p>
+              <h3 class="text-xl text-cyan-400 mb-2">透明性の追求</h3>
+              <p class="text-gray-400 text-sm leading-relaxed">すべての評価プロセスを公開し、誰もが検証できる透明なセキュリティを実現する。</p>
             </div>
           </div>
         </div>
@@ -213,11 +199,6 @@ export function MainInterface() {
     team: `<div class="space-y-6">
       <h2 class="text-3xl bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent mb-4">開発チーム</h2>
 
-      <div class="p-4 bg-green-500/10 border border-green-500/30 rounded-lg mb-6">
-        <p class="text-gray-300 text-sm leading-relaxed">
-          GENIAC-PRIZEに挑むAnother Starの開発体制は、社員2名と4名の専門メンバーが役割を分担しながら密に連携することで、要件定義から実装、評価までを短いスプリントで回しています。
-        </p>
-      </div>
 
       <div class="space-y-4">
         <!-- チームメンバー1 -->
@@ -384,6 +365,7 @@ export function MainInterface() {
 
   const closeWindow = (id: string) => {
     setWindows(windows.filter(w => w.id !== id));
+    setFocusPlanetId(null);
   };
 
   const bringToFront = (id: string) => {
@@ -399,6 +381,11 @@ export function MainInterface() {
     ));
   };
 
+  const handleNavClick = useCallback((itemId: string) => {
+    setFocusPlanetId(itemId);
+    openWindow(itemId);
+  }, [openWindow]);
+
   return (
     <motion.div
       className="fixed inset-0"
@@ -407,8 +394,8 @@ export function MainInterface() {
       transition={{ duration: 1 }}
     >
       <SpaceBackground
-        onPlanetClick={openWindow}
-        onPlanetHover={handlePlanetHover}
+        onPlanetClick={(id) => { setFocusPlanetId(id); openWindow(id); }}
+        onPlanetHover={() => {}}
         onEarthClick={handleEarthClick}
         onEmptyClick={() => { setFocusPlanetId(null); setWindows([]); }}
         focusPlanetId={focusPlanetId}
@@ -421,31 +408,39 @@ export function MainInterface() {
         onContactClick={handleEarthContactClick}
       />
 
-      <HUD />
+      {/* ヘッダーナビゲーション */}
+      <header className="fixed top-0 left-0 right-0 z-50">
+        <nav className="flex items-center justify-between px-10 py-6">
+          <div className="text-white font-light tracking-[0.2em] text-base select-none">
+            Another Star
+          </div>
+          <div className="hidden md:flex items-center gap-10">
+            {menuItems.map(item => (
+              <button
+                key={item.id}
+                onClick={() => handleNavClick(item.id)}
+                className={`text-xs tracking-[0.15em] uppercase transition-colors duration-200 ${
+                  focusPlanetId === item.id
+                    ? 'text-white'
+                    : 'text-gray-400 hover:text-gray-200'
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </nav>
+      </header>
 
-      {/* ホログラム・グリッチエフェクト */}
-      <HologramGlitch />
-
-      {/* 惑星フォーカスナビゲーション */}
-      <PlanetHint
-        focusPlanetId={focusPlanetId}
-        onCyclePlanet={(planetId) => { setFocusPlanetId(planetId); setWindows([]); }}
-        planetIds={menuItems.map(m => m.id)}
-        planetLabels={Object.fromEntries(menuItems.map(m => [m.id, m.label]))}
-      />
-
-      {/* 制御パネル（中央下部） */}
-      <ControlPanel
-        hoveredPlanet={hoveredPlanet}
-        planets={[
-          { id: 'about', name: 'ABOUT', color: 0x4a9eff, position: [-250, 120, -130], size: 22 },
-          { id: 'mission', name: 'MISSION', color: 0xa855f7, position: [220, 180, -220], size: 20 },
-          { id: 'members', name: 'MEMBERS', color: 0x60a5fa, position: [-130, -220, -260], size: 18 },
-          { id: 'team', name: 'TEAM', color: 0x34d399, position: [280, -140, -100], size: 21 },
-          { id: 'systems', name: 'SYSTEMS', color: 0xfb923c, position: [50, 260, -70], size: 24 },
-          { id: 'contact', name: 'CONTACT', color: 0xec4899, position: [-240, -100, -320], size: 20 },
-        ]}
-      />
+      {/* ヒーローテキスト */}
+      <div className="absolute bottom-[28%] left-0 right-0 text-center pointer-events-none select-none">
+        <h1 className="text-4xl md:text-5xl text-white font-light leading-tight tracking-wide">
+          AIエージェントが信頼でつながる<br />世界をつくる。
+        </h1>
+        <p className="text-gray-400 mt-5 text-sm tracking-[0.15em]">
+          Becoming the next stellar force for safe, sustainable AI.
+        </p>
+      </div>
 
       {/* ウィンドウ */}
       <AnimatePresence>
