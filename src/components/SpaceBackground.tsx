@@ -22,8 +22,8 @@ interface SpaceBackgroundProps {
   focusPlanetId?: string | null;
 }
 
-// 地球中心座標
-const EARTH_CENTER: [number, number, number] = [0, 0, 0];
+// 地球中心座標（JAFCOスタイル：少し上に配置）
+const EARTH_CENTER: [number, number, number] = [0, 30, 0];
 
 const planets: Planet[] = [
   {
@@ -31,8 +31,8 @@ const planets: Planet[] = [
     name: 'ABOUT',
     color: 0x4a9eff,
     emissive: 0x2463a8,
-    position: [-250, 120, -130],   // 左上手前
-    size: 22,
+    position: [-500, 240, -130],
+    size: 44,
     orbitSpeed: 0.0003,
     rotationSpeed: 0.005,
   },
@@ -41,8 +41,8 @@ const planets: Planet[] = [
     name: 'MISSION',
     color: 0xa855f7,
     emissive: 0x7c3aed,
-    position: [220, 180, -220],    // 右上奥
-    size: 20,
+    position: [440, 360, -220],
+    size: 40,
     orbitSpeed: 0.0004,
     rotationSpeed: 0.007,
   },
@@ -51,8 +51,8 @@ const planets: Planet[] = [
     name: 'MEMBERS',
     color: 0x60a5fa,
     emissive: 0x3b82f6,
-    position: [-130, -220, -260],  // 左下奥
-    size: 18,
+    position: [-260, -440, -260],
+    size: 36,
     orbitSpeed: 0.0005,
     rotationSpeed: 0.006,
   },
@@ -61,8 +61,8 @@ const planets: Planet[] = [
     name: 'TEAM',
     color: 0x34d399,
     emissive: 0x10b981,
-    position: [280, -140, -100],   // 右下手前
-    size: 21,
+    position: [560, -280, -100],
+    size: 42,
     orbitSpeed: 0.00035,
     rotationSpeed: 0.004,
   },
@@ -71,8 +71,8 @@ const planets: Planet[] = [
     name: 'SYSTEMS',
     color: 0xfb923c,
     emissive: 0xf97316,
-    position: [50, 260, -70],      // 上中央手前
-    size: 24,
+    position: [100, 520, -70],
+    size: 48,
     orbitSpeed: 0.00045,
     rotationSpeed: 0.008,
   },
@@ -81,8 +81,8 @@ const planets: Planet[] = [
     name: 'CONTACT',
     color: 0xec4899,
     emissive: 0xdb2777,
-    position: [-240, -100, -320],  // 左中央奥
-    size: 20,
+    position: [-480, -200, -320],
+    size: 40,
     orbitSpeed: 0.0006,
     rotationSpeed: 0.005,
     ringColor: 0xf9a8d4,
@@ -123,7 +123,7 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
     if (!canvasRef.current) return;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 5000);
+    const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 5000);
     const renderer = new THREE.WebGLRenderer({ 
       canvas: canvasRef.current, 
       antialias: true,
@@ -249,8 +249,8 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
     const particles = new THREE.Points(particlesGeometry, particlesMaterial);
     scene.add(particles);
 
-    // 回転する地球（遠景）- NASAの地球テクスチャ
-    const earthGeometry = new THREE.SphereGeometry(35, 64, 64);
+    // 回転する地球（JAFCOスタイル：大きく表示）
+    const earthGeometry = new THREE.SphereGeometry(120, 64, 64);
     const earthTexture = textureLoader.load(
       'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg'
     );
@@ -269,7 +269,7 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
     earthOriginalScale.current = 1;
     scene.add(earth);
 
-    const atmosphereGeometry = new THREE.SphereGeometry(38, 64, 64);
+    const atmosphereGeometry = new THREE.SphereGeometry(130, 64, 64);
     const atmosphereMaterial = new THREE.MeshBasicMaterial({
       color: 0x00aaff,
       transparent: true,
@@ -566,7 +566,7 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
     pointLight2.position.set(-200, -200, 100);
     scene.add(pointLight2);
 
-    camera.position.z = 700;
+    camera.position.z = 800;
 
     // マウス追従
     let mouseX = 0;
@@ -599,7 +599,9 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
       mousePositionRef.current = { x: event.clientX, y: event.clientY };
     };
 
-    const handleClick = () => {
+    const handleClick = (event: MouseEvent) => {
+      // canvasへのクリックのみ処理（ヘッダーやUIボタンのクリックを無視）
+      if (event.target !== canvasRef.current) return;
       if (!raycasterRef.current) return;
 
       raycaster.setFromCamera(mouseRef.current, camera);
@@ -797,7 +799,7 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
       } else {
         camera.position.x += (currentCameraX - camera.position.x) * 0.05;
         camera.position.y += (currentCameraY - camera.position.y) * 0.05;
-        camera.position.z += (700 - camera.position.z) * 0.05;
+        camera.position.z += (800 - camera.position.z) * 0.05;
         camera.lookAt(0, 0, 0);
       }
 
