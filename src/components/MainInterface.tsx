@@ -565,6 +565,7 @@ export function MainInterface() {
                   </div>
                 </div>
               </div>
+
             </motion.div>
           </div>
         </section>
