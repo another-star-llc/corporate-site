@@ -189,6 +189,7 @@ export function DraggableWindow({
 
         {/* コンテンツエリア */}
         <div
+          data-draggable-window-content
           className="p-4 sm:p-6 text-gray-300 overflow-y-auto relative max-h-[60vh] sm:max-h-[70vh] md:max-h-[400px]"
           style={{
             maxHeight: isMaximized ? 'calc(85vh - 60px)' : undefined,

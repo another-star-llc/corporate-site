@@ -11,7 +11,6 @@ import {
   Mail,
   Menu,
   X,
-  Award,
   ExternalLink,
   type LucideIcon
 } from 'lucide-react';
@@ -50,13 +49,39 @@ export function MainInterface() {
   const heroScale = useTransform(scrollYProgress, [0, 0.25], [1, 0.92]);
 
   useEffect(() => {
+    let touchStartY = 0;
+
     const handleWheel = (e: WheelEvent) => {
+      const target = e.target as Element;
+      if (target.closest('[data-draggable-window-content]')) return;
       if (scrollContainerRef.current) {
         scrollContainerRef.current.scrollTop += e.deltaY;
       }
     };
+
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const target = e.target as Element;
+      if (target.closest('[data-draggable-window-content]')) return;
+      const delta = touchStartY - e.touches[0].clientY;
+      touchStartY = e.touches[0].clientY;
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.scrollTop += delta;
+      }
+    };
+
     window.addEventListener('wheel', handleWheel, { passive: true });
-    return () => window.removeEventListener('wheel', handleWheel);
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+    };
   }, []);
 
   const menuItems = [
@@ -550,7 +575,7 @@ export function MainInterface() {
                     設立わずか8ヶ月で「みらいビジョン賞（特別賞）」を受賞いたしました。
                     急成長するAIエージェントセキュリティ市場において、国産OSSによる安全性確保技術の開発が高く評価されました。
                   </p>
-                  <div className="flex flex-wrap justify-center md:justify-start gap-4">
+                  <div className="flex flex-wrap justify-start gap-4">
                     <a
                       href="https://prtimes.jp/main/html/rd/p/000000002.000180278.html"
                       target="_blank"
