@@ -17,7 +17,6 @@ interface Planet {
 interface SpaceBackgroundProps {
   onPlanetClick?: (planetId: string) => void;
   onPlanetHover?: (planetId: string | null) => void;
-  onEarthClick?: () => void;
   onEmptyClick?: () => void;
   focusPlanetId?: string | null;
 }
@@ -89,7 +88,7 @@ const planets: Planet[] = [
   },
 ];
 
-export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, onEmptyClick, focusPlanetId }: SpaceBackgroundProps) {
+export function SpaceBackground({ onPlanetClick, onPlanetHover, onEmptyClick, focusPlanetId }: SpaceBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hoveredPlanet, setHoveredPlanet] = useState<string | null>(null);
   const mousePositionRef = useRef({ x: 0, y: 0 }); // ステートからrefに変更
@@ -104,15 +103,13 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
   // コールバックをrefで保存（依存配列から除外するため）
   const onPlanetClickRef = useRef(onPlanetClick);
   const onPlanetHoverRef = useRef(onPlanetHover);
-  const onEarthClickRef = useRef(onEarthClick);
   const onEmptyClickRef = useRef(onEmptyClick);
 
   useEffect(() => {
     onPlanetClickRef.current = onPlanetClick;
     onPlanetHoverRef.current = onPlanetHover;
-    onEarthClickRef.current = onEarthClick;
     onEmptyClickRef.current = onEmptyClick;
-  }, [onPlanetClick, onPlanetHover, onEarthClick, onEmptyClick]);
+  }, [onPlanetClick, onPlanetHover, onEmptyClick]);
 
   // フォーカス対象をrefに同期
   useEffect(() => {
@@ -613,15 +610,6 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
         const planetId = clicked.userData.id;
         if (planetId) {
           onPlanetClickRef.current(planetId);
-          return;
-        }
-      }
-
-      // 地球のクリック検知
-      if (earthMeshRef.current && onEarthClickRef.current) {
-        const earthIntersects = raycaster.intersectObject(earthMeshRef.current);
-        if (earthIntersects.length > 0) {
-          onEarthClickRef.current();
           return;
         }
       }

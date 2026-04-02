@@ -232,69 +232,6 @@ export function EntryScreen() {
         </div>
       </div>
 
-      {/* GENIAC-PRIZE 受賞リボンバナー（画面上部） */}
-      <motion.a
-        href="https://www.meti.go.jp/press/2025/03/20260325001/20260325001-1.pdf"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="absolute top-0 left-0 right-0 z-50 overflow-hidden cursor-pointer"
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.3, type: 'spring', stiffness: 80, damping: 15 }}
-        whileHover={{ scale: 1.02 }}
-      >
-        <div className="relative py-4 px-6 bg-gradient-to-r from-amber-900/40 via-amber-600/30 to-amber-900/40 border-b border-amber-400/50 backdrop-blur-sm">
-          {/* スキャンライン */}
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/20 to-transparent"
-            style={{ width: '30%' }}
-            animate={{ x: ['-100%', '400%'] }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'linear', delay: 1 }}
-          />
-          <div className="flex items-center justify-center gap-3">
-            <motion.span
-              className="text-amber-400 text-2xl"
-              aria-hidden="true"
-              animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.2, 1] }}
-              transition={{ duration: 2, repeat: Infinity, delay: 1.5 }}
-            >
-              ★
-            </motion.span>
-            <div className="text-center">
-              <div className="text-xl font-bold text-amber-300 tracking-widest drop-shadow-[0_0_10px_rgba(245,158,11,0.8)]">
-                GENIAC-PRIZE 受賞
-              </div>
-              <div className="text-sm text-amber-200/90 mt-0.5">
-                領域03（安全性）みらいビジョン賞（特別賞）
-              </div>
-              <div className="text-xs text-amber-400/60 font-mono mt-0.5">
-                NEDO懸賞金活用型プログラム
-              </div>
-            </div>
-            <motion.span
-              className="text-amber-400 text-2xl"
-              aria-hidden="true"
-              animate={{ rotate: [0, -15, 15, 0], scale: [1, 1.2, 1] }}
-              transition={{ duration: 2, repeat: Infinity, delay: 1.5 }}
-            >
-              ★
-            </motion.span>
-          </div>
-          {/* 下部グロー */}
-          <motion.div
-            className="absolute bottom-0 left-0 right-0 h-px"
-            animate={{
-              boxShadow: [
-                '0 0 20px 2px rgba(245,158,11,0.3)',
-                '0 0 40px 4px rgba(245,158,11,0.6)',
-                '0 0 20px 2px rgba(245,158,11,0.3)',
-              ],
-            }}
-            transition={{ duration: 2, repeat: Infinity }}
-          />
-        </div>
-      </motion.a>
-
       {/* UI オーバーレイ */}
       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
         <motion.div

@@ -1,8 +1,7 @@
-import { useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { useState, useCallback, useRef, useEffect } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 import { SpaceBackground } from './SpaceBackground';
 import { DraggableWindow } from './DraggableWindow';
-import { EarthMessage } from './EarthMessage';
 import {
   Building2,
   Target,
@@ -12,6 +11,8 @@ import {
   Mail,
   Menu,
   X,
+  Award,
+  ExternalLink,
   type LucideIcon
 } from 'lucide-react';
 
@@ -35,14 +36,27 @@ interface WindowState {
 export function MainInterface() {
   const [windows, setWindows] = useState<WindowState[]>([]);
   const [highestZIndex, setHighestZIndex] = useState(100);
-  const [showEarthMessage, setShowEarthMessage] = useState(false);
   const [focusPlanetId, setFocusPlanetId] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // 地球クリックハンドラ
-  const handleEarthClick = useCallback(() => {
-    setWindows([]); // 既存のポップアップを閉じる
-    setShowEarthMessage(true);
+  const scrollToNews = () => {
+    scrollContainerRef.current?.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+    setIsMobileMenuOpen(false);
+  };
+
+  const { scrollYProgress } = useScroll({ container: scrollContainerRef });
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.25], [1, 0]);
+  const heroScale = useTransform(scrollYProgress, [0, 0.25], [1, 0.92]);
+
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.scrollTop += e.deltaY;
+      }
+    };
+    window.addEventListener('wheel', handleWheel, { passive: true });
+    return () => window.removeEventListener('wheel', handleWheel);
   }, []);
 
   const menuItems = [
@@ -360,12 +374,6 @@ export function MainInterface() {
     setHighestZIndex(highestZIndex + 1);
   }, [highestZIndex, menuItems, contentMap]);
 
-  // 地球メッセージからお問い合わせを開く
-  const handleEarthContactClick = useCallback(() => {
-    setShowEarthMessage(false);
-    openWindow('contact');
-  }, [openWindow]);
-
   const closeWindow = (id: string) => {
     setWindows(windows.filter(w => w.id !== id));
     setFocusPlanetId(null);
@@ -399,16 +407,8 @@ export function MainInterface() {
       <SpaceBackground
         onPlanetClick={(id) => { setFocusPlanetId(id); openWindow(id); }}
         onPlanetHover={() => {}}
-        onEarthClick={handleEarthClick}
         onEmptyClick={() => { setFocusPlanetId(null); setWindows([]); }}
         focusPlanetId={focusPlanetId}
-      />
-
-      {/* 地球クリック時のメッセージオーバーレイ */}
-      <EarthMessage
-        isVisible={showEarthMessage}
-        onClose={() => setShowEarthMessage(false)}
-        onContactClick={handleEarthContactClick}
       />
 
       {/* ヘッダーナビゲーション */}
@@ -431,6 +431,13 @@ export function MainInterface() {
                 {item.label}
               </button>
             ))}
+            <button
+              onClick={scrollToNews}
+              className="text-xs tracking-[0.15em] uppercase transition-colors duration-200 text-blue-400 hover:text-blue-200 relative"
+            >
+              NEWS
+              <span className="absolute -top-1 -right-2 w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse" />
+            </button>
           </div>
           <button
             className="md:hidden text-white p-2"
@@ -464,20 +471,30 @@ export function MainInterface() {
                   {item.label}
                 </button>
               ))}
+              <button
+                onClick={scrollToNews}
+                className="text-xs tracking-[0.15em] uppercase transition-colors duration-200 text-blue-400 hover:text-blue-200 relative"
+              >
+                NEWS
+                <span className="absolute -top-1 -right-2 w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse" />
+              </button>
             </motion.div>
           )}
         </AnimatePresence>
       </header>
 
       {/* ヒーローテキスト */}
-      <div className="absolute bottom-[28%] left-0 right-0 text-center pointer-events-none select-none">
+      <motion.div
+        style={{ opacity: heroOpacity, scale: heroScale }}
+        className="absolute bottom-[28%] left-0 right-0 text-center pointer-events-none select-none"
+      >
         <h1 className="text-4xl md:text-5xl text-white font-light leading-tight tracking-wide">
           AIエージェントが信頼でつながる<br />世界をつくる。
         </h1>
         <p className="text-gray-400 mt-5 text-sm tracking-[0.15em]">
           Becoming the next stellar force for safe, sustainable AI.
         </p>
-      </div>
+      </motion.div>
 
       {/* ウィンドウ */}
       <AnimatePresence>
@@ -498,6 +515,72 @@ export function MainInterface() {
           </DraggableWindow>
         ))}
       </AnimatePresence>
+
+      {/* スクロール可能なオーバーレイ */}
+      <div
+        ref={scrollContainerRef}
+        className="fixed inset-0 overflow-y-auto pointer-events-none z-20"
+      >
+        {/* 最初の画面分のスペーサー */}
+        <div className="h-screen" />
+
+        {/* ニュースセクション */}
+        <section id="news" className="relative py-32 px-6 pointer-events-auto bg-gradient-to-b from-black/60 via-blue-950/20 to-black/80 backdrop-blur-sm">
+          <div className="max-w-5xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="relative p-8 md:p-16 rounded-3xl border border-blue-500/20 bg-black/40 backdrop-blur-xl overflow-hidden"
+            >
+              <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/10 blur-[100px] rounded-full" />
+              <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-emerald-500/10 blur-[100px] rounded-full" />
+
+              <div className="relative z-10 flex flex-col md:flex-row items-center gap-12">
+                <div className="flex-shrink-0">
+                  <motion.div
+                    animate={{ scale: [1, 1.05, 1] }}
+                    transition={{ duration: 4, repeat: Infinity }}
+                    className="w-32 h-32 md:w-48 md:h-48 rounded-full bg-gradient-to-br from-blue-500/20 to-emerald-500/20 flex items-center justify-center border border-white/10"
+                  >
+                    <Award className="w-16 h-16 md:w-24 md:h-24 text-blue-400" />
+                  </motion.div>
+                </div>
+
+                <div className="flex-grow text-center md:text-left">
+                  <div className="inline-block px-4 py-1 rounded-full border border-blue-500/30 bg-blue-500/10 text-[10px] tracking-[0.2em] text-blue-400 mb-6 uppercase">
+                    Special Award
+                  </div>
+                  <h2 className="text-2xl md:text-4xl font-light tracking-wider mb-6 leading-tight text-white">
+                    GENIAC-PRIZE <br className="md:hidden" />
+                    みらいビジョン賞（特別賞）受賞
+                  </h2>
+                  <p className="text-sm md:text-base text-gray-400 font-light leading-relaxed mb-8">
+                    Another Star合同会社は、経済産業省およびNEDOが主催する「GENIAC（Generative AI Accelerator Challenge）」において、
+                    設立わずか8ヶ月で「みらいビジョン賞（特別賞）」を受賞いたしました。
+                    急成長するAIエージェントセキュリティ市場において、国産OSSによる安全性確保技術の開発が高く評価されました。
+                  </p>
+                  <div className="flex flex-wrap justify-center md:justify-start gap-4">
+                    <a
+                      href="https://prtimes.jp/main/html/rd/p/000000002.000180278.html"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 px-6 py-3 rounded-full bg-white text-black text-xs tracking-widest font-medium hover:bg-blue-400 transition-colors"
+                    >
+                      PRESS RELEASE <ExternalLink size={14} />
+                    </a>
+                    <div className="flex items-center gap-2 px-6 py-3 rounded-full border border-white/20 text-xs tracking-widest font-light text-gray-300">
+                      2026.03.31
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        <div className="h-32 bg-black/60" />
+      </div>
     </motion.div>
   );
 }
