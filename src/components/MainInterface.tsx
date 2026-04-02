@@ -585,7 +585,7 @@ export function MainInterface() {
                       PRESS RELEASE <ExternalLink size={14} />
                     </a>
                     <div className="flex items-center gap-2 px-6 py-3 rounded-full border border-white/20 text-xs tracking-widest font-light text-gray-300">
-                      2026.03.31
+                      2026.03.24
                     </div>
                   </div>
                 </div>
