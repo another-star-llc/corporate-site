@@ -536,18 +536,8 @@ export function MainInterface() {
               <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/10 blur-[100px] rounded-full" />
               <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-emerald-500/10 blur-[100px] rounded-full" />
 
-              <div className="relative z-10 flex flex-col md:flex-row items-center gap-12">
-                <div className="flex-shrink-0">
-                  <motion.div
-                    animate={{ scale: [1, 1.05, 1] }}
-                    transition={{ duration: 4, repeat: Infinity }}
-                    className="w-32 h-32 md:w-48 md:h-48 rounded-full bg-gradient-to-br from-blue-500/20 to-emerald-500/20 flex items-center justify-center border border-white/10"
-                  >
-                    <Award className="w-16 h-16 md:w-24 md:h-24 text-blue-400" />
-                  </motion.div>
-                </div>
-
-                <div className="flex-grow text-center md:text-left">
+              <div className="relative z-10">
+                <div className="text-left">
                   <div className="inline-block px-4 py-1 rounded-full border border-blue-500/30 bg-blue-500/10 text-[10px] tracking-[0.2em] text-blue-400 mb-6 uppercase">
                     Special Award
                   </div>
