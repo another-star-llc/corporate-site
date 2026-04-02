@@ -846,7 +846,7 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEarthClick, on
       <AnimatePresence>
         {hoveredPlanet && !focusPlanetId && (
           <motion.div
-            className="fixed pointer-events-none z-20"
+            className="fixed pointer-events-none z-20 hidden sm:block"
             style={{
               left: mousePositionRef.current.x,
               top: mousePositionRef.current.y,

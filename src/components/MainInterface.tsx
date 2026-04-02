@@ -10,6 +10,8 @@ import {
   UserCog,
   Shield,
   Mail,
+  Menu,
+  X,
   type LucideIcon
 } from 'lucide-react';
 
@@ -35,6 +37,7 @@ export function MainInterface() {
   const [highestZIndex, setHighestZIndex] = useState(100);
   const [showEarthMessage, setShowEarthMessage] = useState(false);
   const [focusPlanetId, setFocusPlanetId] = useState<string | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // 地球クリックハンドラ
   const handleEarthClick = useCallback(() => {
@@ -429,7 +432,41 @@ export function MainInterface() {
               </button>
             ))}
           </div>
+          <button
+            className="md:hidden text-white p-2"
+            onClick={() => setIsMobileMenuOpen(prev => !prev)}
+            aria-label="メニューを開く"
+          >
+            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
         </nav>
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="md:hidden flex flex-col items-start gap-4 px-10 pb-6 bg-black/60 backdrop-blur-sm"
+            >
+              {menuItems.map(item => (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    handleNavClick(item.id);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`text-xs tracking-[0.15em] uppercase transition-colors duration-200 ${
+                    focusPlanetId === item.id
+                      ? 'text-white'
+                      : 'text-gray-400 hover:text-gray-200'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
 
       {/* ヒーローテキスト */}
