@@ -99,22 +99,27 @@ export function AboutContent() {
 export function MissionContent() {
   const items = [
     {
-      title: 'AIエージェントの信頼を守る',
-      body: 'エージェントストアと仲介エージェントで、AI間通信の安全性を多層防御する。',
+      title: '検知で安全を支える',
+      body: '計画外の行動や間接的プロンプトインジェクションなど、AI特有のリスクを捉えて安全な連携を支える。',
     },
     {
-      title: 'AIが市場を歪めることを防ぐ',
-      body: 'デジタル市場の価格操作・バイアス・不正パターンをリアルタイムに検知・可視化する。',
+      title: '信頼のプラットフォームをつくる',
+      body: '外部AIエージェントの真正性や信頼性を見極め、安心してつながれる基盤を実装する。',
     },
     {
-      title: 'オープンな標準で社会全体を守る',
-      body: '産官学連携で、誰もが参照できるグローバルなAIガバナンス基準を確立する。',
+      title: 'オープンな標準を広げる',
+      body: '産官学と連携し、AIエージェント連携の安全性を支える標準づくりを進める。',
     },
   ];
 
   return (
     <ContentShell>
       <ContentHeading>ミッション</ContentHeading>
+      <div className={`space-y-4 mb-7 ${bodyTextClass}`}>
+        <p>
+          A2A通信の広がりにより、AIエージェント同士が人の確認を介さずに直接連携する時代が現実になりつつあります。その一方で、外部AIエージェントの真正性や信頼性の不確かさ、間接的プロンプトインジェクションのような新しいリスクへの対応が求められています。Another Starは、この課題に向き合います。
+        </p>
+      </div>
       <div className="space-y-px">
         {items.map((item) => (
           <div
