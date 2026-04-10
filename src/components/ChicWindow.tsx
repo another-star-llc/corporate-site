@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { motion } from 'motion/react';
-import { X, Minimize2, Maximize2, type LucideIcon } from 'lucide-react';
+import { X, Maximize2, type LucideIcon } from 'lucide-react';
 
 interface ChicWindowProps {
   id: string;
@@ -26,7 +26,6 @@ export function ChicWindow({
   onPositionChange: _onPositionChange,
 }: ChicWindowProps) {
   const [isMaximized, setIsMaximized] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(false);
 
   return (
     <motion.div
@@ -38,8 +37,8 @@ export function ChicWindow({
       }}
       initial={{ scale: 0.96, opacity: 0, y: 12 }}
       animate={{
-        scale: isMinimized ? 0.05 : 1,
-        opacity: isMinimized ? 0 : 1,
+        scale: 1,
+        opacity: 1,
         y: 0,
         width: isMaximized ? '90vw' : 'auto',
         height: isMaximized ? '85vh' : 'auto',
@@ -63,13 +62,6 @@ export function ChicWindow({
           </div>
 
           <div className="flex items-center gap-0.5">
-            <motion.button
-              className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-500 hover:text-slate-200 hover:bg-white/[0.08] transition-colors"
-              whileTap={{ scale: 0.85 }}
-              onClick={() => setIsMinimized(!isMinimized)}
-            >
-              <Minimize2 className="w-3 h-3" />
-            </motion.button>
             <motion.button
               className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-500 hover:text-slate-200 hover:bg-white/[0.08] transition-colors"
               whileTap={{ scale: 0.85 }}
