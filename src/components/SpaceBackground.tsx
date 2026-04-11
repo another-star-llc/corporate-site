@@ -591,9 +591,20 @@ export function SpaceBackground({
     let currentCameraX = 0;
     let currentCameraY = 0;
 
+    const updatePointerPosition = (clientX: number, clientY: number) => {
+      const normalizedX = (clientX / window.innerWidth) * 2 - 1;
+      const normalizedY = -(clientY / window.innerHeight) * 2 + 1;
+
+      mouseRef.current.x = normalizedX;
+      mouseRef.current.y = normalizedY;
+
+      return { normalizedX, normalizedY };
+    };
+
     const handleMouseMove = (event: MouseEvent) => {
-      mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-      mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+      const { normalizedX, normalizedY } = updatePointerPosition(event.clientX, event.clientY);
+      mouseX = normalizedX;
+      mouseY = normalizedY;
 
       mouseRef.current.x = mouseX;
       mouseRef.current.y = mouseY;
@@ -608,11 +619,11 @@ export function SpaceBackground({
       mousePositionRef.current = { x: event.clientX, y: event.clientY };
     };
 
-    const handleClick = (event: MouseEvent) => {
-      // canvasへのクリックのみ処理（ヘッダーやUIボタンのクリックを無視）
+    const handlePointerDown = (event: PointerEvent) => {
       if (event.target !== canvasRef.current) return;
       if (!raycasterRef.current) return;
 
+      updatePointerPosition(event.clientX, event.clientY);
       raycaster.setFromCamera(mouseRef.current, camera);
 
       // 惑星のクリック検知
@@ -633,7 +644,7 @@ export function SpaceBackground({
     };
 
     window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('click', handleClick);
+    window.addEventListener('pointerdown', handlePointerDown);
 
     // アニメーションループ
     let animationId: number;
@@ -827,7 +838,7 @@ export function SpaceBackground({
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('click', handleClick);
+      window.removeEventListener('pointerdown', handlePointerDown);
       cancelAnimationFrame(animationId);
       renderer.dispose();
       earthGeometry.dispose();
