@@ -167,7 +167,7 @@ export function MainInterface() {
       />
 
       {/* ヘッダーナビゲーション */}
-      <header className="fixed top-0 left-0 right-0 z-50">
+      <header className="fixed top-0 left-0 right-0 z-[1000]">
         <nav className="flex items-center justify-between px-10 py-6">
           <div className="text-white font-light tracking-[0.2em] text-base select-none">
             Another Star
@@ -208,7 +208,7 @@ export function MainInterface() {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="md:hidden flex flex-col items-start gap-4 px-10 pb-6 bg-black/60 backdrop-blur-sm"
+              className="md:hidden relative isolate flex flex-col items-start gap-4 px-10 pb-6 bg-black/90 backdrop-blur-xl border-b border-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.65)]"
             >
               {menuItems.map(item => (
                 <button
