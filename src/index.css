@@ -223,6 +223,134 @@ html {
   background: rgba(255, 255, 255, 0.14);
 }
 
+.news-popup-frame {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  width: 90vw;
+  max-width: 95vw;
+  border-radius: 28px;
+  border: 1px solid rgba(59, 130, 246, 0.22);
+  background: linear-gradient(180deg, rgba(4, 8, 18, 0.94), rgba(2, 4, 10, 0.98));
+  backdrop-filter: blur(24px);
+  box-shadow:
+    0 40px 100px rgba(0, 0, 0, 0.72),
+    inset 0 1px 0 rgba(148, 163, 184, 0.05),
+    0 0 0 1px rgba(30, 41, 59, 0.2);
+}
+
+.news-popup-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(3, 7, 16, 0.24), rgba(1, 3, 10, 0.46)),
+    radial-gradient(circle at top right, rgba(59, 130, 246, 0.12), transparent 34%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+@media (min-width: 640px) {
+  .news-popup-frame {
+    width: 540px;
+  }
+}
+
+@media (min-width: 768px) {
+  .news-popup-frame {
+    width: 600px;
+  }
+}
+
+.news-popup-glow {
+  position: absolute;
+  width: 16rem;
+  height: 16rem;
+  border-radius: 9999px;
+  filter: blur(100px);
+  pointer-events: none;
+}
+
+.news-popup-glow-top {
+  top: -6rem;
+  right: -6rem;
+  background: rgba(59, 130, 246, 0.12);
+}
+
+.news-popup-glow-bottom {
+  bottom: -6rem;
+  left: -6rem;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.news-popup-titlebar {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.25rem 0;
+}
+
+.news-popup-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: rgba(59, 130, 246, 0.08);
+  color: rgb(96 165 250);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.news-popup-icon-button {
+  display: inline-flex;
+  width: 1.9rem;
+  height: 1.9rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  color: rgba(226, 232, 240, 0.72);
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.news-popup-icon-button:hover {
+  border-color: rgba(96, 165, 250, 0.26);
+  background: rgba(59, 130, 246, 0.12);
+  color: rgb(239 246 255);
+}
+
+.news-popup-content {
+  position: relative;
+  z-index: 1;
+  margin-top: 1rem;
+  scrollbar-gutter: stable both-edges;
+}
+
+.news-popup-card {
+  border-radius: 1.25rem;
+  border: 1px solid rgba(59, 130, 246, 0.14);
+  background: linear-gradient(180deg, rgba(8, 16, 32, 0.72), rgba(5, 10, 22, 0.9));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.news-popup-label {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(96, 165, 250, 0.88);
+}
+
 /* カーソルのカスタマイズ */
 * {
   cursor: crosshair;

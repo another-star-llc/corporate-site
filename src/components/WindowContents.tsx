@@ -10,8 +10,8 @@ import kannoImg from '../assets/Kanno.png';
 
 const bodyTextClass = 'text-[15px] leading-8 text-slate-200/88';
 const subTextClass = 'text-sm leading-7 text-slate-300/78';
-const cardClass = 'rounded-2xl border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]';
-const labelClass = 'text-[11px] tracking-[0.18em] uppercase text-slate-400/80';
+const cardClass = 'news-popup-card';
+const labelClass = 'news-popup-label';
 
 function ContentShell({ children }: { children: ReactNode }) {
   return <div className="px-6 py-6 sm:px-7 sm:py-7">{children}</div>;
@@ -19,7 +19,7 @@ function ContentShell({ children }: { children: ReactNode }) {
 
 function ContentHeading({ children }: { children: ReactNode }) {
   return (
-    <h2 className="text-[2rem] text-white font-light tracking-[0.04em] mb-6">{children}</h2>
+    <h2 className="text-[2rem] text-white font-light tracking-[0.04em] mb-6 leading-tight">{children}</h2>
   );
 }
 
@@ -51,7 +51,7 @@ function PersonCard({
         <img
           src={img}
           alt={name}
-          className="w-16 h-16 rounded-full ring-1 ring-white/15 object-cover flex-shrink-0 shadow-[0_8px_24px_rgba(0,0,0,0.28)]"
+          className="w-16 h-16 rounded-full ring-1 ring-blue-400/20 object-cover flex-shrink-0 shadow-[0_8px_24px_rgba(0,0,0,0.28)]"
         />
         <div className="min-w-0 flex-1">
           <div className="text-white font-light text-[1.9rem] leading-none tracking-[0.03em]">{name}</div>
@@ -215,11 +215,16 @@ export function SystemsContent() {
       <ContentHeading>システム・技術紹介</ContentHeading>
 
       {/* 受賞バッジ */}
-      <div className={`${cardClass} mb-6 p-5`}>
-        <div className={`${labelClass} mb-2`}>
-          GENIAC-PRIZE 領域3
+      <div className="mb-6 border-b border-white/10 pb-6">
+        <div className={`mb-3 flex flex-wrap items-center gap-x-3 gap-y-1`}>
+          <div className={labelClass}>
+            GENIAC-PRIZE 領域3
+          </div>
+          <div className="text-sm tracking-[0.08em] text-slate-300/78">
+            みらいビジョン賞 受賞
+          </div>
         </div>
-        <div className="text-white text-base font-medium mb-2">みらいビジョン賞 受賞</div>
+        <div className="text-white font-light text-lg mb-3">AIエージェント間セキュアマッチング・連携基盤</div>
         <p className={subTextClass}>
           外部AIエージェントの真正性とセキュリティを多段階で評価しスコア化するエージェントストアと、仲介エージェントを組み合わせた国産OSSプラットフォーム。計画逸脱や不正を検知した場合は即座にブロックし、自己改善ループにより安全性を継続向上させます。
         </p>
@@ -237,7 +242,7 @@ export function SystemsContent() {
             {['Comet', 'ChatGPT Atlas', 'Playwright MCP', 'Gemini Computer Use'].map((tag) => (
               <span
                 key={tag}
-                className="px-2.5 py-1 rounded-full border border-white/10 bg-white/[0.06] text-slate-200/86 text-xs tracking-wide"
+                className="px-2.5 py-1 rounded-full border border-blue-400/15 bg-blue-500/[0.08] text-slate-200/86 text-xs tracking-wide"
               >
                 {tag}
               </span>
