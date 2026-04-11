@@ -298,7 +298,7 @@ export function ContactContent() {
 
         <div className="grid grid-cols-2 gap-2">
           <InfoBlock label="Business">受託開発・コンサルティング・技術提携</InfoBlock>
-          <InfoBlock label="Location">東京都港区南青山</InfoBlock>
+          <InfoBlock label="Location">〒107-0062 東京都港区南青山３丁目１番３６号青山丸竹ビル６Ｆ</InfoBlock>
         </div>
       </div>
     </ContentShell>
