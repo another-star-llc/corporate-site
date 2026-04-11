@@ -186,26 +186,41 @@ html {
   font-size: var(--font-size);
 }
 
-/* カスタムスクロールバー（SF風） */
+/* カスタムスクロールバー */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 4px;
+  height: 4px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 4px;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #06b6d4 0%, #3b82f6 100%);
-  border-radius: 4px;
-  box-shadow: 0 0 10px rgba(0, 200, 255, 0.5);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #0891b2 0%, #2563eb 100%);
-  box-shadow: 0 0 15px rgba(0, 200, 255, 0.8);
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* ポップアップウィンドウ内のスクロールバー */
+.popup-scroll::-webkit-scrollbar {
+  width: 3px;
+}
+
+.popup-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.popup-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+}
+
+.popup-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.14);
 }
 
 /* カーソルのカスタマイズ */
