@@ -15,10 +15,11 @@ interface Planet {
 }
 
 interface SpaceBackgroundProps {
-  onPlanetClick?: (planetId: string) => void;
+  onPlanetClick?: (planetId: string, screenPos: { x: number; y: number }) => void;
   onPlanetHover?: (planetId: string | null) => void;
   onEmptyClick?: () => void;
   focusPlanetId?: string | null;
+  focusPlanetSide?: 'left' | 'right' | null;
 }
 
 // 地球中心座標（JAFCOスタイル：少し上に配置）
@@ -88,7 +89,13 @@ const planets: Planet[] = [
   },
 ];
 
-export function SpaceBackground({ onPlanetClick, onPlanetHover, onEmptyClick, focusPlanetId }: SpaceBackgroundProps) {
+export function SpaceBackground({
+  onPlanetClick,
+  onPlanetHover,
+  onEmptyClick,
+  focusPlanetId,
+  focusPlanetSide,
+}: SpaceBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hoveredPlanet, setHoveredPlanet] = useState<string | null>(null);
   const mousePositionRef = useRef({ x: 0, y: 0 }); // ステートからrefに変更
@@ -99,6 +106,7 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEmptyClick, fo
   const lastHoveredPlanetRef = useRef<string | null>(null); // 前回のホバー状態を保存
   const earthOriginalScale = useRef(1);
   const focusPlanetRef = useRef<string | null>(null);
+  const focusPlanetSideRef = useRef<'left' | 'right' | null>(null);
 
   // コールバックをrefで保存（依存配列から除外するため）
   const onPlanetClickRef = useRef(onPlanetClick);
@@ -115,6 +123,10 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEmptyClick, fo
   useEffect(() => {
     focusPlanetRef.current = focusPlanetId ?? null;
   }, [focusPlanetId]);
+
+  useEffect(() => {
+    focusPlanetSideRef.current = focusPlanetSide ?? null;
+  }, [focusPlanetSide]);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -609,7 +621,7 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEmptyClick, fo
         const clicked = planetIntersects[0].object as THREE.Mesh;
         const planetId = clicked.userData.id;
         if (planetId) {
-          onPlanetClickRef.current(planetId);
+          onPlanetClickRef.current(planetId, { x: event.clientX, y: event.clientY });
           return;
         }
       }
@@ -775,11 +787,18 @@ export function SpaceBackground({ onPlanetClick, onPlanetHover, onEmptyClick, fo
           const standoffDistance = (planetData?.size ?? 12) * 8;
           const dirFromOrigin = worldPos.clone().normalize();
           const targetPos = worldPos.clone().sub(dirFromOrigin.multiplyScalar(standoffDistance));
+          const distanceToPlanet = targetPos.distanceTo(worldPos);
+          const horizontalFov = 2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2) * camera.aspect);
+          const visibleWidthAtTarget = 2 * Math.tan(horizontalFov / 2) * distanceToPlanet;
+          const compositionSide = focusPlanetSideRef.current ?? (worldPos.x < 0 ? 'left' : 'right');
+          const framingOffsetRatio = window.innerWidth < 640 ? 0.12 : 0.2;
+          const framingOffset = visibleWidthAtTarget * framingOffsetRatio;
+          const offsetDirection = compositionSide === 'left' ? 1 : -1;
 
           camera.position.x += (targetPos.x - camera.position.x) * 0.04;
           camera.position.y += (targetPos.y - camera.position.y) * 0.04;
           camera.position.z += (targetPos.z - camera.position.z) * 0.04;
-          camera.lookAt(worldPos);
+          camera.lookAt(worldPos.x + framingOffset * offsetDirection, worldPos.y, worldPos.z);
 
           // フォーカス中の惑星を拡大表示
           planetMesh.scale.setScalar(1.5);
