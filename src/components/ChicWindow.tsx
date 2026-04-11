@@ -50,7 +50,7 @@ export function ChicWindow({
       onPointerDown={(e) => e.stopPropagation()}
     >
       {/* ウィンドウ本体 */}
-      <div className="backdrop-blur-2xl rounded-[28px] overflow-hidden w-[90vw] sm:w-[540px] md:w-[600px] max-w-[95vw] bg-[linear-gradient(180deg,rgba(20,22,28,0.97),rgba(10,11,16,0.96))] border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.72),0_0_0_1px_rgba(255,255,255,0.04)]">
+      <div className="rounded-[28px] overflow-hidden w-[90vw] sm:w-[540px] md:w-[600px] max-w-[95vw] bg-[linear-gradient(180deg,rgba(20,22,28,0.55),rgba(10,11,16,0.52))] border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.72),0_0_0_1px_rgba(255,255,255,0.04)]">
 
         {/* タイトルバー */}
         <div className="border-b border-white/10 px-5 py-3 select-none bg-white/[0.02] flex items-center justify-between">

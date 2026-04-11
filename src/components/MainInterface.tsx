@@ -36,6 +36,9 @@ export function MainInterface() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const scrollToNews = () => {
+    setWindows([]);
+    setFocusPlanetId(null);
+    setFocusPlanetSide(null);
     scrollContainerRef.current?.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
     setIsMobileMenuOpen(false);
   };
@@ -91,12 +94,12 @@ export function MainInterface() {
   ];
 
   const defaultPlanetSides: Record<string, Exclude<FocusPlanetSide, null>> = {
-    about: 'left',
-    members: 'left',
-    contact: 'left',
-    systems: 'right',
-    team: 'right',
-    mission: 'right',
+    about: 'right',
+    members: 'right',
+    contact: 'right',
+    systems: 'left',
+    team: 'left',
+    mission: 'left',
   };
 
   const openWindow = useCallback((itemId: string, clickPos?: { x: number; y: number }) => {
@@ -120,6 +123,7 @@ export function MainInterface() {
 
     setWindows([newWindow]);
     setHighestZIndex(highestZIndex + 1);
+    scrollContainerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
   }, [defaultPlanetSides, highestZIndex, menuItems]);
 
   const closeWindow = (id: string) => {
@@ -235,9 +239,11 @@ export function MainInterface() {
       </header>
 
       {/* ヒーローテキスト */}
+      <div
+        className={`absolute bottom-[28%] left-0 right-0 text-center pointer-events-none select-none transition-opacity duration-300 ${windows.length > 0 ? 'opacity-0' : 'opacity-100'}`}
+      >
       <motion.div
         style={{ opacity: heroOpacity, scale: heroScale }}
-        className="absolute bottom-[28%] left-0 right-0 text-center pointer-events-none select-none"
       >
         <h1 className="text-4xl md:text-5xl text-white font-light leading-tight tracking-wide">
           AIエージェントが信頼でつながる<br />世界をつくる。
@@ -246,6 +252,7 @@ export function MainInterface() {
           Becoming the next stellar force for safe, sustainable AI.
         </p>
       </motion.div>
+      </div>
 
       <motion.div
         aria-hidden
