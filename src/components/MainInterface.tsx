@@ -279,6 +279,14 @@ export function MainInterface() {
         </nav>
         <AnimatePresence>
           {isMobileMenuOpen && (
+            <>
+            <motion.div
+              className="fixed inset-0 z-[-1]"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -309,6 +317,7 @@ export function MainInterface() {
                 <span className="absolute -top-1 -right-2 w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse" />
               </button>
             </motion.div>
+            </>
           )}
         </AnimatePresence>
       </header>
