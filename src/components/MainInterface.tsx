@@ -221,8 +221,7 @@ export function MainInterface() {
                 className="text-xs tracking-[0.15em] uppercase transition-colors duration-200 text-blue-400 hover:text-blue-200 relative"
               >
                 NEWS
-                <span className="absolute -top-1 -right-2 w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse" />
-              </button>
+                </button>
             </motion.div>
             </>
           )}
@@ -278,7 +277,7 @@ export function MainInterface() {
           <div className="h-[100svh] pointer-events-none" />
 
           {/* ニュースセクション */}
-          <section id="news" className="relative px-6 pt-6 pb-8 sm:py-32 pointer-events-auto">
+          <section id="news" className={`relative px-6 pt-6 pb-8 sm:py-32 transition-opacity duration-300 ${hasOpenWindow ? 'pointer-events-none opacity-0' : 'pointer-events-auto opacity-100'}`}>
             <div className="max-w-5xl mx-auto w-full">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
