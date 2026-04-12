@@ -34,13 +34,39 @@ export function MainInterface() {
   const [focusPlanetSide, setFocusPlanetSide] = useState<FocusPlanetSide>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const newsHeadingRef = useRef<HTMLHeadingElement>(null);
+  const touchScrollStateRef = useRef({
+    lastY: 0,
+    lastTime: 0,
+    velocity: 0,
+    animationFrame: 0,
+  });
 
   const scrollToNews = () => {
     setWindows([]);
     setFocusPlanetId(null);
     setFocusPlanetSide(null);
-    scrollContainerRef.current?.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
     setIsMobileMenuOpen(false);
+
+    requestAnimationFrame(() => {
+      const container = scrollContainerRef.current;
+      const heading = newsHeadingRef.current;
+      if (!container) return;
+
+      if (window.innerWidth < 768 && heading) {
+        const containerRect = container.getBoundingClientRect();
+        const headingRect = heading.getBoundingClientRect();
+        const headerOffset = 40;
+        const targetTop = container.scrollTop
+          + (headingRect.top - containerRect.top)
+          - ((container.clientHeight - headerOffset - headingRect.height) / 2);
+
+        container.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+        return;
+      }
+
+      container.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+    });
   };
 
   const { scrollYProgress } = useScroll({ container: scrollContainerRef });
@@ -49,7 +75,36 @@ export function MainInterface() {
   const pageVeilOpacity = useTransform(scrollYProgress, [0, 0.22], [0, 0.78]);
 
   useEffect(() => {
-    let touchStartY = 0;
+    const stopMomentumScroll = () => {
+      if (touchScrollStateRef.current.animationFrame) {
+        cancelAnimationFrame(touchScrollStateRef.current.animationFrame);
+        touchScrollStateRef.current.animationFrame = 0;
+      }
+    };
+
+    const startMomentumScroll = () => {
+      stopMomentumScroll();
+
+      const step = () => {
+        const container = scrollContainerRef.current;
+        if (!container) return;
+
+        const nextVelocity = touchScrollStateRef.current.velocity * 0.94;
+        if (Math.abs(nextVelocity) < 0.2) {
+          touchScrollStateRef.current.velocity = 0;
+          touchScrollStateRef.current.animationFrame = 0;
+          return;
+        }
+
+        container.scrollTop += nextVelocity;
+        touchScrollStateRef.current.velocity = nextVelocity;
+        touchScrollStateRef.current.animationFrame = requestAnimationFrame(step);
+      };
+
+      if (Math.abs(touchScrollStateRef.current.velocity) >= 0.2) {
+        touchScrollStateRef.current.animationFrame = requestAnimationFrame(step);
+      }
+    };
 
     const handleWheel = (e: WheelEvent) => {
       const target = e.target as Element;
@@ -60,27 +115,47 @@ export function MainInterface() {
     };
 
     const handleTouchStart = (e: TouchEvent) => {
-      touchStartY = e.touches[0].clientY;
+      stopMomentumScroll();
+      touchScrollStateRef.current.lastY = e.touches[0].clientY;
+      touchScrollStateRef.current.lastTime = performance.now();
+      touchScrollStateRef.current.velocity = 0;
     };
 
     const handleTouchMove = (e: TouchEvent) => {
       const target = e.target as Element;
       if (target.closest('[data-draggable-window-content]')) return;
-      const delta = touchStartY - e.touches[0].clientY;
-      touchStartY = e.touches[0].clientY;
+      const now = performance.now();
+      const delta = touchScrollStateRef.current.lastY - e.touches[0].clientY;
+      const elapsed = Math.max(now - touchScrollStateRef.current.lastTime, 1);
+
+      touchScrollStateRef.current.lastY = e.touches[0].clientY;
+      touchScrollStateRef.current.lastTime = now;
+      touchScrollStateRef.current.velocity = (delta / elapsed) * 16;
+
       if (scrollContainerRef.current) {
         scrollContainerRef.current.scrollTop += delta;
       }
     };
 
+    const handleTouchEnd = (e: TouchEvent) => {
+      const target = e.target as Element | null;
+      if (target?.closest('[data-draggable-window-content]')) return;
+      startMomentumScroll();
+    };
+
     window.addEventListener('wheel', handleWheel, { passive: true });
     window.addEventListener('touchstart', handleTouchStart, { passive: true });
     window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('touchend', handleTouchEnd, { passive: true });
+    window.addEventListener('touchcancel', stopMomentumScroll);
 
     return () => {
+      stopMomentumScroll();
       window.removeEventListener('wheel', handleWheel);
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
+      window.removeEventListener('touchcancel', stopMomentumScroll);
     };
   }, []);
 
@@ -167,7 +242,7 @@ export function MainInterface() {
       />
 
       {/* ヘッダーナビゲーション */}
-      <header className="fixed top-0 left-0 right-0 z-50">
+      <header className="fixed top-0 left-0 right-0 z-[1000]">
         <nav className="flex items-center justify-between px-10 py-6">
           <div className="text-white font-light tracking-[0.2em] text-base select-none">
             Another Star
@@ -204,11 +279,19 @@ export function MainInterface() {
         </nav>
         <AnimatePresence>
           {isMobileMenuOpen && (
+            <>
+            <motion.div
+              className="fixed inset-0 z-[-1]"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="md:hidden flex flex-col items-start gap-4 px-10 pb-6 bg-black/60 backdrop-blur-sm"
+              className="md:hidden relative isolate flex flex-col items-start gap-4 px-10 pb-6 bg-black/90 backdrop-blur-xl border-b border-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.65)]"
             >
               {menuItems.map(item => (
                 <button
@@ -234,6 +317,7 @@ export function MainInterface() {
                 <span className="absolute -top-1 -right-2 w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse" />
               </button>
             </motion.div>
+            </>
           )}
         </AnimatePresence>
       </header>
@@ -291,8 +375,8 @@ export function MainInterface() {
           <div className="h-screen" />
 
           {/* ニュースセクション */}
-          <section id="news" className="relative py-32 px-6 pointer-events-auto">
-            <div className="max-w-5xl mx-auto">
+          <section id="news" className="relative px-6 pt-6 pb-12 sm:py-32 pointer-events-auto">
+            <div className="max-w-5xl mx-auto w-full">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -307,7 +391,7 @@ export function MainInterface() {
                   <div className="inline-block px-4 py-1 rounded-full border border-blue-500/30 bg-blue-500/10 text-[10px] tracking-[0.2em] text-blue-400 mb-6 uppercase">
                     Special Award
                   </div>
-                  <h2 className="text-2xl md:text-4xl font-light tracking-wider mb-6 leading-tight text-white">
+                  <h2 ref={newsHeadingRef} className="text-2xl md:text-4xl font-light tracking-wider mb-6 leading-tight text-white">
                     GENIAC-PRIZE <br className="md:hidden" />
                     みらいビジョン賞（特別賞）受賞
                   </h2>
