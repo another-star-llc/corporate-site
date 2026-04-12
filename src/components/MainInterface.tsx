@@ -1,8 +1,9 @@
-import { useState, useCallback, useRef, useEffect, type ReactNode } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
+import { useState, useCallback, useRef, type ReactNode } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { SpaceBackground } from './SpaceBackground';
 import { ChicWindow } from './ChicWindow';
 import { getWindowContent } from './WindowContents';
+import { useHeroFadeProgress, useScrollLock } from '../hooks';
 import {
   Building2,
   Target,
@@ -33,14 +34,13 @@ export function MainInterface() {
   const [focusPlanetId, setFocusPlanetId] = useState<string | null>(null);
   const [focusPlanetSide, setFocusPlanetSide] = useState<FocusPlanetSide>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const newsHeadingRef = useRef<HTMLHeadingElement>(null);
-  const touchScrollStateRef = useRef({
-    lastY: 0,
-    lastTime: 0,
-    velocity: 0,
-    animationFrame: 0,
-  });
+  const hasOpenWindow = windows.length > 0;
+  const heroFadeProgress = useHeroFadeProgress(144);
+  const heroOpacity = hasOpenWindow ? 0 : 1 - heroFadeProgress;
+  const overlayOpacity = heroFadeProgress * 0.8;
+
+  useScrollLock(hasOpenWindow);
 
   const scrollToNews = () => {
     setWindows([]);
@@ -49,115 +49,22 @@ export function MainInterface() {
     setIsMobileMenuOpen(false);
 
     requestAnimationFrame(() => {
-      const container = scrollContainerRef.current;
       const heading = newsHeadingRef.current;
-      if (!container) return;
 
       if (window.innerWidth < 768 && heading) {
-        const containerRect = container.getBoundingClientRect();
         const headingRect = heading.getBoundingClientRect();
         const headerOffset = 40;
-        const targetTop = container.scrollTop
-          + (headingRect.top - containerRect.top)
-          - ((container.clientHeight - headerOffset - headingRect.height) / 2);
+        const targetTop = window.scrollY
+          + headingRect.top
+          - ((window.innerHeight - headerOffset - headingRect.height) / 2);
 
-        container.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+        window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
         return;
       }
 
-      container.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+      window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
     });
   };
-
-  const { scrollYProgress } = useScroll({ container: scrollContainerRef });
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.25], [1, 0]);
-  const heroScale = useTransform(scrollYProgress, [0, 0.25], [1, 0.92]);
-  const pageVeilOpacity = useTransform(scrollYProgress, [0, 0.22], [0, 0.78]);
-
-  useEffect(() => {
-    const stopMomentumScroll = () => {
-      if (touchScrollStateRef.current.animationFrame) {
-        cancelAnimationFrame(touchScrollStateRef.current.animationFrame);
-        touchScrollStateRef.current.animationFrame = 0;
-      }
-    };
-
-    const startMomentumScroll = () => {
-      stopMomentumScroll();
-
-      const step = () => {
-        const container = scrollContainerRef.current;
-        if (!container) return;
-
-        const nextVelocity = touchScrollStateRef.current.velocity * 0.94;
-        if (Math.abs(nextVelocity) < 0.2) {
-          touchScrollStateRef.current.velocity = 0;
-          touchScrollStateRef.current.animationFrame = 0;
-          return;
-        }
-
-        container.scrollTop += nextVelocity;
-        touchScrollStateRef.current.velocity = nextVelocity;
-        touchScrollStateRef.current.animationFrame = requestAnimationFrame(step);
-      };
-
-      if (Math.abs(touchScrollStateRef.current.velocity) >= 0.2) {
-        touchScrollStateRef.current.animationFrame = requestAnimationFrame(step);
-      }
-    };
-
-    const handleWheel = (e: WheelEvent) => {
-      const target = e.target as Element;
-      if (target.closest('[data-draggable-window-content]')) return;
-      if (scrollContainerRef.current) {
-        scrollContainerRef.current.scrollTop += e.deltaY;
-      }
-    };
-
-    const handleTouchStart = (e: TouchEvent) => {
-      stopMomentumScroll();
-      touchScrollStateRef.current.lastY = e.touches[0].clientY;
-      touchScrollStateRef.current.lastTime = performance.now();
-      touchScrollStateRef.current.velocity = 0;
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      const target = e.target as Element;
-      if (target.closest('[data-draggable-window-content]')) return;
-      const now = performance.now();
-      const delta = touchScrollStateRef.current.lastY - e.touches[0].clientY;
-      const elapsed = Math.max(now - touchScrollStateRef.current.lastTime, 1);
-
-      touchScrollStateRef.current.lastY = e.touches[0].clientY;
-      touchScrollStateRef.current.lastTime = now;
-      touchScrollStateRef.current.velocity = (delta / elapsed) * 16;
-
-      if (scrollContainerRef.current) {
-        scrollContainerRef.current.scrollTop += delta;
-      }
-    };
-
-    const handleTouchEnd = (e: TouchEvent) => {
-      const target = e.target as Element | null;
-      if (target?.closest('[data-draggable-window-content]')) return;
-      startMomentumScroll();
-    };
-
-    window.addEventListener('wheel', handleWheel, { passive: true });
-    window.addEventListener('touchstart', handleTouchStart, { passive: true });
-    window.addEventListener('touchmove', handleTouchMove, { passive: true });
-    window.addEventListener('touchend', handleTouchEnd, { passive: true });
-    window.addEventListener('touchcancel', stopMomentumScroll);
-
-    return () => {
-      stopMomentumScroll();
-      window.removeEventListener('wheel', handleWheel);
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('touchend', handleTouchEnd);
-      window.removeEventListener('touchcancel', stopMomentumScroll);
-    };
-  }, []);
 
   const menuItems = [
     { id: 'about', label: 'ABOUT', icon: Target },
@@ -198,7 +105,7 @@ export function MainInterface() {
 
     setWindows([newWindow]);
     setHighestZIndex(highestZIndex + 1);
-    scrollContainerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [defaultPlanetSides, highestZIndex, menuItems]);
 
   const closeWindow = (id: string) => {
@@ -228,7 +135,7 @@ export function MainInterface() {
 
   return (
     <motion.div
-      className="fixed inset-0"
+      className="relative min-h-[100svh]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
@@ -324,10 +231,8 @@ export function MainInterface() {
 
       {/* ヒーローテキスト */}
       <div
-        className={`absolute bottom-[28%] left-0 right-0 text-center pointer-events-none select-none transition-opacity duration-300 ${windows.length > 0 ? 'opacity-0' : 'opacity-100'}`}
-      >
-      <motion.div
-        style={{ opacity: heroOpacity, scale: heroScale }}
+        className="fixed bottom-[28svh] left-0 right-0 z-30 text-center pointer-events-none select-none"
+        style={{ opacity: heroOpacity }}
       >
         <h1 className="text-4xl md:text-5xl text-white font-light leading-tight tracking-wide">
           AIエージェントが信頼でつながる<br />世界をつくる。
@@ -335,13 +240,12 @@ export function MainInterface() {
         <p className="text-gray-400 mt-5 text-sm tracking-[0.15em]">
           Becoming the next stellar force for safe, sustainable AI.
         </p>
-      </motion.div>
       </div>
 
-      <motion.div
+      <div
         aria-hidden
-        style={{ opacity: pageVeilOpacity }}
         className="fixed inset-0 z-10 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(8,14,24,0.04)_0%,rgba(3,7,16,0.14)_32%,rgba(2,4,12,0.42)_62%,rgba(1,2,8,0.82)_100%)]"
+        style={{ opacity: overlayOpacity }}
       />
 
       {/* ウィンドウ */}
@@ -365,17 +269,16 @@ export function MainInterface() {
 
       {/* スクロール可能なオーバーレイ */}
       <div
-        ref={scrollContainerRef}
-        className="fixed inset-0 overflow-y-auto pointer-events-none z-20"
+        className="relative z-20 pointer-events-none"
       >
         <div className="relative">
           <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(180deg,rgba(0,0,0,0)_0vh,rgba(2,6,16,0.08)_38vh,rgba(2,6,16,0.28)_72vh,rgba(0,0,0,0.82)_120vh,rgba(0,0,0,0.96)_100%)]" />
 
           {/* 最初の画面分のスペーサー */}
-          <div className="h-screen" />
+          <div className="h-[100svh] pointer-events-none" />
 
           {/* ニュースセクション */}
-          <section id="news" className="relative px-6 pt-6 pb-12 sm:py-32 pointer-events-auto">
+          <section id="news" className="relative px-6 pt-6 pb-8 sm:py-32 pointer-events-auto">
             <div className="max-w-5xl mx-auto w-full">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -418,8 +321,6 @@ export function MainInterface() {
             </motion.div>
             </div>
           </section>
-
-          <div className="h-32" />
         </div>
       </div>
     </motion.div>

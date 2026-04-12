@@ -130,6 +130,7 @@
     @apply bg-background text-foreground;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior-y: none;
   }
 }
 
@@ -184,6 +185,13 @@
 
 html {
   font-size: var(--font-size);
+  height: 100%;
+  overscroll-behavior-y: none;
+}
+
+body,
+#root {
+  min-height: 100%;
 }
 
 /* カスタムスクロールバー */
@@ -208,6 +216,10 @@ html {
 /* ポップアップウィンドウ内のスクロールバー */
 .popup-scroll::-webkit-scrollbar {
   width: 3px;
+}
+
+.popup-scroll {
+  overscroll-behavior-y: contain;
 }
 
 .popup-scroll::-webkit-scrollbar-track {

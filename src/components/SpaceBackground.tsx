@@ -759,19 +759,7 @@ export function SpaceBackground({
         const visualMesh = hoveredMesh.parent && hoveredMesh.parent instanceof THREE.Mesh ? hoveredMesh.parent : hoveredMesh;
         visualMesh.scale.setScalar(1.3);
       } else {
-        // 惑星にホバーしていない場合、地球をチェック
-        if (earthMeshRef.current) {
-          const earthIntersects = raycaster.intersectObject(earthMeshRef.current);
-          if (earthIntersects.length > 0) {
-            isHoveringEarth = true;
-            earthMeshRef.current.scale.setScalar(1.15);
-
-            if (lastHoveredPlanetRef.current !== 'earth') {
-              lastHoveredPlanetRef.current = 'earth';
-              setHoveredPlanet('earth');
-            }
-          }
-        }
+        // 惑星にホバーしていない場合、地球はラベル対象にしない
 
         // ホバーが外れた場合のみ更新
         if (!isHoveringEarth && lastHoveredPlanetRef.current !== null) {
@@ -858,7 +846,7 @@ export function SpaceBackground({
 
   return (
     <>
-      <canvas ref={canvasRef} className="fixed inset-0 -z-10 pointer-events-auto" />
+      <canvas ref={canvasRef} className="fixed inset-0 z-0 pointer-events-auto touch-pan-y" />
 
       {/* ホバー時のラベル（フォーカス中は非表示） */}
       <AnimatePresence>
@@ -878,7 +866,9 @@ export function SpaceBackground({
               <div className="text-cyan-400 font-mono text-sm">
                 {hoveredPlanet === 'earth' ? 'EARTH' : planets.find(p => p.id === hoveredPlanet)?.name}
               </div>
-              <div className="text-cyan-600 text-xs mt-1">Click to access</div>
+              {hoveredPlanet !== 'earth' && (
+                <div className="text-cyan-600 text-xs mt-1">Click to access</div>
+              )}
             </div>
             <motion.div
               className="absolute top-full left-1/2 w-px h-8 bg-gradient-to-b from-cyan-500 to-transparent"

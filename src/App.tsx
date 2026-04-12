@@ -3,7 +3,7 @@ import './index.css';
 
 export default function App() {
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-black">
+    <div className="relative w-full min-h-[100svh] bg-black">
       <MainInterface />
     </div>
   );
