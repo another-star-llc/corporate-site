@@ -336,6 +336,16 @@ body,
     color 160ms ease;
 }
 
+.news-popup-maximize-button {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .news-popup-maximize-button {
+    display: inline-flex;
+  }
+}
+
 .news-popup-icon-button:hover {
   border-color: rgba(96, 165, 250, 0.26);
   background: rgba(59, 130, 246, 0.12);

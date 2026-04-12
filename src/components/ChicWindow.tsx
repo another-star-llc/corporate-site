@@ -64,9 +64,10 @@ export function ChicWindow({
 
           <div className="flex items-center gap-1">
             <motion.button
-              className="news-popup-icon-button"
+              className="news-popup-icon-button news-popup-maximize-button"
               whileTap={{ scale: 0.85 }}
               onClick={() => setIsMaximized(!isMaximized)}
+              aria-label={isMaximized ? 'ウィンドウの拡大を解除' : 'ウィンドウを拡大'}
             >
               <Maximize2 className="w-3 h-3" />
             </motion.button>
