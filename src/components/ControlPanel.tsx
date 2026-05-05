@@ -33,17 +33,11 @@ const planetInfo: Record<string, {
     status: 'ACCESSIBLE',
     description: 'ミッション・ビジョン'
   },
-  members: { 
-    distance: '18.5 AU', 
-    type: 'ICE WORLD', 
-    status: 'ACCESSIBLE',
-    description: 'メンバー紹介'
-  },
-  team: { 
-    distance: '12.3 AU', 
+  people: { 
+    distance: '15.4 AU', 
     type: 'FOREST', 
     status: 'ACCESSIBLE',
-    description: '開発チーム'
+    description: 'メンバー紹介'
   },
   systems: { 
     distance: '16.7 AU', 

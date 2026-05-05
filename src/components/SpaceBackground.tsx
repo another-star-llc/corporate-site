@@ -47,24 +47,14 @@ const planets: Planet[] = [
     rotationSpeed: 0.007,
   },
   {
-    id: 'members',
+    id: 'people',
     name: 'MEMBERS',
-    color: 0x60a5fa,
-    emissive: 0x3b82f6,
-    position: [-260, -440, -260],
-    size: 36,
-    orbitSpeed: 0.0005,
-    rotationSpeed: 0.006,
-  },
-  {
-    id: 'team',
-    name: 'TEAM',
-    color: 0x34d399,
-    emissive: 0x10b981,
-    position: [560, -280, -100],
-    size: 42,
-    orbitSpeed: 0.00035,
-    rotationSpeed: 0.004,
+    color: 0x4ade80,
+    emissive: 0x22c55e,
+    position: [120, -380, -180],
+    size: 44,
+    orbitSpeed: 0.00042,
+    rotationSpeed: 0.005,
   },
   {
     id: 'systems',
@@ -494,8 +484,7 @@ export function SpaceBackground({
     const planetTextureConfigs: Record<string, { base: [number, number, number]; secondary: [number, number, number]; style: 'gas' | 'rocky' | 'ice' | 'lava' | 'striped' | 'marble' }> = {
       about: { base: [30, 80, 160], secondary: [80, 160, 255], style: 'marble' },        // 青い大理石風
       mission: { base: [100, 40, 140], secondary: [180, 100, 240], style: 'gas' },        // 紫のガス惑星（木星風）
-      members: { base: [40, 80, 140], secondary: [100, 180, 255], style: 'ice' },         // 青い氷惑星
-      team: { base: [20, 100, 60], secondary: [60, 220, 140], style: 'rocky' },           // 緑の岩石惑星
+      people: { base: [20, 100, 60], secondary: [90, 220, 170], style: 'rocky' },         // 緑の岩石惑星
       systems: { base: [160, 80, 20], secondary: [255, 160, 60], style: 'lava' },         // オレンジの溶岩惑星
       contact: { base: [140, 40, 80], secondary: [240, 100, 160], style: 'striped' },     // ピンクの縞模様
     };

@@ -135,7 +135,7 @@ export function MissionContent() {
   );
 }
 
-export function MembersContent() {
+export function PeopleContent() {
   return (
     <ContentShell>
       <ContentHeading>メンバー紹介</ContentHeading>
@@ -176,16 +176,6 @@ export function MembersContent() {
             </div>
           }
         />
-      </div>
-    </ContentShell>
-  );
-}
-
-export function TeamContent() {
-  return (
-    <ContentShell>
-      <ContentHeading>開発チーム</ContentHeading>
-      <div>
         <PersonCard
           img={hiromatsuImg}
           name="広松 太一"
@@ -316,8 +306,7 @@ export function getWindowContent(id: string): ReactNode {
   const map: Record<string, ReactNode> = {
     about: <AboutContent />,
     mission: <MissionContent />,
-    members: <MembersContent />,
-    team: <TeamContent />,
+    people: <PeopleContent />,
     systems: <SystemsContent />,
     contact: <ContactContent />,
   };

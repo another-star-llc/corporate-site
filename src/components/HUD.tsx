@@ -12,10 +12,10 @@ const logMessages = [
   { type: 'system', color: 'blue', text: 'Scanning sector...' },
   { type: 'system', color: 'cyan', text: 'Navigation ready' },
   // メンバー紹介
-  { type: 'member', color: 'purple', text: 'MEMBER: Naoya Yasuda - CEO / Software Engineer' },
-  { type: 'member', color: 'pink', text: 'MEMBER: Shinnosuke Saito - COO / AI Engineer' },
-  { type: 'member', color: 'teal', text: 'TEAM: Taichi Hiromatsu - AI Safety Architect' },
-  { type: 'member', color: 'indigo', text: 'TEAM: Koji Sato - Documentation Specialist' },
+  { type: 'member', color: 'purple', text: 'MEMBERS: Naoya Yasuda - CEO / Software Engineer' },
+  { type: 'member', color: 'pink', text: 'MEMBERS: Shinnosuke Saito - COO / AI Engineer' },
+  { type: 'member', color: 'teal', text: 'MEMBERS: Taichi Hiromatsu - AI Safety Architect' },
+  { type: 'member', color: 'indigo', text: 'MEMBERS: Koji Sato - Documentation Specialist' },
   { type: 'member', color: 'violet', text: 'ADVISOR: Satoshi Kanno - Risk & Strategy' },
   // プロジェクト・案件
   { type: 'project', color: 'orange', text: 'PROJECT: Browser Agent Detector - AI Agent Detection' },

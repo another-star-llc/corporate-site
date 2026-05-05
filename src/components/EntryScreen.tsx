@@ -273,7 +273,7 @@ export function EntryScreen() {
             animate={{ opacity: 1 }}
             transition={{ delay: 1.3 }}
           >
-            生成AIの安全性確保技術開発
+            AIエージェント時代の信頼基盤
           </motion.p>
 
           <motion.div

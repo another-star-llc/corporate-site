@@ -5,7 +5,6 @@ import { ChicWindow } from './ChicWindow';
 import { getWindowContent } from './WindowContents';
 import { useHeroFadeProgress, useScrollLock } from '../hooks';
 import {
-  Building2,
   Target,
   Users,
   UserCog,
@@ -69,18 +68,16 @@ export function MainInterface() {
   const menuItems = [
     { id: 'about', label: 'ABOUT', icon: Target },
     { id: 'systems', label: 'SYSTEMS', icon: UserCog },
-    { id: 'members', label: 'MEMBERS', icon: Users },
-    { id: 'team', label: 'TEAM', icon: Building2 },
+    { id: 'people', label: 'MEMBERS', icon: Users },
     { id: 'contact', label: 'CONTACT', icon: Mail },
     { id: 'mission', label: 'MISSION', icon: Shield },
   ];
 
   const defaultPlanetSides: Record<string, Exclude<FocusPlanetSide, null>> = {
     about: 'right',
-    members: 'right',
+    people: 'right',
     contact: 'right',
     systems: 'left',
-    team: 'left',
     mission: 'left',
   };
 
@@ -155,6 +152,12 @@ export function MainInterface() {
             Another Star
           </div>
           <div className="hidden md:flex items-center gap-10">
+            <a
+              href="/product"
+              className="text-xs tracking-[0.15em] uppercase transition-colors duration-200 text-cyan-300 hover:text-cyan-100"
+            >
+              PRODUCT
+            </a>
             {menuItems.map(item => (
               <button
                 key={item.id}
@@ -200,6 +203,12 @@ export function MainInterface() {
               exit={{ opacity: 0, y: -10 }}
               className="md:hidden relative isolate flex flex-col items-start gap-4 px-10 pb-6 bg-black/90 backdrop-blur-xl border-b border-white/10 shadow-[0_24px_80px_rgba(0,0,0,0.65)]"
             >
+              <a
+                href="/product"
+                className="text-xs tracking-[0.15em] uppercase transition-colors duration-200 text-cyan-300 hover:text-cyan-100"
+              >
+                PRODUCT
+              </a>
               {menuItems.map(item => (
                 <button
                   key={item.id}
