@@ -3,6 +3,7 @@ import {
   ArrowLeft,
   ArrowRight,
   BadgeCheck,
+  ExternalLink,
   ShieldAlert,
   Sparkles,
   Workflow,
@@ -191,6 +192,15 @@ export function ProductPage() {
                     className="rounded-full border border-white/16 px-6 py-3 text-sm tracking-[0.08em] text-slate-200 transition-colors hover:border-white/28 hover:text-white"
                   >
                     お問い合わせ
+                  </a>
+                  <a
+                    href="https://prtimes.jp/main/html/rd/p/000000002.000180278.html"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full border border-cyan-400/18 bg-cyan-400/8 px-5 py-3 text-sm tracking-[0.08em] text-cyan-100/88 transition-colors hover:border-cyan-300/40 hover:bg-cyan-300/14 hover:text-white"
+                  >
+                    GENIAC-PRIZE みらいビジョン賞 受賞
+                    <ExternalLink size={14} />
                   </a>
                 </div>
               </motion.div>
