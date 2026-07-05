@@ -1,0 +1,15 @@
+{
+  "name": "another-star-blog",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build"
+  },
+  "dependencies": {
+    "@astrojs/rss": "^4.0.11",
+    "@astrojs/sitemap": "3.2.1",
+    "astro": "^4.16.18",
+    "prismjs": "^1.30.0"
+  }
+}

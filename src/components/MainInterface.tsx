@@ -158,6 +158,12 @@ export function MainInterface() {
             >
               PRODUCT
             </a>
+            <a
+              href="/blog/"
+              className="text-xs tracking-[0.15em] uppercase transition-colors duration-200 text-gray-400 hover:text-gray-200"
+            >
+              BLOG
+            </a>
             {menuItems.map(item => (
               <button
                 key={item.id}
@@ -208,6 +214,12 @@ export function MainInterface() {
                 className="text-xs tracking-[0.15em] uppercase transition-colors duration-200 text-cyan-300 hover:text-cyan-100"
               >
                 PRODUCT
+              </a>
+              <a
+                href="/blog/"
+                className="text-xs tracking-[0.15em] uppercase transition-colors duration-200 text-gray-400 hover:text-gray-200"
+              >
+                BLOG
               </a>
               {menuItems.map(item => (
                 <button

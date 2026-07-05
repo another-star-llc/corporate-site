@@ -10,6 +10,6 @@
     }
   ],
   "rewrites": [
-    { "source": "/((?!assets/).*)", "destination": "/index.html" }
+    { "source": "/((?!assets/|blog).*)", "destination": "/index.html" }
   ]
 }

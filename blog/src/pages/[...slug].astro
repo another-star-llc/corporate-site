@@ -1,0 +1,123 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.pubDate.toISOString(),
+  ...(post.data.updatedDate && { dateModified: post.data.updatedDate.toISOString() }),
+  inLanguage: 'ja',
+  author: {
+    '@type': 'Person',
+    name: '安田 直也',
+    url: 'https://www.another-star.jp/',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Another Star合同会社',
+    url: 'https://www.another-star.jp/',
+  },
+  mainEntityOfPage: new URL(Astro.url.pathname, Astro.site).toString(),
+};
+---
+
+<BaseLayout
+  title={`${post.data.title} | A2A Insights`}
+  description={post.data.description}
+  ogType="article"
+  pubDate={post.data.pubDate}
+  updatedDate={post.data.updatedDate}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <article>
+    <header class="post-header">
+      <div class="meta">
+        <time datetime={post.data.pubDate.toISOString()}>{fmt(post.data.pubDate)}</time>
+        {post.data.updatedDate && <span>（更新: {fmt(post.data.updatedDate)}）</span>}
+        {post.data.breaking && <span class="badge">臨時号</span>}
+        {post.data.tags.map((t) => <span class="tag">{t}</span>)}
+      </div>
+      <h1>{post.data.title}</h1>
+    </header>
+
+    <div class="post-body">
+      <Content />
+    </div>
+  </article>
+
+  <aside class="author">
+    <div class="author-name">安田 直也（Naoya Yasuda）</div>
+    <p>
+      Another Star合同会社 代表。AIエージェント間連携（A2A）のセキュリティ基盤を開発。
+      GENIAC-PRIZEみらいビジョン賞受賞。A2A時代の信頼基盤の社会実装に取り組む。
+    </p>
+    <p class="author-links">
+      <a href="/">Another Star合同会社</a> ·
+      <a href="https://x.com/anotherstar_ai" rel="noopener" target="_blank">X: @anotherstar_ai</a>
+    </p>
+  </aside>
+
+  <p class="back"><a href="/blog/">← 記事一覧へ</a></p>
+
+  <style>
+    .post-header { margin-bottom: 2.5rem; }
+    .post-header h1 { font-size: 1.8rem; margin: 0.6rem 0 0; }
+    .meta {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      flex-wrap: wrap;
+    }
+    .badge {
+      background: #7f1d1d;
+      color: #fecaca;
+      border-radius: 999px;
+      padding: 0.05rem 0.6rem;
+      font-size: 0.7rem;
+    }
+    .tag {
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.05rem 0.6rem;
+      font-size: 0.7rem;
+    }
+    .post-body :global(h2) {
+      margin-top: 2.5rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .post-body :global(img) { max-width: 100%; }
+    .author {
+      margin-top: 4rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem 1.75rem;
+      background: var(--bg-card);
+      font-size: 0.9rem;
+      color: var(--text-dim);
+    }
+    .author-name { color: #fff; font-size: 1rem; margin-bottom: 0.3rem; }
+    .author p { margin: 0.3rem 0; }
+    .back { margin-top: 2.5rem; }
+  </style>
+</BaseLayout>
