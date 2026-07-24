@@ -9,4 +9,8 @@ export default defineConfig({
   outDir: '../dist/blog',
   trailingSlash: 'always',
   integrations: [sitemap()],
+  // 本体Vite(3000)経由でプロキシ表示するため、Astroの開発ツールバーを無効化。
+  // ツールバーのクライアントスクリプトが /blog 外のパスで読み込まれ、
+  // Vite側に流れて astro:toolbar:internal の解決に失敗するのを防ぐ。
+  devToolbar: { enabled: false },
 });
