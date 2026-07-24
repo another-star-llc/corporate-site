@@ -154,9 +154,9 @@
 | title | Another Star合同会社 - 生成AIの安全性確保技術開発 |
 | description | Another Star合同会社は、生成AIの安全性確保と社会実装を推進するテクノロジー企業です。GENIAC-PRIZE領域03に挑戦し、AI安全性・リスク低減技術の開発を行っています。 |
 | keywords | Another Star合同会社, Another Star, 生成AI, AI安全性, リスク低減, GENIAC-PRIZE, A2A, AI検索, バイアス検知 |
-| OGP画像 | https://another-star.co.jp/og-image.jpg |
+| OGP画像 | https://www.another-star.jp/og-image.jpg |
 | Twitter | @anotherstar_ai |
-| URL | https://another-star.co.jp/ |
+| URL | https://www.another-star.jp/ |
 
 ---
 
@@ -168,7 +168,7 @@
   "@type": "Organization",
   "name": "Another Star合同会社",
   "legalName": "Another Star合同会社",
-  "url": "https://another-star.co.jp/",
+  "url": "https://www.another-star.jp/",
   "foundingDate": "2025-07-01",
   "founders": [
     { "@type": "Person", "name": "安田 直也" },
