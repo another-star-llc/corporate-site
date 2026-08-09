@@ -23,4 +23,4 @@ A2Aは2025年4月にGoogleが発表し、現在は[Linux Foundation](https://www
 
 Another Star合同会社は、AIエージェント間の安全な連携を支える信頼基盤を開発するテクノロジー企業です。A2Aプロトコルのセキュリティ領域に取り組む立場から、実務に役立つ視点で動向をお伝えします。
 
-更新は[RSS](/blog/rss.xml)または[X: @anotherstar_ai](https://x.com/anotherstar_ai)でフォローできます。
+更新は[RSS](/blog/rss.xml)でフォローできます。
