@@ -27,13 +27,15 @@ const fmt = (d: Date) =>
     {posts.length === 0 && <p class="empty">記事は準備中です。まもなく最初の定点観測をお届けします。</p>}
     {posts.map((post) => (
       <article class="card">
-        <div class="meta">
-          <time datetime={post.data.pubDate.toISOString()}>{fmt(post.data.pubDate)}</time>
-          {post.data.breaking && <span class="badge">臨時号</span>}
-          {post.data.tags.map((t) => <span class="tag">{t}</span>)}
-        </div>
-        <h2><a href={`/blog/${post.slug}/`}>{post.data.title}</a></h2>
-        <p>{post.data.description}</p>
+        <a class="card-link" href={`/blog/${post.slug}/`} aria-label={`${post.data.title}を読む`}>
+          <div class="meta">
+            <time datetime={post.data.pubDate.toISOString()}>{fmt(post.data.pubDate)}</time>
+            {post.data.breaking && <span class="badge">臨時号</span>}
+            {post.data.tags.map((t) => <span class="tag">{t}</span>)}
+          </div>
+          <h2>{post.data.title}</h2>
+          <p>{post.data.description}</p>
+        </a>
       </article>
     ))}
   </section>
@@ -55,15 +57,24 @@ const fmt = (d: Date) =>
     .card {
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 1.5rem 1.75rem;
       margin-bottom: 1.5rem;
+      overflow: hidden;
       background: var(--bg-card);
       transition: border-color 0.2s;
     }
-    .card:hover { border-color: var(--accent-dim); }
-    .card h2 { margin: 0.4rem 0; font-size: 1.25rem; }
-    .card h2 a { color: #fff; text-decoration: none; }
-    .card h2 a:hover { color: var(--accent); }
+    .card:hover, .card:focus-within { border-color: var(--accent-dim); }
+    .card-link {
+      display: block;
+      padding: 1.5rem 1.75rem;
+      color: inherit;
+      text-decoration: none;
+    }
+    .card-link:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: -2px;
+    }
+    .card h2 { margin: 0.4rem 0; color: #fff; font-size: 1.25rem; }
+    .card:hover h2, .card:focus-within h2 { color: var(--accent); }
     .card p { color: var(--text-dim); margin: 0.4rem 0 0; font-size: 0.95rem; }
     .meta {
       display: flex;
