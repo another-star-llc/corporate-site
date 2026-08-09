@@ -208,6 +208,33 @@ export function ProductPage() {
             </div>
           </section>
 
+          <section id="demo" className="px-6 pt-2 pb-16 md:px-10 md:pb-24">
+            <div className="mx-auto max-w-7xl">
+              <SectionHeader
+                eyebrow="Demo"
+                title="実際の動作を、動画で見る。"
+                body="登録エージェントの審査から、仲介実行・異常検知までの一連の流れを、実際の画面でご確認いただけます。"
+              />
+
+              <motion.div
+                initial={{ opacity: 0, y: 22 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.1 }}
+                className="mt-10 overflow-hidden rounded-[2rem] border border-white/8 bg-black shadow-[0_40px_140px_-50px_rgba(34,211,238,0.4)]"
+              >
+                <video
+                  className="block aspect-video w-full bg-black object-contain"
+                  controls
+                  playsInline
+                  preload="metadata"
+                >
+                  <source src="/product-demo.mp4" type="video/mp4" />
+                  お使いのブラウザは動画の再生に対応していません。
+                </video>
+              </motion.div>
+            </div>
+          </section>
+
           <section className="px-6 py-16 md:px-10 md:py-24">
             <div className="mx-auto max-w-7xl">
               <SectionHeader
