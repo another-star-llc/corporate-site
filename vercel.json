@@ -7,9 +7,14 @@
       ],
       "destination": "https://www.another-star.jp/$1",
       "permanent": true
+    },
+    {
+      "source": "/llm.txt",
+      "destination": "/llms.txt",
+      "permanent": true
     }
   ],
   "rewrites": [
-    { "source": "/((?!assets/|blog).*)", "destination": "/index.html" }
+    { "source": "/product", "destination": "/index.html" }
   ]
 }

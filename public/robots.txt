@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# AI / LLM 向けの要約は llms.txt を参照してください
+# LLM summary: https://www.another-star.jp/llms.txt
+
+Sitemap: https://www.another-star.jp/sitemap.xml
