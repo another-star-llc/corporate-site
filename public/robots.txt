@@ -5,3 +5,4 @@ Allow: /
 # LLM summary: https://www.another-star.jp/llms.txt
 
 Sitemap: https://www.another-star.jp/sitemap.xml
+Sitemap: https://www.another-star.jp/blog/sitemap-index.xml
