@@ -4,6 +4,15 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  build: {
+    // /product 用に個別の HTML を生成し、検索エンジンにも固有の title・説明文を返す。
+    rollupOptions: {
+      input: {
+        home: new URL('./index.html', import.meta.url).pathname,
+        product: new URL('./product/index.html', import.meta.url).pathname,
+      },
+    },
+  },
   resolve: {
     alias: {
       '@': '/src',
