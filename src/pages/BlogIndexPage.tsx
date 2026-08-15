@@ -44,8 +44,7 @@ export function BlogIndexPage({ manageMetadata = true }: { manageMetadata?: bool
             <Breadcrumbs />
             <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_23rem] lg:items-end">
               <div>
-                <div className="text-[0.7rem] tracking-[0.28em] uppercase text-cyan-300">Another Star Editorial</div>
-                <h1 className="mt-5 text-[3.2rem] font-light leading-[0.95] tracking-[-0.035em] text-white sm:text-[5rem] lg:text-[6.5rem]">
+                <h1 className="text-[3.2rem] font-light leading-[0.95] tracking-[-0.035em] text-white sm:text-[5rem] lg:text-[6.5rem]">
                   BLOG
                 </h1>
               </div>
