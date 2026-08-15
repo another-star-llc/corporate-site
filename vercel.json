@@ -12,6 +12,11 @@
       "source": "/llm.txt",
       "destination": "/llms.txt",
       "permanent": true
+    },
+    {
+      "source": "/product/",
+      "destination": "/product",
+      "permanent": true
     }
   ],
   "rewrites": [
