@@ -16,7 +16,7 @@ export function BlogIndexPage({ manageMetadata = true }: { manageMetadata?: bool
   const jsonLd = useMemo(() => ({
     '@context': 'https://schema.org',
     '@type': 'Blog',
-    name: 'A2A Insights',
+    name: 'BLOG',
     description: pageDescription,
     url: 'https://www.another-star.jp/blog',
     publisher: { '@type': 'Organization', name: 'Another Star合同会社' },
@@ -30,7 +30,7 @@ export function BlogIndexPage({ manageMetadata = true }: { manageMetadata?: bool
 
   usePageMetadata({
     enabled: manageMetadata,
-    title: 'A2A Insights｜Another Star',
+    title: 'BLOG｜Another Star',
     description: pageDescription,
     canonicalPath: '/blog',
     jsonLd,
@@ -46,7 +46,7 @@ export function BlogIndexPage({ manageMetadata = true }: { manageMetadata?: bool
               <div>
                 <div className="text-[0.7rem] tracking-[0.28em] uppercase text-cyan-300">Another Star Editorial</div>
                 <h1 className="mt-5 text-[3.2rem] font-light leading-[0.95] tracking-[-0.035em] text-white sm:text-[5rem] lg:text-[6.5rem]">
-                  A2A<br className="sm:hidden" /> Insights
+                  BLOG
                 </h1>
               </div>
               <p className="max-w-xl text-base leading-8 text-slate-300 lg:pb-2">
