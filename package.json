@@ -7,7 +7,8 @@
     "dev": "trap 'kill 0' EXIT INT TERM; npm run dev:blog & npm run dev:site",
     "dev:site": "vite",
     "dev:blog": "npm --prefix blog run dev",
-    "build": "tsc && vite build && npm run build:blog",
+    "build": "tsc && vite build && npm run prerender && npm run build:blog",
+    "prerender": "node scripts/prerender.mjs",
     "build:blog": "npm --prefix blog install --no-audit --no-fund && npm --prefix blog run build",
     "preview": "vite preview"
   },

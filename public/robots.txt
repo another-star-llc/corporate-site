@@ -1,3 +1,11 @@
+# ChatGPT検索への掲載・引用用クローラー。学習用のGPTBotとは別の制御です。
+User-agent: OAI-SearchBot
+Allow: /
+
+# ユーザー操作に基づいてページを取得するChatGPTのクローラー。
+User-agent: ChatGPT-User
+Allow: /
+
 User-agent: *
 Allow: /
 

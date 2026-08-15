@@ -48,7 +48,9 @@ const ogImage = new URL(image, Astro.site);
     <meta name="theme-color" content="#0b2149" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" type="text/plain" title="llms.txt" href="/llms.txt" />
     <meta property="og:type" content={ogType} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />

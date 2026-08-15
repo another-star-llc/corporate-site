@@ -24,6 +24,7 @@
     <meta name="keywords" content="A2A, AIエージェント, エージェントストア, 仲介エージェント, 信頼スコア, AIセキュリティ" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://www.another-star.jp/product" />
+    <link rel="alternate" type="text/plain" title="llms.txt" href="/llms.txt" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="A2Aセキュリティ基盤｜エージェントストア・仲介エージェント｜Another Star" />
     <meta property="og:description" content="エージェントストアによる登録・評価と、仲介エージェントによる安全な接続・実行記録で、AIエージェント間通信の導入を支援します。" />
@@ -41,6 +42,39 @@
     <meta name="twitter:image" content="https://www.another-star.jp/og-image.png" />
     <meta name="twitter:image:alt" content="ANOTHER STAR — もうひとつの星を、ともに創る。" />
     <title>A2Aセキュリティ基盤｜エージェントストア・仲介エージェント｜Another Star</title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Service",
+            "@id": "https://www.another-star.jp/product#service",
+            "name": "A2Aセキュリティ基盤",
+            "serviceType": "AIエージェント間通信のセキュリティ・信頼基盤",
+            "url": "https://www.another-star.jp/product",
+            "description": "エージェントの事前評価、信頼スコア、仲介実行、異常検知、監査により、安全なA2A連携を支援します。",
+            "provider": {
+              "@type": "Organization",
+              "@id": "https://www.another-star.jp/#organization",
+              "name": "Another Star合同会社",
+              "url": "https://www.another-star.jp/"
+            },
+            "areaServed": { "@type": "Country", "name": "Japan" },
+            "audience": {
+              "@type": "BusinessAudience",
+              "audienceType": "A2A連携を導入する企業・セキュリティ部門・AIエージェント提供企業"
+            }
+          },
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.another-star.jp/" },
+              { "@type": "ListItem", "position": 2, "name": "A2Aセキュリティ基盤", "item": "https://www.another-star.jp/product" }
+            ]
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

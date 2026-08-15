@@ -49,45 +49,64 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Another Star合同会社",
-        "legalName": "Another Star合同会社",
-        "url": "https://www.another-star.jp/",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://www.another-star.jp/company-logo-512.png",
-          "contentUrl": "https://www.another-star.jp/company-logo-512.png",
-          "width": 512,
-          "height": 512,
-          "caption": "Another Star合同会社"
-        },
-        "image": "https://www.another-star.jp/og-image.png",
-        "foundingDate": "2025-07-01",
-        "founders": [
+        "@graph": [
           {
-            "@type": "Person",
-            "name": "安田 直也"
+            "@type": "Organization",
+            "@id": "https://www.another-star.jp/#organization",
+            "name": "Another Star合同会社",
+            "legalName": "Another Star合同会社",
+            "url": "https://www.another-star.jp/",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://www.another-star.jp/company-logo-512.png",
+              "contentUrl": "https://www.another-star.jp/company-logo-512.png",
+              "width": 512,
+              "height": 512,
+              "caption": "Another Star合同会社"
+            },
+            "image": "https://www.another-star.jp/og-image.png",
+            "foundingDate": "2025-07-22",
+            "founders": [
+              { "@type": "Person", "name": "安田 直也" },
+              { "@type": "Person", "name": "齊藤 慎之介" }
+            ],
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "南青山3丁目1番36号 青山丸竹ビル6F",
+              "addressLocality": "港区",
+              "addressRegion": "東京都",
+              "postalCode": "107-0062",
+              "addressCountry": "JP"
+            },
+            "description": "AIエージェント間の安全な連携を支える信頼基盤を開発するテクノロジー企業。A2A 時代のセキュリティと社会実装に取り組む。",
+            "knowsAbout": [
+              "A2Aにおけるセキュリティ",
+              "Agent2Agent Protocol",
+              "AIエージェントセキュリティ",
+              "マルチエージェントセキュリティ",
+              "Agent Card",
+              "エージェントディスカバリ",
+              "エージェント認証・認可",
+              "プロンプトインジェクション対策",
+              "AIエージェント間通信",
+              "AIエージェントガバナンス"
+            ],
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "contactType": "customer support",
+              "email": "contact@another-star.jp",
+              "availableLanguage": ["ja", "en"]
+            }
           },
           {
-            "@type": "Person",
-            "name": "齊藤 慎之介"
+            "@type": "WebSite",
+            "@id": "https://www.another-star.jp/#website",
+            "url": "https://www.another-star.jp/",
+            "name": "Another Star合同会社",
+            "inLanguage": "ja",
+            "publisher": { "@id": "https://www.another-star.jp/#organization" }
           }
-        ],
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "弘道一丁目36番5号",
-          "addressLocality": "足立区",
-          "addressRegion": "東京都",
-          "postalCode": "120-0013",
-          "addressCountry": "JP"
-        },
-        "description": "AIエージェント間の安全な連携を支える信頼基盤を開発するテクノロジー企業。A2A 時代のセキュリティと社会実装に取り組む。",
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "contactType": "Customer Service",
-          "email": "contact@another-star.jp",
-          "availableLanguage": ["ja", "en"]
-        }
+        ]
       }
     </script>
   </head>

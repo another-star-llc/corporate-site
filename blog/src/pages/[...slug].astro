@@ -59,6 +59,8 @@ const jsonLd = post ? [
   datePublished: post.data.pubDate.toISOString(),
   ...(post.data.updatedDate && { dateModified: post.data.updatedDate.toISOString() }),
   ...(post.data.heroImage && { image: `https://www.another-star.jp${post.data.heroImage}` }),
+  keywords: post.data.tags.join(', '),
+  about: post.data.tags.map((tag) => ({ '@type': 'Thing', name: tag })),
   inLanguage: 'ja',
   author: {
     '@type': 'Person',

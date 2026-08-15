@@ -27,7 +27,7 @@ export function usePageMetadata({
   title,
   description,
   canonicalPath,
-  image = '/og-image.jpg',
+  image = '/og-image.png',
   type = 'website',
   jsonLd,
 }: PageMetadata) {

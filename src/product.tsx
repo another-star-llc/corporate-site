@@ -1,10 +1,17 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { createRoot, hydrateRoot } from 'react-dom/client';
 import { ProductPage } from './pages/ProductPage';
 import './index.css';
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+const root = document.getElementById('root')!;
+const page = (
   <React.StrictMode>
     <ProductPage />
-  </React.StrictMode>,
+  </React.StrictMode>
 );
+
+if (root.hasChildNodes()) {
+  hydrateRoot(root, page);
+} else {
+  createRoot(root).render(page);
+}
