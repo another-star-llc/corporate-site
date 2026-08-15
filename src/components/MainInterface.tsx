@@ -160,9 +160,9 @@ export function MainInterface() {
             </a>
             <a
               href="/blog/"
-              className="text-xs tracking-[0.15em] uppercase transition-colors duration-200 text-blue-300 hover:text-blue-100"
+              className="text-xs tracking-[0.15em] uppercase transition-colors duration-200 text-gray-400 hover:text-gray-200"
             >
-              INSIGHTS
+              BLOG
             </a>
             {menuItems.map(item => (
               <button
@@ -217,9 +217,9 @@ export function MainInterface() {
               </a>
               <a
                 href="/blog/"
-                className="text-xs tracking-[0.15em] uppercase transition-colors duration-200 text-blue-300 hover:text-blue-100"
+                className="text-xs tracking-[0.15em] uppercase transition-colors duration-200 text-gray-400 hover:text-gray-200"
               >
-                INSIGHTS
+                BLOG
               </a>
               {menuItems.map(item => (
                 <button
@@ -335,14 +335,6 @@ export function MainInterface() {
                     <div className="flex items-center gap-2 px-6 py-3 rounded-full border border-white/20 text-xs tracking-widest font-light text-gray-300">
                       2026.03.24
                     </div>
-                  </div>
-                  <div className="mt-8 border-t border-white/10 pt-6">
-                    <a
-                      href="/blog"
-                      className="inline-flex items-center gap-2 text-xs tracking-[0.14em] text-blue-300 transition-colors hover:text-white"
-                    >
-                      A2A INSIGHTS を読む <ExternalLink size={14} />
-                    </a>
                   </div>
                 </div>
               </div>

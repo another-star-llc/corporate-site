@@ -1,32 +1,22 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { BlogArticlePage } from '../../../src/pages/BlogArticlePage';
-import { blogArticles, getBlogArticle } from '../../../src/data/blogArticles';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => !data.draft);
-  return [
-    ...posts.map((post) => ({
-      params: { slug: post.slug },
-      props: { kind: 'observation', post },
-    })),
-    ...blogArticles.map((article) => ({
-      params: { slug: article.slug },
-      props: { kind: 'editorial', articleSlug: article.slug },
-    })),
-  ];
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
 }
 
-const { kind, post, articleSlug } = Astro.props;
-const article = kind === 'editorial' ? getBlogArticle(articleSlug) : undefined;
-const renderedPost = post ? await post.render() : undefined;
-const Content = renderedPost?.Content;
+const { post } = Astro.props;
+const { Content } = await post.render();
 
 const fmt = (d: Date) =>
   d.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
 
-const jsonLd = post ? {
+const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
   headline: post.data.title,
@@ -45,84 +35,46 @@ const jsonLd = post ? {
     url: 'https://www.another-star.jp/',
   },
   mainEntityOfPage: new URL(Astro.url.pathname, Astro.site).toString(),
-} : article ? [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: article.title,
-    description: article.description,
-    image: `https://www.another-star.jp${article.heroImage}`,
-    datePublished: article.publishedAt,
-    dateModified: article.updatedAt,
-    inLanguage: 'ja',
-    author: { '@type': 'Organization', name: 'Another Star編集部' },
-    publisher: { '@type': 'Organization', name: 'Another Star合同会社' },
-    mainEntityOfPage: `https://www.another-star.jp/blog/${article.slug}/`,
-    isPartOf: { '@type': 'Blog', name: 'A2A Insights' },
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.another-star.jp/' },
-      { '@type': 'ListItem', position: 2, name: 'A2A Insights', item: 'https://www.another-star.jp/blog/' },
-      { '@type': 'ListItem', position: 3, name: article.shortTitle, item: `https://www.another-star.jp/blog/${article.slug}/` },
-    ],
-  },
-] : undefined;
+};
 ---
 
-{article ? (
-  <BaseLayout
-    title={`${article.shortTitle}｜A2A Insights | Another Star`}
-    description={article.description}
-    ogType="article"
-    pubDate={new Date(article.publishedAt)}
-    updatedDate={new Date(article.updatedAt)}
-    image={article.heroImage}
-    bare
-  >
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-    <BlogArticlePage slug={article.slug} />
-  </BaseLayout>
-) : post && Content ? (
-  <BaseLayout
-    title={`${post.data.title} | A2A Insights`}
-    description={post.data.description}
-    ogType="article"
-    pubDate={post.data.pubDate}
-    updatedDate={post.data.updatedDate}
-  >
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+<BaseLayout
+  title={`${post.data.title} | A2A Insights`}
+  description={post.data.description}
+  ogType="article"
+  pubDate={post.data.pubDate}
+  updatedDate={post.data.updatedDate}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
-    <article>
-      <header class="post-header">
-        <div class="meta">
-          <time datetime={post.data.pubDate.toISOString()}>{fmt(post.data.pubDate)}</time>
-          {post.data.updatedDate && <span>（更新: {fmt(post.data.updatedDate)}）</span>}
-          {post.data.breaking && <span class="badge">臨時号</span>}
-          {post.data.tags.map((t) => <span class="tag">{t}</span>)}
-        </div>
-        <h1>{post.data.title}</h1>
-      </header>
-
-      <div class="post-body">
-        <Content />
+  <article>
+    <header class="post-header">
+      <div class="meta">
+        <time datetime={post.data.pubDate.toISOString()}>{fmt(post.data.pubDate)}</time>
+        {post.data.updatedDate && <span>（更新: {fmt(post.data.updatedDate)}）</span>}
+        {post.data.breaking && <span class="badge">臨時号</span>}
+        {post.data.tags.map((t) => <span class="tag">{t}</span>)}
       </div>
-    </article>
+      <h1>{post.data.title}</h1>
+    </header>
 
-    <aside class="author">
-      <div class="author-name">安田 直也（Naoya Yasuda）</div>
-      <p>
-        Another Star合同会社 代表。AIエージェント間連携（A2A）のセキュリティ基盤を開発。
-        GENIAC-PRIZEみらいビジョン賞受賞。A2A時代の信頼基盤の社会実装に取り組む。
-      </p>
-      <p class="author-links">
-        <a href="/">Another Star合同会社</a>
-      </p>
-    </aside>
+    <div class="post-body">
+      <Content />
+    </div>
+  </article>
 
-    <p class="back"><a href="/blog/">← 記事一覧へ</a></p>
+  <aside class="author">
+    <div class="author-name">安田 直也（Naoya Yasuda）</div>
+    <p>
+      Another Star合同会社 代表。AIエージェント間連携（A2A）のセキュリティ基盤を開発。
+      GENIAC-PRIZEみらいビジョン賞受賞。A2A時代の信頼基盤の社会実装に取り組む。
+    </p>
+    <p class="author-links">
+      <a href="/">Another Star合同会社</a>
+    </p>
+  </aside>
+
+  <p class="back"><a href="/blog/">← 記事一覧へ</a></p>
 
   <style>
     .post-header { margin-bottom: 2.5rem; }
@@ -167,5 +119,4 @@ const jsonLd = post ? {
     .author p { margin: 0.3rem 0; }
     .back { margin-top: 2.5rem; }
   </style>
-  </BaseLayout>
-) : null}
+</BaseLayout>

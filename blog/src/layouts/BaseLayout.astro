@@ -1,27 +1,15 @@
 ---
-import '../../../src/index.css';
-
 interface Props {
   title: string;
   description: string;
   ogType?: string;
   pubDate?: Date;
   updatedDate?: Date;
-  image?: string;
-  bare?: boolean;
 }
 
-const {
-  title,
-  description,
-  ogType = 'website',
-  pubDate,
-  updatedDate,
-  image = '/og-image.jpg',
-  bare = false,
-} = Astro.props;
+const { title, description, ogType = 'website', pubDate, updatedDate } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
-const ogImage = new URL(image, Astro.site);
+const ogImage = new URL('/og-image.jpg', Astro.site);
 ---
 
 <!DOCTYPE html>
@@ -60,35 +48,29 @@ const ogImage = new URL(image, Astro.site);
     <link rel="sitemap" href="/blog/sitemap-index.xml" />
   </head>
   <body>
-    {bare ? (
+    <header class="site-header">
+      <nav>
+        <a class="brand" href="/">Another Star</a>
+        <div class="nav-links">
+          <a href="/product">PRODUCT</a>
+          <a class="active" href="/blog/">BLOG</a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
       <slot />
-    ) : (
-      <>
-        <header class="site-header">
-          <nav>
-            <a class="brand" href="/">Another Star</a>
-            <div class="nav-links">
-              <a href="/product">PRODUCT</a>
-              <a class="active" href="/blog/">BLOG</a>
-            </div>
-          </nav>
-        </header>
+    </main>
 
-        <main>
-          <slot />
-        </main>
-
-        <footer class="site-footer">
-          <p>
-            <a href="/blog/">A2A Insights</a> — AIエージェント間連携（A2A）の動向を定点観測するブログ
-          </p>
-          <p>
-            <a href="/blog/rss.xml">RSS</a> ·
-            <a href="/">Another Star合同会社</a>
-          </p>
-        </footer>
-      </>
-    )}
+    <footer class="site-footer">
+      <p>
+        <a href="/blog/">A2A Insights</a> — AIエージェント間連携（A2A）の動向を定点観測するブログ
+      </p>
+      <p>
+        <a href="/blog/rss.xml">RSS</a> ·
+        <a href="/">Another Star合同会社</a>
+      </p>
+    </footer>
 
     <style is:global>
       :root {

@@ -4,17 +4,12 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev --port 4321 --host 127.0.0.1",
-    "build": "astro build && node scripts/strip-null-bytes.mjs"
+    "build": "astro build"
   },
   "dependencies": {
-    "@astrojs/react": "^4.3.0",
     "@astrojs/rss": "^4.0.11",
     "@astrojs/sitemap": "3.2.1",
-    "@tailwindcss/vite": "^4.0.0",
     "astro": "^4.16.18",
-    "prismjs": "^1.30.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "tailwindcss": "^4.0.0"
+    "prismjs": "^1.30.0"
   }
 }
