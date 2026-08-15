@@ -1,0 +1,4 @@
+interface:
+  display_name: "A2A Insights記事執筆"
+  short_description: "既存記事に揃えたA2A Insights原稿とPRを作成"
+  default_prompt: "Use $a2a-blog-writing to draft and validate an A2A Insights article that matches the corporate-site repository."
