@@ -79,8 +79,6 @@ function Article({ article }: { article: BlogArticle }) {
                   {article.lead}
                 </p>
                 <div className="mt-7 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-slate-400">
-                  <span>Another Star編集部</span>
-                  <span aria-hidden="true">•</span>
                   <time dateTime={article.publishedAt}>{formatDate(article.publishedAt)}</time>
                   <span aria-hidden="true">•</span>
                   <span>読了 {article.readingTime}</span>
