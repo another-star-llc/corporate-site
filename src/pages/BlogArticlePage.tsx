@@ -5,8 +5,8 @@ import { ArticleCTA, AdjacentArticles, TableOfContents, type RelatedLink } from 
 import { getBlogArticle, type BlogArticle } from '../data/blogArticles';
 import { usePageMetadata } from '../hooks/usePageMetadata';
 
-/** 解説記事の執筆者。JSON-LD の author と必ず同じ表記にすること。 */
-const ARTICLE_AUTHOR = '齊藤 慎之介';
+/** 解説記事の既定執筆者。記事ごとに変える場合は blogArticles.ts の author を指定する。 */
+const DEFAULT_ARTICLE_AUTHOR = '齊藤 慎之介';
 
 export interface BlogArticlePageProps {
   slug: string;
@@ -46,7 +46,7 @@ function Article({ article, prev, next }: { article: BlogArticle } & Pick<BlogAr
       image: `https://www.another-star.jp${article.heroImage}`,
       datePublished: article.publishedAt,
       dateModified: article.updatedAt,
-      author: { '@type': 'Person', name: '齊藤 慎之介', url: 'https://www.another-star.jp/' },
+      author: { '@type': 'Person', name: article.author ?? DEFAULT_ARTICLE_AUTHOR, url: 'https://www.another-star.jp/' },
       publisher: { '@type': 'Organization', name: 'Another Star合同会社' },
       mainEntityOfPage: `https://www.another-star.jp/blog/${article.slug}`,
       isPartOf: { '@type': 'Blog', name: 'A2A Insights' },
@@ -93,7 +93,7 @@ function Article({ article, prev, next }: { article: BlogArticle } & Pick<BlogAr
                   <span aria-hidden="true">•</span>
                   <span>読了 {article.readingTime}</span>
                   <span aria-hidden="true">•</span>
-                  <span>{ARTICLE_AUTHOR}</span>
+                  <span>{article.author ?? DEFAULT_ARTICLE_AUTHOR}</span>
                 </div>
               </div>
 
@@ -136,6 +136,7 @@ function Article({ article, prev, next }: { article: BlogArticle } & Pick<BlogAr
                   {article.slug === 'what-is-a2a' && <WhatIsA2AContent />}
                   {article.slug === 'a2a-vs-mcp' && <A2AVsMCPContent />}
                   {article.slug === 'copilot-studio-a2a-agent' && <CopilotStudioContent />}
+                  {article.slug === 'what-is-x402' && <WhatIsX402Content />}
                 </div>
 
                 <section className="mt-16 border-t border-white/10 pt-10" aria-labelledby="sources-heading">
@@ -383,6 +384,108 @@ function CopilotStudioContent() {
           <li>人の承認が必要な操作と、緊急時に接続を止める手順</li>
         </ul>
         <p>画面や機能は段階的にロールアウトされるため、公開前に対象テナントでUI、A2Aバージョン、タスク操作、ライセンスを再確認してください。</p>
+      </Section>
+    </>
+  );
+}
+
+function WhatIsX402Content() {
+  return (
+    <>
+      <Section id="why-x402" title="なぜx402が必要なのか">
+        <p>AIエージェントが自律的に外部サービスを使うようになると、既存の課金方式が合わなくなります。APIキーの発行、月額契約、クレジットカードの登録は、いずれも「人間が事前に手続きを済ませてある」ことを前提にしているからです。エージェントが実行中に見つけた未知のAPIを、その場で一度だけ使いたい場合、通す道がありません。</p>
+        <p>x402は、この隙間をHTTPの仕組みだけで埋めます。サーバーは <code>402 Payment Required</code> を返して支払い条件を提示し、クライアントは署名した支払いデータを添えて同じリクエストを再送します。<strong>事前のアカウント登録も契約も不要で、支払いはリクエスト単位で完結します。</strong></p>
+        <Callout title="402は30年間空いていた番号">
+          <code>402 Payment Required</code> はHTTPの初期から「将来の利用のために予約」とされたまま、標準的な使い方が定義されていませんでした。x402はこのステータスコードに、具体的な支払い交渉のフローを与えるものです。
+        </Callout>
+      </Section>
+
+      <Section id="flow" title="402から決済成立までの流れ">
+        <p>登場する役割は3つです。<strong>クライアント</strong>（買い手。エージェントやアプリケーション）、<strong>リソースサーバー</strong>（売り手。APIやコンテンツの提供者）、<strong>ファシリテーター</strong>（支払いの検証と決済を代行する第三者）。</p>
+        <ol className="blog-steps">
+          <Step number="01" title="通常どおりリクエストする">クライアントは保護されたリソースへ普通にHTTPリクエストを送ります。この時点では支払い情報を持っていません。</Step>
+          <Step number="02" title="402で支払い条件を受け取る">サーバーは <code>402</code> を返し、<code>PAYMENT-REQUIRED</code> ヘッダーで支払い条件を提示します。条件は <code>accepts</code> 配列で複数示せるため、クライアントは自分が扱えるネットワークや通貨を選べます。</Step>
+          <Step number="03" title="署名して再送する">クライアントは選んだ条件に対する支払い認可に署名し、<code>PAYMENT-SIGNATURE</code> ヘッダーへ載せて同じリクエストを再送します。この時点ではまだ送金は起きていません。</Step>
+          <Step number="04" title="サーバーが検証を依頼する">サーバーはファシリテーターの <code>/verify</code> を呼び、署名・残高・有効期限・条件の一致を確認します。結果は <code>isValid</code> で返ります。</Step>
+          <Step number="05" title="決済を実行し、リソースを返す">ファシリテーターの <code>/settle</code> がブロックチェーンへトランザクションを送信します。サーバーはリソースを返し、<code>PAYMENT-RESPONSE</code> ヘッダーで決済結果を伝えます。</Step>
+        </ol>
+        <Callout title="検証と決済は別の段階です">
+          <code>/verify</code> が成功しても、<code>/settle</code> が成立するとは限りません。この2段階の間に何を実行してよいかは仕様が決めてくれないため、実装側の設計事項になります。<a href="/blog/2026-08-15-x402-facilitator-usenix-security/">実際にここが多数の実装で問題になっている</a>ことが、2026年のUSENIX Securityで報告されています。
+        </Callout>
+      </Section>
+
+      <Section id="data-model" title="やり取りされる4つのデータ">
+        <DefinitionGrid items={[
+          ['PaymentRequired', 'サーバーが402とともに返す全体。対象リソースの情報と、受け入れ可能な支払い条件の配列を持つ。'],
+          ['PaymentRequirements', 'accepts配列の1要素。scheme、network、amount、asset、payTo、maxTimeoutSecondsなどを指定する。'],
+          ['PaymentPayload', 'クライアントが署名して送る支払い認可。選んだ条件（accepted）と、署名データ（payload）を持つ。'],
+          ['SettlementResponse', '決済の結果。success、transaction、network、payerを返す。'],
+        ]} />
+        <p>サーバーが提示する支払い条件は、次のような形をしています。金額は小数を避けるため最小単位の文字列で表現し、ネットワークはCAIP-2形式（<code>名前空間:参照</code>）で識別します。</p>
+        <pre><code>{`{
+  "x402Version": 2,
+  "resource": { "url": "https://api.example.com/report" },
+  "accepts": [
+    {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "amount": "10000",
+      "asset": "0x036CbD53...",
+      "payTo": "0x209693Bc...",
+      "maxTimeoutSeconds": 60
+    }
+  ]
+}`}</code></pre>
+        <p><code>scheme</code> は支払い方式を表し、現在の中心は <code>exact</code>（提示額ちょうどを支払う）です。EVM系ではEIP-3009の <code>transferWithAuthorization</code> を使うため、<strong>買い手はガス代を負担せず、署名だけで支払えます</strong>。Solanaでは同等の役割をSPLトークンの <code>TransferChecked</code> が担います。</p>
+      </Section>
+
+      <Section id="facilitator" title="ファシリテーターが担うもの">
+        <p>ファシリテーターは、支払い証明の検証とブロックチェーンへの送信を代行する第三者です。これがあるおかげで、<strong>売り手はウォレットもRPCノードもガス代の管理も持たずに済みます</strong>。売り手が実装するのは、402を返すことと、ファシリテーターのAPIを呼ぶことだけです。</p>
+        <div className="blog-table-wrap" tabIndex={0} aria-label="ファシリテーターが公開する3つのエンドポイント。横にスクロールできます">
+          <table>
+            <caption>ファシリテーターの主要エンドポイント（x402 v2）</caption>
+            <thead><tr><th scope="col">エンドポイント</th><th scope="col">役割</th><th scope="col">主な応答</th></tr></thead>
+            <tbody>
+              <tr><th scope="row"><code>POST /verify</code></th><td>送金せずに支払い認可の妥当性を確認する</td><td><code>isValid</code>、<code>invalidReason</code>、<code>payer</code></td></tr>
+              <tr><th scope="row"><code>POST /settle</code></th><td>検証済みの認可をチェーンへ送信して決済する</td><td><code>success</code>、<code>transaction</code>、<code>network</code></td></tr>
+              <tr><th scope="row"><code>GET /supported</code></th><td>対応するscheme・network・拡張を公開する</td><td><code>kinds</code>、<code>extensions</code>、<code>signers</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>設計上ここが重要な点です。<strong>x402では、支払いが正しいかどうかの判断がファシリテーターに集約されます。</strong>多数の売り手が同じファシリテーターを共有するため、その実装に欠陥があれば、利用しているすべてのサービスに影響します。ファシリテーターの選定は、決済手数料の比較ではなく、信頼をどこに預けるかの判断です。</p>
+      </Section>
+
+      <Section id="transports" title="A2A・MCPとの関係">
+        <p>v2でx402はトランスポート非依存になりました。HTTPヘッダーで運ぶのはあくまで一つの実装形態であり、<strong>MCPやA2Aの上でも同じ支払いフローを成立させられる</strong>設計になっています。エージェント連携の観点では、3つの標準が別々の境界を受け持ちます。</p>
+        <div className="architecture-diagram" role="img" aria-label="依頼側エージェントと提供側エージェントはA2Aで接続し、その対価をx402で支払う。各エージェントはMCPでツールへ接続する構成">
+          <div className="architecture-row"><DiagramNode accent="cyan">依頼側エージェント</DiagramNode><DiagramLink label="A2A + x402" /><DiagramNode accent="cyan">提供側エージェント</DiagramNode></div>
+          <div className="architecture-branches"><span>MCP</span><span>MCP</span></div>
+          <div className="architecture-row"><DiagramNode accent="violet">社内DB・業務API</DiagramNode><span className="w-10" /><DiagramNode accent="violet">外部データ・計算資源</DiagramNode></div>
+        </div>
+        <DefinitionGrid items={[
+          ['A2A', '誰に、何を依頼するか。相手の発見、タスクの委任、進捗と成果物の受け渡し。'],
+          ['MCP', 'エージェントが自分の道具をどう使うか。ツール、リソース、プロンプトの供給。'],
+          ['x402', 'その依頼の対価をどう払うか。支払い条件の提示、認可、決済。'],
+        ]} />
+        <p>A2Aは「仕事を頼めること」までを標準化しますが、その仕事が有料である場合の支払い方は定義しません。x402はそこを埋める位置にあります。ただし現時点では、A2A上でx402を使う構成は仕様として可能になった段階であり、<a href="/blog/2026-08-09-a2a-agents-liveness-x402/">公開エージェントでの実装はまだ限定的です</a>。</p>
+      </Section>
+
+      <Section id="caveats" title="実装で注意すること">
+        <Checklist items={[
+          '検証成功で応答を返すか、決済成立を待つかを明示的に決める。前者は未決済のままリソースが渡る可能性がある',
+          '決済が失敗したときに、実行済みの業務ロジックを巻き戻す手段を用意する。仕様はロールバックを提供しない',
+          'maxTimeoutSecondsと署名の有効期限を、実際の処理時間より十分長く設定する',
+          'ファシリテーターを単一に依存させない。/supportedで対応schemeとnetworkを確認しておく',
+          'v1のX-PAYMENT系ヘッダーとv2のPAYMENT-*ヘッダーが混在しうるため、SDKと相手側の版をそろえる',
+        ]} />
+        <Callout title="v1とv2の差分に注意">
+          v2ではX-プレフィックスの旧ヘッダーが廃止され、<code>PAYMENT-REQUIRED</code> / <code>PAYMENT-SIGNATURE</code> / <code>PAYMENT-RESPONSE</code> に統一されました。ネットワーク識別子もCAIP-2形式に変わっています。既存の解説記事やサンプルコードにはv1準拠のものが多く残っているため、参照時は版を確認してください。
+        </Callout>
+      </Section>
+
+      <Section id="summary" title="まとめ">
+        <p>x402は、HTTPの402を使って「機械が機械に払う」経路を標準化します。事前契約なしにリクエスト単位で支払えること、売り手がブロックチェーンを直接扱わずに済むことが、実務上の主な利点です。</p>
+        <p>一方で、支払いの正しさの判断はファシリテーターに集約され、検証と決済のあいだには時間差が残ります。x402対応であることは、支払いが確実に成立することの保証ではありません。<strong>どこまでを完了とみなすかは、依然として実装側の設計事項です。</strong></p>
       </Section>
     </>
   );

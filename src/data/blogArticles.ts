@@ -14,6 +14,8 @@ export interface BlogArticle {
   lead: string;
   category: BlogCategory;
   tags: string[];
+  /** 執筆者。未指定なら解説記事の既定執筆者を使う。表示とJSON-LDの両方がこの値を参照する。 */
+  author?: string;
   publishedAt: string;
   updatedAt: string;
   readingTime: string;
@@ -230,6 +232,76 @@ export const blogArticles: BlogArticle[] = [
         title: 'Create an agent — Agent2Agent (preview)',
         url: 'https://docs.cloud.google.com/gemini-enterprise-agent-platform/build/runtime/create-an-agent',
         publisher: 'Google Cloud',
+      },
+    ],
+  },
+  {
+    slug: 'what-is-x402',
+    title: 'x402とは？AIエージェントがAPIに支払うためのHTTPネイティブな決済プロトコル',
+    shortTitle: 'x402とは？',
+    description:
+      'x402の目的、402応答から決済成立までの流れ、PaymentRequirements・PaymentPayloadなどのデータ構造、ファシリテーターの役割、A2A・MCPとの関係を、v2仕様に沿って解説します。',
+    lead:
+      'x402は、HTTPの402 Payment Requiredを使い、AIエージェントやプログラムが人手を介さずAPIやリソースの利用料を支払うためのオープン標準です。v2ではHTTP以外のトランスポートにも対応し、A2A上での決済も想定されています。',
+    category: 'A2A基礎',
+    tags: ['x402 v2', 'HTTP 402', 'ファシリテーター', '機械間決済'],
+    author: '安田 直也',
+    publishedAt: '2026-08-15',
+    updatedAt: '2026-08-15',
+    readingTime: '9分',
+    featured: false,
+    heroImage: '/blog/what-is-x402-eyecatch.webp',
+    heroAlt: '暗い背景に白い大きな文字でx402と描かれたビジュアル',
+    takeaways: [
+      'x402は、事前契約やアカウント登録なしに、リクエスト単位で支払いを完結させるための規格です。',
+      '支払いの検証とブロックチェーン上の決済は、ファシリテーターと呼ばれる第三者に委任されます。',
+      'v2でトランスポート非依存になり、HTTPだけでなくMCP・A2A上での利用も想定されています。',
+    ],
+    toc: [
+      { id: 'why-x402', label: 'なぜx402が必要なのか' },
+      { id: 'flow', label: '402から決済成立までの流れ' },
+      { id: 'data-model', label: 'やり取りされる4つのデータ' },
+      { id: 'facilitator', label: 'ファシリテーターが担うもの' },
+      { id: 'transports', label: 'A2A・MCPとの関係' },
+      { id: 'caveats', label: '実装で注意すること' },
+      { id: 'summary', label: 'まとめ' },
+    ],
+    sources: [
+      {
+        title: 'x402 Specification v2',
+        url: 'https://github.com/coinbase/x402/blob/main/specs/x402-specification-v2.md',
+        publisher: 'x402 (GitHub)',
+      },
+      {
+        title: 'Introducing x402 V2: Evolving the Standard for Internet-native Payments',
+        url: 'https://www.x402.org/writing/x402-v2-launch',
+        publisher: 'x402',
+      },
+      {
+        title: 'x402 Docs: Client / Server',
+        url: 'https://docs.x402.org/core-concepts/client-server',
+        publisher: 'x402',
+      },
+      {
+        title: 'EIP-3009: Transfer With Authorization',
+        url: 'https://eips.ethereum.org/EIPS/eip-3009',
+        publisher: 'Ethereum Improvement Proposals',
+      },
+      {
+        title: 'CAIP-2: Blockchain ID Specification',
+        url: 'https://chainagnostic.org/CAIPs/caip-2',
+        publisher: 'Chain Agnostic Improvement Proposals',
+      },
+      {
+        title:
+          'When HTTP 402 Meets the Blockchain: Risks on Emerging x402 Payments',
+        url: 'https://arxiv.org/abs/2607.19545',
+        publisher: 'USENIX Security 2026',
+      },
+      {
+        title: 'A2A Protocol Specification v1.0',
+        url: 'https://a2a-protocol.org/latest/specification/',
+        publisher: 'A2A Protocol',
       },
     ],
   },

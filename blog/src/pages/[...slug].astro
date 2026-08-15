@@ -92,7 +92,7 @@ const jsonLd = post ? [
     datePublished: article.publishedAt,
     dateModified: article.updatedAt,
     inLanguage: 'ja',
-    author: { '@type': 'Person', name: '齊藤 慎之介', url: 'https://www.another-star.jp/' },
+    author: { '@type': 'Person', name: article.author ?? '齊藤 慎之介', url: 'https://www.another-star.jp/' },
     publisher: { '@type': 'Organization', name: 'Another Star合同会社' },
     mainEntityOfPage: `https://www.another-star.jp/blog/${article.slug}/`,
     isPartOf: { '@type': 'Blog', name: 'A2A Insights' },
