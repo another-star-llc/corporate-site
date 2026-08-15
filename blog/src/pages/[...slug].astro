@@ -24,9 +24,14 @@ const article = kind === 'editorial' ? getBlogArticle(articleSlug) : undefined;
 const renderedPost = post ? await post.render() : undefined;
 const Content = renderedPost?.Content;
 
-// ヒーロー画像は記事一覧と同じものを使う。定点観測記事は frontmatter ではなく
-// 一覧データ側に画像を持っているので、slug で引いて単一のソースを保つ。
-const postMeta = post ? blogIndexArticles.find((a) => a.slug === post.slug) : undefined;
+// Markdown記事の表示情報はfrontmatterを正本にする。
+const postMeta = post ? {
+  shortTitle: post.data.title,
+  category: post.data.category,
+  readingTime: post.data.readingTime,
+  heroImage: post.data.heroImage,
+  heroAlt: post.data.heroAlt,
+} : undefined;
 
 // 目次は Markdown の h2 から自動生成する。本文を生HTMLで組んでいる記事は
 // ここが空になり、BlogPostPage 側でサイドバーなしの1カラムに切り替わる。
@@ -54,7 +59,7 @@ const jsonLd = post ? [
   description: post.data.description,
   datePublished: post.data.pubDate.toISOString(),
   ...(post.data.updatedDate && { dateModified: post.data.updatedDate.toISOString() }),
-  ...(postMeta?.heroImage && { image: `https://www.another-star.jp${postMeta.heroImage}` }),
+  ...(post.data.heroImage && { image: `https://www.another-star.jp${post.data.heroImage}` }),
   inLanguage: 'ja',
   author: {
     '@type': 'Person',
@@ -125,21 +130,21 @@ const jsonLd = post ? [
     ogType="article"
     pubDate={post.data.pubDate}
     updatedDate={post.data.updatedDate}
-    image={postMeta?.heroImage}
+    image={post.data.heroImage}
     bare
   >
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     <BlogPostPage
       slug={post.slug}
       title={post.data.title}
-      shortTitle={postMeta?.shortTitle ?? post.data.title}
+      shortTitle={post.data.title}
       lead={post.data.description}
-      category={postMeta?.category ?? '定点観測'}
+      category={post.data.category}
       publishedAt={iso(post.data.pubDate)}
-      readingTime={postMeta?.readingTime ?? ''}
+      readingTime={post.data.readingTime}
       author={POST_AUTHOR}
-      heroImage={postMeta?.heroImage}
-      heroAlt={postMeta?.heroAlt}
+      heroImage={post.data.heroImage}
+      heroAlt={post.data.heroAlt}
       toc={postToc}
       related={postRelated}
     >

@@ -1,18 +1,28 @@
 import { useMemo, useState } from 'react';
 import { ArrowRight, Clock3 } from 'lucide-react';
 import { BlogShell, Breadcrumbs } from '../components/BlogShell';
-import { blogCategories, blogIndexArticles } from '../data/blogArticles';
+import { blogIndexArticles, type BlogIndexArticle } from '../data/blogArticles';
 import { usePageMetadata } from '../hooks/usePageMetadata';
 
 const pageDescription =
   'A2Aをめぐる市場構造、技術標準、企業導入の実務を、公式仕様と一次情報から読み解くAnother Starの専門メディアです。';
 
-export function BlogIndexPage({ manageMetadata = true }: { manageMetadata?: boolean }) {
-  const [activeCategory, setActiveCategory] = useState<(typeof blogCategories)[number]>('すべて');
+export function BlogIndexPage({
+  manageMetadata = true,
+  articles: allArticles = blogIndexArticles,
+}: {
+  manageMetadata?: boolean;
+  articles?: BlogIndexArticle[];
+}) {
+  const categories = useMemo(
+    () => ['すべて', ...Array.from(new Set(allArticles.map((article) => article.category)))],
+    [allArticles],
+  );
+  const [activeCategory, setActiveCategory] = useState('すべて');
   const articles = activeCategory === 'すべて'
-    ? blogIndexArticles
-    : blogIndexArticles.filter((article) => article.category === activeCategory);
-  const featured = blogIndexArticles.find((article) => article.featured) ?? blogIndexArticles[0];
+    ? allArticles
+    : allArticles.filter((article) => article.category === activeCategory);
+  const featured = allArticles.find((article) => article.featured) ?? allArticles[0];
   const jsonLd = useMemo(() => ({
     '@context': 'https://schema.org',
     '@type': 'Blog',
@@ -20,13 +30,13 @@ export function BlogIndexPage({ manageMetadata = true }: { manageMetadata?: bool
     description: pageDescription,
     url: 'https://www.another-star.jp/blog',
     publisher: { '@type': 'Organization', name: 'Another Star合同会社' },
-    blogPost: blogIndexArticles.map((article) => ({
+    blogPost: allArticles.map((article) => ({
       '@type': 'BlogPosting',
       headline: article.title,
       url: article.href.startsWith('http') ? article.href : `https://www.another-star.jp${article.href}`,
       datePublished: article.publishedAt,
     })),
-  }), []);
+  }), [allArticles]);
 
   usePageMetadata({
     enabled: manageMetadata,
@@ -55,7 +65,7 @@ export function BlogIndexPage({ manageMetadata = true }: { manageMetadata?: bool
             </div>
 
             <div className="mt-12 flex flex-wrap gap-2" aria-label="記事カテゴリ">
-              {blogCategories.map((category) => {
+              {categories.map((category) => {
                 const isActive = activeCategory === category;
                 return (
                   <button

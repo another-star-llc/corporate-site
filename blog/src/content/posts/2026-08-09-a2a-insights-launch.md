@@ -3,6 +3,10 @@ title: "A2A Insightsを始めます — A2Aプロトコルを日本語で定点�
 description: "AIエージェント間連携プロトコルA2A（Agent2Agent）の仕様変更・企業採用・セキュリティ情報を、日本語で継続的に追跡するブログを開始します。"
 pubDate: 2026-08-09
 tags: ["お知らせ"]
+category: "定点観測"
+readingTime: "3分"
+heroImage: "/blog/a2a-insights-launch-eyecatch.webp"
+heroAlt: "ネットワーク上のAIエージェントを観測する青く発光した装置"
 ---
 
 Another Star合同会社は、AIエージェント間連携プロトコル **A2A（Agent2Agent）** の動向を日本語で定点観測するブログ「A2A Insights」を開始します。

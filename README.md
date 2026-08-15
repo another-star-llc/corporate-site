@@ -65,6 +65,15 @@ docker-compose logs -f app    # ログ確認
 pnpm run build
 ```
 
+### ブログ記事の追加
+
+ニュース・定点観測記事は`blog/src/content/posts/<slug>.md`へ追加します。
+frontmatterの`category`が既存一覧にない場合も、記事一覧のカテゴリボタンへ自動追加されます。
+記事データを`src/data/blogArticles.ts`へ重複登録する必要はありません。
+
+Slack承認から作成された記事は、専用ブランチとPull Requestで受け入れます。
+Pull Requestのビルドと公開文面を確認してmainへマージするまで、本番公開とは扱いません。
+
 ### プレビュー
 ```bash
 pnpm run preview

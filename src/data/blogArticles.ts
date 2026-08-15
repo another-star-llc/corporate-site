@@ -1,6 +1,4 @@
-export const blogCategories = ['すべて', 'A2A基礎', '定点観測'] as const;
-
-export type BlogCategory = Exclude<(typeof blogCategories)[number], 'すべて'>;
+export type BlogCategory = string;
 
 export interface BlogSource {
   title: string;
@@ -258,39 +256,6 @@ export interface BlogIndexArticle {
   featured: boolean;
 }
 
-const observationArticles: BlogIndexArticle[] = [
-  {
-    slug: '2026-08-09-a2a-agents-liveness-x402',
-    href: '/blog/2026-08-09-a2a-agents-liveness-x402/',
-    title: '公開A2Aエージェント194件を調査：実応答67件、そのうち31件がx402に言及',
-    shortTitle: '公開A2Aエージェント194件の実測',
-    description:
-      'a2aregistryの公開APIを対象に、Agent Cardの疎通、ヘルスチェック、A2A message/sendの実動作を分けて調査した実測レポートです。',
-    category: '定点観測',
-    publishedAt: '2026-08-09',
-    readingTime: '8分',
-    heroImage: '/blog/a2a-liveness-x402-eyecatch.webp',
-    heroAlt: '暗い背景に白い大きな文字でx402と描かれたビジュアル',
-    visualLabel: 'FIELD NOTES / 001',
-    featured: false,
-  },
-  {
-    slug: '2026-08-09-a2a-insights-launch',
-    href: '/blog/2026-08-09-a2a-insights-launch/',
-    title: 'A2A Insightsを始めます — A2Aプロトコルを日本語で定点観測する',
-    shortTitle: 'A2A Insightsを始めます',
-    description:
-      'A2Aの仕様変更、企業採用、セキュリティ情報を日本語で継続的に追跡する、A2A Insightsの開始案内です。',
-    category: '定点観測',
-    publishedAt: '2026-08-09',
-    readingTime: '3分',
-    heroImage: '/blog/a2a-insights-launch-eyecatch.webp',
-    heroAlt: 'ネットワーク上のAIエージェントを観測する青く発光した装置',
-    visualLabel: 'EDITORIAL NOTE',
-    featured: false,
-  },
-];
-
 export const blogIndexArticles: BlogIndexArticle[] = [
   ...blogArticles.map((article) => ({
     slug: article.slug,
@@ -306,7 +271,6 @@ export const blogIndexArticles: BlogIndexArticle[] = [
     thumbnailIcon: article.thumbnailIcon,
     featured: article.featured,
   })),
-  ...observationArticles,
 ];
 
 export function getBlogArticle(slug: string) {
