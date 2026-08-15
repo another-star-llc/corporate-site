@@ -46,7 +46,7 @@ function Article({ article }: { article: BlogArticle }) {
       '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.another-star.jp/' },
-        { '@type': 'ListItem', position: 2, name: 'A2A Insights', item: 'https://www.another-star.jp/blog' },
+        { '@type': 'ListItem', position: 2, name: 'BLOG', item: 'https://www.another-star.jp/blog' },
         { '@type': 'ListItem', position: 3, name: article.shortTitle, item: `https://www.another-star.jp/blog/${article.slug}` },
       ],
     },

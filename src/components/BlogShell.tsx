@@ -54,12 +54,12 @@ export function Breadcrumbs({ children }: { children?: ReactNode }) {
       <span aria-hidden="true">/</span>
       {children ? (
         <>
-          <a href="/blog/" className="transition-colors hover:text-white">A2A Insights</a>
+          <a href="/blog/" className="transition-colors hover:text-white">BLOG</a>
           <span aria-hidden="true">/</span>
           <span className="text-slate-300" aria-current="page">{children}</span>
         </>
       ) : (
-        <span className="text-slate-300" aria-current="page">A2A Insights</span>
+        <span className="text-slate-300" aria-current="page">BLOG</span>
       )}
     </nav>
   );
