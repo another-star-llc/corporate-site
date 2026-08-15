@@ -1,102 +1,34 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { BlogIndexPage } from '../../../src/pages/BlogIndexPage';
+import { blogIndexArticles } from '../../../src/data/blogArticles';
 
-const posts = (await getCollection('posts', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const description =
+  'A2A・MCP・AIエージェント実装を、公式仕様と一次情報から読み解くAnother Starの専門メディアです。';
 
-const fmt = (d: Date) =>
-  d.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  name: 'A2A Insights',
+  description,
+  url: 'https://www.another-star.jp/blog/',
+  publisher: { '@type': 'Organization', name: 'Another Star合同会社' },
+  blogPost: blogIndexArticles.map((article) => ({
+    '@type': 'BlogPosting',
+    headline: article.title,
+    url: article.href.startsWith('http')
+      ? article.href
+      : `https://www.another-star.jp${article.href}`,
+    datePublished: article.publishedAt,
+  })),
+};
 ---
 
 <BaseLayout
-  title="A2A Insights | Another Star合同会社"
-  description="AIエージェント間連携プロトコル A2A（Agent2Agent）の最新動向を日本語で定点観測。仕様変更・企業採用・セキュリティ情報を毎週お届けします。"
+  title="A2A Insights｜Another Star"
+  description={description}
+  bare
 >
-  <section class="hero">
-    <h1>A2A Insights</h1>
-    <p class="tagline">
-      AIエージェント間連携プロトコル「A2A」の動向を、日本語で定点観測する。
-    </p>
-    <p class="byline">
-      Another Star合同会社 — AIエージェント時代の信頼基盤
-    </p>
-  </section>
-
-  <section class="posts">
-    {posts.length === 0 && <p class="empty">記事は準備中です。まもなく最初の定点観測をお届けします。</p>}
-    {posts.map((post) => (
-      <article class="card">
-        <a class="card-link" href={`/blog/${post.slug}/`} aria-label={`${post.data.title}を読む`}>
-          <div class="meta">
-            <time datetime={post.data.pubDate.toISOString()}>{fmt(post.data.pubDate)}</time>
-            {post.data.breaking && <span class="badge">臨時号</span>}
-            {post.data.tags.map((t) => <span class="tag">{t}</span>)}
-          </div>
-          <h2>{post.data.title}</h2>
-          <p>{post.data.description}</p>
-        </a>
-      </article>
-    ))}
-  </section>
-
-  <style>
-    .hero { margin-bottom: 3.5rem; }
-    .hero h1 {
-      font-size: 2.2rem;
-      letter-spacing: 0.08em;
-      margin-bottom: 0.5rem;
-      background: linear-gradient(90deg, #67e8f9, #818cf8);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      display: inline-block;
-    }
-    .tagline { font-size: 1.05rem; color: var(--text); margin: 0.25rem 0; }
-    .byline { color: var(--text-dim); font-size: 0.85rem; }
-    .card {
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      margin-bottom: 1.5rem;
-      overflow: hidden;
-      background: var(--bg-card);
-      transition: border-color 0.2s;
-    }
-    .card:hover, .card:focus-within { border-color: var(--accent-dim); }
-    .card-link {
-      display: block;
-      padding: 1.5rem 1.75rem;
-      color: inherit;
-      text-decoration: none;
-    }
-    .card-link:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: -2px;
-    }
-    .card h2 { margin: 0.4rem 0; color: #fff; font-size: 1.25rem; }
-    .card:hover h2, .card:focus-within h2 { color: var(--accent); }
-    .card p { color: var(--text-dim); margin: 0.4rem 0 0; font-size: 0.95rem; }
-    .meta {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-size: 0.8rem;
-      color: var(--text-dim);
-      flex-wrap: wrap;
-    }
-    .badge {
-      background: #7f1d1d;
-      color: #fecaca;
-      border-radius: 999px;
-      padding: 0.05rem 0.6rem;
-      font-size: 0.7rem;
-    }
-    .tag {
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 0.05rem 0.6rem;
-      font-size: 0.7rem;
-    }
-    .empty { color: var(--text-dim); }
-  </style>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <BlogIndexPage manageMetadata={false} client:load />
 </BaseLayout>
