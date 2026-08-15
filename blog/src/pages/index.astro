@@ -1,26 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { BlogIndexPage } from '../../../src/pages/BlogIndexPage';
-import { blogIndexArticles } from '../../../src/data/blogArticles';
-import { getCollection } from 'astro:content';
+import { getAllArticles } from '../lib/articles';
 
-const posts = await getCollection('posts', ({ data }) => !data.draft);
-const contentArticles = posts.map((post) => ({
-  slug: post.slug,
-  href: `/blog/${post.slug}/`,
-  title: post.data.title,
-  shortTitle: post.data.title,
-  description: post.data.description,
-  category: post.data.category,
-  publishedAt: post.data.pubDate.toISOString().slice(0, 10),
-  readingTime: post.data.readingTime,
-  heroImage: post.data.heroImage,
-  heroAlt: post.data.heroAlt,
-  featured: post.data.featured,
-}));
-const articles = [...blogIndexArticles, ...contentArticles].sort((left, right) =>
-  right.publishedAt.localeCompare(left.publishedAt),
-);
+const articles = await getAllArticles();
 
 const description =
   'A2A・MCP・AIエージェント実装を、公式仕様と一次情報から読み解くAnother Starの専門メディアです。';

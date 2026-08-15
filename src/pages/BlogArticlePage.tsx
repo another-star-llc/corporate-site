@@ -1,14 +1,20 @@
 import { useMemo, type ReactNode } from 'react';
 import { ArrowRight, Check, ExternalLink } from 'lucide-react';
 import { BlogShell, Breadcrumbs } from '../components/BlogShell';
-import { ArticleCTA, RelatedArticles, TableOfContents } from '../components/ArticleSections';
+import { ArticleCTA, AdjacentArticles, TableOfContents, type RelatedLink } from '../components/ArticleSections';
 import { getBlogArticle, type BlogArticle } from '../data/blogArticles';
 import { usePageMetadata } from '../hooks/usePageMetadata';
 
 /** 解説記事の執筆者。JSON-LD の author と必ず同じ表記にすること。 */
 const ARTICLE_AUTHOR = '齊藤 慎之介';
 
-export function BlogArticlePage({ slug }: { slug: string }) {
+export interface BlogArticlePageProps {
+  slug: string;
+  prev?: RelatedLink;
+  next?: RelatedLink;
+}
+
+export function BlogArticlePage({ slug, prev, next }: BlogArticlePageProps) {
   const article = getBlogArticle(slug);
 
   if (!article) {
@@ -27,14 +33,10 @@ export function BlogArticlePage({ slug }: { slug: string }) {
     );
   }
 
-  return <Article article={article} />;
+  return <Article article={article} prev={prev} next={next} />;
 }
 
-function Article({ article }: { article: BlogArticle }) {
-  const relatedLinks = article.relatedSlugs
-    .map(getBlogArticle)
-    .filter((item): item is BlogArticle => Boolean(item))
-    .map((item) => ({ href: `/blog/${item.slug}/`, category: item.category, title: item.shortTitle }));
+function Article({ article, prev, next }: { article: BlogArticle } & Pick<BlogArticlePageProps, 'prev' | 'next'>) {
   const jsonLd = useMemo(() => ([
     {
       '@context': 'https://schema.org',
@@ -152,7 +154,7 @@ function Article({ article }: { article: BlogArticle }) {
                 </section>
 
                 <ArticleCTA slug={article.slug} />
-                <RelatedArticles related={relatedLinks} />
+                <AdjacentArticles prev={prev} next={next} />
               </div>
 
               <aside className="sticky top-28 hidden rounded-2xl border border-white/10 bg-white/[0.025] p-5 lg:block" aria-label="記事の目次">
@@ -417,6 +419,7 @@ function DecisionCards() {
 function Checklist({ items }: { items: string[] }) {
   return <ul className="checklist">{items.map((item) => <li key={item}><Check size={17} aria-hidden="true" /><span>{item}</span></li>)}</ul>;
 }
+
 
 function formatDate(value: string) {
   const [year, month, day] = value.split('-');

@@ -24,7 +24,6 @@ export interface BlogArticle {
   takeaways: string[];
   toc: { id: string; label: string }[];
   sources: BlogSource[];
-  relatedSlugs: string[];
 }
 
 export const blogArticles: BlogArticle[] = [
@@ -73,7 +72,6 @@ export const blogArticles: BlogArticle[] = [
         publisher: 'A2A Protocol',
       },
     ],
-    relatedSlugs: ['a2a-vs-mcp', 'copilot-studio-a2a-agent'],
   },
   {
     slug: 'a2a-vs-mcp',
@@ -125,7 +123,6 @@ export const blogArticles: BlogArticle[] = [
         publisher: 'Model Context Protocol',
       },
     ],
-    relatedSlugs: ['what-is-a2a', 'copilot-studio-a2a-agent'],
   },
   {
     slug: 'copilot-studio-a2a-agent',
@@ -235,7 +232,6 @@ export const blogArticles: BlogArticle[] = [
         publisher: 'Google Cloud',
       },
     ],
-    relatedSlugs: ['what-is-a2a', 'a2a-vs-mcp'],
   },
 ];
 
@@ -275,4 +271,20 @@ export const blogIndexArticles: BlogIndexArticle[] = [
 
 export function getBlogArticle(slug: string) {
   return blogArticles.find((article) => article.slug === slug);
+}
+
+/**
+ * 発行順で前後にある記事を返す。next が新しい方、prev が古い方。端の記事は片方が undefined。
+ *
+ * 対象の一覧は呼び出し側から渡す。Markdown記事の情報は astro:content 経由でしか
+ * 取れず、このファイル単体では全記事を組み立てられないため。
+ * （blog/src/lib/articles.ts の getAllArticles() が発行順に並べたものを渡す想定）
+ */
+export function getAdjacentArticles(slug: string, articles: BlogIndexArticle[]) {
+  const index = articles.findIndex((article) => article.slug === slug);
+  if (index === -1) return { prev: undefined, next: undefined };
+  return {
+    next: index > 0 ? articles[index - 1] : undefined,
+    prev: articles[index + 1],
+  };
 }

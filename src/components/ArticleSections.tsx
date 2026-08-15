@@ -1,4 +1,4 @@
-import { ArrowRight, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ShieldCheck } from 'lucide-react';
 
 export interface RelatedLink {
   href: string;
@@ -30,26 +30,46 @@ export function ArticleCTA({ slug }: { slug: string }) {
   );
 }
 
-export function RelatedArticles({ related }: { related: RelatedLink[] }) {
-  if (related.length === 0) return null;
+/**
+ * 発行順で前後にある記事への導線。
+ * 手書きの関連記事指定だとどの記事でも同じ顔ぶれになりがちなので、発行順で機械的に出す。
+ * 端の記事は片方しか無いため、次の記事だけの場合も右側に置いて位置を揃える。
+ */
+export function AdjacentArticles({ prev, next }: { prev?: RelatedLink; next?: RelatedLink }) {
+  if (!prev && !next) return null;
   return (
-    <section className="mt-16" aria-labelledby="related-heading">
+    <section className="mt-16" aria-labelledby="adjacent-heading">
       <div className="mb-5 flex items-center gap-4">
-        <h2 id="related-heading" className="text-xs tracking-[0.18em] uppercase text-slate-400">次に読む</h2>
+        <h2 id="adjacent-heading" className="text-xs tracking-[0.18em] uppercase text-slate-400">次に読む</h2>
         <span className="h-px flex-1 bg-white/10" />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
-        {related.map((item) => (
-          <a key={item.href} href={item.href} className="group rounded-2xl border border-white/10 bg-white/[0.025] p-5 transition-colors hover:border-cyan-300/25 hover:bg-white/[0.045] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300">
-            <div className="text-xs text-cyan-300">{item.category}</div>
-            <h3 className="mt-3 text-lg font-light leading-snug text-white">{item.title}</h3>
-            <div className="mt-5 inline-flex items-center gap-2 text-xs text-slate-400 group-hover:text-white">
-              記事を読む <ArrowRight size={14} aria-hidden="true" />
-            </div>
-          </a>
-        ))}
+        {prev && <AdjacentCard link={prev} direction="prev" />}
+        {next && <AdjacentCard link={next} direction="next" />}
       </div>
     </section>
+  );
+}
+
+function AdjacentCard({ link, direction }: { link: RelatedLink; direction: 'prev' | 'next' }) {
+  const isNext = direction === 'next';
+  return (
+    <a
+      href={link.href}
+      className={`group rounded-2xl border border-white/10 bg-white/[0.025] p-5 transition-colors hover:border-cyan-300/25 hover:bg-white/[0.045] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 ${
+        isNext ? 'text-right sm:col-start-2' : ''
+      }`}
+    >
+      <div className={`flex items-center gap-2 text-xs text-slate-500 group-hover:text-slate-300 ${isNext ? 'justify-end' : ''}`}>
+        {isNext ? (
+          <>次の記事 <ArrowRight size={13} aria-hidden="true" /></>
+        ) : (
+          <><ArrowLeft size={13} aria-hidden="true" /> 前の記事</>
+        )}
+      </div>
+      <div className="mt-3 text-xs text-cyan-300">{link.category}</div>
+      <h3 className="mt-2 text-lg font-light leading-snug text-white">{link.title}</h3>
+    </a>
   );
 }
 

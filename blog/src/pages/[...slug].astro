@@ -3,7 +3,8 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { BlogArticlePage } from '../../../src/pages/BlogArticlePage';
 import { BlogPostPage } from '../../../src/pages/BlogPostPage';
-import { blogArticles, getBlogArticle, blogIndexArticles } from '../../../src/data/blogArticles';
+import { blogArticles, getBlogArticle, getAdjacentArticles } from '../../../src/data/blogArticles';
+import { getAllArticles } from '../lib/articles';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => !data.draft);
@@ -39,14 +40,12 @@ const postToc = (renderedPost?.headings ?? [])
   .filter((h) => h.depth === 2)
   .map((h) => ({ id: h.slug, label: h.text }));
 
-// 「次に読む」は同じブログ内の他の記事から新しい順に2件。
-const postRelated = post
-  ? blogIndexArticles
-      .filter((a) => a.slug !== post.slug)
-      .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
-      .slice(0, 2)
-      .map((a) => ({ href: a.href, category: a.category, title: a.shortTitle }))
-  : [];
+// 「次に読む」は手書きの指定ではなく発行順の前後を参照する。
+const toLink = (a?: { href: string; category: string; shortTitle: string }) =>
+  a ? { href: a.href, category: a.category, title: a.shortTitle } : undefined;
+// 解説記事とMarkdown記事を1本に束ねた発行順の一覧から前後を引く。
+const allArticles = await getAllArticles();
+const adjacent = getAdjacentArticles(post ? post.slug : article!.slug, allArticles);
 
 const POST_AUTHOR = '安田 直也';
 const iso = (d: Date) => d.toISOString().slice(0, 10);
@@ -121,7 +120,7 @@ const jsonLd = post ? [
     bare
   >
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-    <BlogArticlePage slug={article.slug} />
+    <BlogArticlePage slug={article.slug} prev={toLink(adjacent.prev)} next={toLink(adjacent.next)} />
   </BaseLayout>
 ) : post && Content ? (
   <BaseLayout
@@ -146,7 +145,8 @@ const jsonLd = post ? [
       heroImage={post.data.heroImage}
       heroAlt={post.data.heroAlt}
       toc={postToc}
-      related={postRelated}
+      prev={toLink(adjacent.prev)}
+      next={toLink(adjacent.next)}
     >
       <Content />
     </BlogPostPage>

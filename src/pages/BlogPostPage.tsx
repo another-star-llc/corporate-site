@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { BlogShell, Breadcrumbs } from '../components/BlogShell';
-import { ArticleCTA, RelatedArticles, TableOfContents, type RelatedLink } from '../components/ArticleSections';
+import { ArticleCTA, AdjacentArticles, TableOfContents, type RelatedLink } from '../components/ArticleSections';
 
 export interface BlogPostPageProps {
   slug: string;
@@ -15,7 +15,8 @@ export interface BlogPostPageProps {
   heroImage?: string;
   heroAlt?: string;
   toc: { id: string; label: string }[];
-  related: RelatedLink[];
+  prev?: RelatedLink;
+  next?: RelatedLink;
   children?: ReactNode;
 }
 
@@ -39,7 +40,8 @@ export function BlogPostPage({
   heroImage,
   heroAlt,
   toc,
-  related,
+  prev,
+  next,
   children,
 }: BlogPostPageProps) {
   const hasToc = toc.length > 0;
@@ -104,7 +106,7 @@ export function BlogPostPage({
                 <div className="blog-prose blog-prose-md">{children}</div>
 
                 <ArticleCTA slug={slug} />
-                <RelatedArticles related={related} />
+                <AdjacentArticles prev={prev} next={next} />
               </div>
 
               {hasToc && (
