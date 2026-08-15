@@ -112,7 +112,7 @@ npm run build
 
 生成された記事詳細、ブログ一覧、RSS、sitemapを確認する。長いタイトル、表の横スクロール、目次、hero、OG画像、JSON-LD、カテゴリ、CTA、前後記事ナビは画面幅を変えて目視する。検証できない項目はPR本文に明記する。
 
-画面確認では`npm run dev`を起動し、`http://localhost:5173/blog/<slug>/`と`http://localhost:5173/blog/`をデスクトップ幅とモバイル幅で開く。確認後は開発サーバーを停止する。
+画面確認では`npm run dev`を起動し、`http://localhost:3000/blog/<slug>/`と`http://localhost:3000/blog/`をデスクトップ幅とモバイル幅で開く。確認後は開発サーバーを停止する。
 
 ## PRを準備する
 

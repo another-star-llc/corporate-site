@@ -41,6 +41,7 @@ FRONTMATTER = re.compile(r"\A---\r?\n(.*?)\r?\n---\r?\n?", re.DOTALL)
 FIELD = re.compile(r"^([A-Za-z][A-Za-z0-9]*):[ \t]*(.*)$", re.MULTILINE)
 PUB_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 READING_TIME = re.compile(r"^[1-9]\d*分$")
+REFERENCE_LINK = re.compile(r"\[[^\]]+\]\(https://[^)\s]+\)")
 
 
 def _today_jst() -> date:
@@ -215,8 +216,10 @@ def validate_article(
             re.MULTILINE,
         )
         reference_body = body[reference_match.end() :] if reference_match else ""
-        if "https://" not in reference_body:
-            errors.append("参照した一次情報の節にHTTPSリンクを含めてください")
+        if not REFERENCE_LINK.search(reference_body):
+            errors.append(
+                "参照した一次情報の節に名称付きのHTTPS Markdownリンクを含めてください"
+            )
 
     public_text = article.read_text(encoding="utf-8")
     if INTERNAL_TERMS.search(public_text):

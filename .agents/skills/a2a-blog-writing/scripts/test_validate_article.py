@@ -137,6 +137,16 @@ draft: false
         errors = MODULE.validate_article(self.article, self.repo)
         self.assertTrue(any("参照した一次情報の節" in error for error in errors))
 
+    def test_rejects_bare_reference_url(self) -> None:
+        self.write_article(
+            self.valid_body().replace(
+                "[公式仕様](https://example.com/spec)",
+                "https://example.com/spec",
+            )
+        )
+        errors = MODULE.validate_article(self.article, self.repo)
+        self.assertTrue(any("名称付きのHTTPS Markdownリンク" in error for error in errors))
+
     def test_rejects_non_string_tag(self) -> None:
         self.write_article(self.valid_body(), "tags: [1]\n")
         errors = MODULE.validate_article(self.article, self.repo)

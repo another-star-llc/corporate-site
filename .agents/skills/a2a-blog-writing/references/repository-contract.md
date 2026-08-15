@@ -133,8 +133,8 @@ npm run build
 
 ```bash
 npm run dev
-# http://localhost:5173/blog/<slug>/
-# http://localhost:5173/blog/
+# http://localhost:3000/blog/<slug>/
+# http://localhost:3000/blog/
 ```
 
 ## PR
