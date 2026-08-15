@@ -82,8 +82,6 @@ function Article({ article }: { article: BlogArticle }) {
                   <time dateTime={article.publishedAt}>{formatDate(article.publishedAt)}</time>
                   <span aria-hidden="true">•</span>
                   <span>読了 {article.readingTime}</span>
-                  <span aria-hidden="true">•</span>
-                  <span>情報確認日 {formatDate(article.updatedAt)}</span>
                 </div>
               </div>
             </div>
