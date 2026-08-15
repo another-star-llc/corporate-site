@@ -86,12 +86,6 @@ function Article({ article }: { article: BlogArticle }) {
                   <span>情報確認日 {formatDate(article.updatedAt)}</span>
                 </div>
               </div>
-              <figure className="mt-12 overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#06101d]">
-                <img src={article.heroImage} alt={article.heroAlt} width="1672" height="941" className="aspect-video w-full object-cover" />
-                <figcaption className="border-t border-white/10 px-5 py-3 text-xs leading-5 text-slate-500">
-                  A2A Insights コンセプトイメージ（生成画像）
-                </figcaption>
-              </figure>
             </div>
           </header>
 
