@@ -73,6 +73,8 @@ frontmatterの`category`が既存一覧にない場合も、記事一覧のカ�
 
 Slack承認から作成された記事は、専用ブランチとPull Requestで受け入れます。
 Pull Requestのビルドと公開文面を確認してmainへマージするまで、本番公開とは扱いません。
+OpenClawまたはCodexで記事を執筆・改稿する場合は、公開仕様の正本として
+`.agents/skills/a2a-blog-writing/SKILL.md`を使用します。
 
 ### プレビュー
 ```bash
