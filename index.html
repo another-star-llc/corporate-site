@@ -11,9 +11,17 @@
       gtag('config', 'G-0QHYFTBBB2');
     </script>
     <meta charset="UTF-8" />
+    <!-- ブラウザのタブは 16/32、Google 検索結果の丸アイコンは 48px 以上の正方形が使われる。
+         両方を同じ rel="icon" で並べ、用途ごとに最適なサイズを選ばせる。 -->
     <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#0b2149" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Another Star合同会社は、AIエージェント間の安全な連携を支える信頼基盤を開発するテクノロジー企業です。A2A 時代のセキュリティと社会実装を見据えたプロダクト開発に取り組んでいます。" />
     <meta name="keywords" content="Another Star合同会社, Another Star, A2A, AIエージェント, AIセキュリティ, 信頼基盤, エージェントストア, 仲介エージェント" />
@@ -27,11 +35,16 @@
     <meta property="og:url" content="https://www.another-star.jp/" />
     <meta property="og:site_name" content="Another Star合同会社" />
     <meta property="og:locale" content="ja_JP" />
-    <meta property="og:image" content="https://www.another-star.jp/og-image.jpg" />
+    <meta property="og:image" content="https://www.another-star.jp/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="ANOTHER STAR — もうひとつの星を、ともに創る。" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Another Star合同会社 - AIエージェント時代の信頼基盤" />
     <meta name="twitter:description" content="AIエージェント間の安全な連携を支える信頼基盤を開発する、Another Star合同会社の公式サイト。" />
-    <meta name="twitter:image" content="https://www.another-star.jp/og-image.jpg" />
+    <meta name="twitter:image" content="https://www.another-star.jp/og-image.png" />
+    <meta name="twitter:image:alt" content="ANOTHER STAR — もうひとつの星を、ともに創る。" />
     <title>Another Star合同会社 - AIエージェント時代の信頼基盤</title>
     <script type="application/ld+json">
       {
@@ -40,7 +53,15 @@
         "name": "Another Star合同会社",
         "legalName": "Another Star合同会社",
         "url": "https://www.another-star.jp/",
-        "logo": "https://www.another-star.jp/og-image.jpg",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.another-star.jp/company-logo-512.png",
+          "contentUrl": "https://www.another-star.jp/company-logo-512.png",
+          "width": 512,
+          "height": 512,
+          "caption": "Another Star合同会社"
+        },
+        "image": "https://www.another-star.jp/og-image.png",
         "foundingDate": "2025-07-01",
         "founders": [
           {
