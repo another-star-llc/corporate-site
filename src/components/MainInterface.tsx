@@ -162,7 +162,7 @@ export function MainInterface() {
               href="/blog/"
               className="text-xs tracking-[0.15em] uppercase transition-colors duration-200 text-blue-300 hover:text-blue-100"
             >
-              INSIGHTS
+              BLOG
             </a>
             {menuItems.map(item => (
               <button
@@ -219,7 +219,7 @@ export function MainInterface() {
                 href="/blog/"
                 className="text-xs tracking-[0.15em] uppercase transition-colors duration-200 text-blue-300 hover:text-blue-100"
               >
-                INSIGHTS
+                BLOG
               </a>
               {menuItems.map(item => (
                 <button

@@ -27,7 +27,7 @@ export function BlogShell({ children }: { children: ReactNode }) {
               aria-current="page"
               className="inline-flex min-h-11 items-center text-xs tracking-[0.2em] uppercase text-cyan-200 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
             >
-              A2A Insights
+              BLOG
             </a>
           </nav>
         </header>
