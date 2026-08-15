@@ -152,7 +152,11 @@ export function BlogIndexPage({ manageMetadata = true }: { manageMetadata?: bool
                           <img src={article.thumbnailIcon} alt="" width="96" height="96" className="h-full w-full object-contain" />
                         </span>
                       )}
-                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/80 to-transparent px-5 pb-5 pt-14">
+                      <div className={`absolute inset-x-0 px-5 ${
+                        article.titlePosition === 'top'
+                          ? 'top-0 bg-gradient-to-b from-black via-black/80 to-transparent pb-14 pt-5'
+                          : 'bottom-0 bg-gradient-to-t from-black via-black/80 to-transparent pb-5 pt-14'
+                      }`}>
                         <h3 className="line-clamp-3 text-lg font-medium leading-snug text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] md:text-xl">
                           {article.title}
                         </h3>

@@ -251,6 +251,7 @@ export interface BlogIndexArticle {
   readingTime: string;
   heroImage?: string;
   heroAlt?: string;
+  titlePosition?: 'top' | 'bottom';
   thumbnailIcon?: string;
   visualLabel?: string;
   featured: boolean;
@@ -266,6 +267,8 @@ const observationArticles: BlogIndexArticle[] = [
     category: '定点観測',
     publishedAt: '2026-08-09',
     readingTime: '8分',
+    heroImage: '/blog/a2a-liveness-x402-eyecatch.webp',
+    heroAlt: '暗い背景に白い大きな文字でx402と描かれたビジュアル',
     visualLabel: 'FIELD NOTES / 001',
     featured: false,
   },
@@ -278,6 +281,9 @@ const observationArticles: BlogIndexArticle[] = [
     category: '定点観測',
     publishedAt: '2026-08-09',
     readingTime: '3分',
+    heroImage: '/blog/a2a-insights-launch-eyecatch.webp',
+    heroAlt: 'ネットワーク上のAIエージェントを観測する青く発光した装置',
+    titlePosition: 'top',
     visualLabel: 'EDITORIAL NOTE',
     featured: false,
   },
