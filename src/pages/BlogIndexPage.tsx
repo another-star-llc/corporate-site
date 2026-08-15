@@ -5,7 +5,7 @@ import { blogCategories, blogIndexArticles } from '../data/blogArticles';
 import { usePageMetadata } from '../hooks/usePageMetadata';
 
 const pageDescription =
-  'A2A・MCP・AIエージェント実装を、公式仕様と一次情報から読み解くAnother Starの専門メディアです。';
+  'A2Aをめぐる市場構造、技術標準、企業導入の実務を、公式仕様と一次情報から読み解くAnother Starの専門メディアです。';
 
 export function BlogIndexPage({ manageMetadata = true }: { manageMetadata?: boolean }) {
   const [activeCategory, setActiveCategory] = useState<(typeof blogCategories)[number]>('すべて');
@@ -49,8 +49,8 @@ export function BlogIndexPage({ manageMetadata = true }: { manageMetadata?: bool
                 </h1>
               </div>
               <p className="max-w-xl text-base leading-8 text-slate-300 lg:pb-2">
-                AIエージェントが組織や製品の境界を越えて働く時代へ。
-                A2A、MCP、実装とガバナンスを、公式仕様と一次情報から読み解きます。
+                AIエージェントが組織や製品の境界を越えて協働する時代へ。
+                A2Aをめぐる市場構造、技術標準、企業導入の実務を、一次情報から読み解きます。
               </p>
             </div>
 
