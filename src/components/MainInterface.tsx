@@ -338,7 +338,7 @@ export function MainInterface() {
                   </div>
                   <div className="mt-8 border-t border-white/10 pt-6">
                     <a
-                      href="/blog"
+                      href="/blog/"
                       className="inline-flex items-center gap-2 text-xs tracking-[0.14em] text-blue-300 transition-colors hover:text-white"
                     >
                       A2A INSIGHTS を読む <ExternalLink size={14} />

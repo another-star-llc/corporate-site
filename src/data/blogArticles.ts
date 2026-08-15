@@ -286,7 +286,7 @@ const observationArticles: BlogIndexArticle[] = [
 export const blogIndexArticles: BlogIndexArticle[] = [
   ...blogArticles.map((article) => ({
     slug: article.slug,
-    href: `/blog/${article.slug}`,
+    href: `/blog/${article.slug}/`,
     title: article.title,
     description: article.description,
     category: article.category,

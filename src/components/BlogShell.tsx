@@ -23,7 +23,7 @@ export function BlogShell({ children }: { children: ReactNode }) {
               Another Star
             </a>
             <a
-              href="/blog"
+              href="/blog/"
               aria-current="page"
               className="inline-flex min-h-11 items-center text-xs tracking-[0.2em] uppercase text-cyan-200 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
             >
@@ -54,7 +54,7 @@ export function Breadcrumbs({ children }: { children?: ReactNode }) {
       <span aria-hidden="true">/</span>
       {children ? (
         <>
-          <a href="/blog" className="transition-colors hover:text-white">A2A Insights</a>
+          <a href="/blog/" className="transition-colors hover:text-white">A2A Insights</a>
           <span aria-hidden="true">/</span>
           <span className="text-slate-300" aria-current="page">{children}</span>
         </>

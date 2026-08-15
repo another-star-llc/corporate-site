@@ -14,7 +14,7 @@ export function BlogArticlePage({ slug }: { slug: string }) {
           <div className="mx-auto w-full max-w-3xl text-center">
             <div className="text-xs tracking-[0.2em] text-cyan-300">404</div>
             <h1 className="mt-5 text-4xl font-light">記事が見つかりません</h1>
-            <a href="/blog" className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-full border border-white/20 px-5 text-sm text-white">
+            <a href="/blog/" className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-full border border-white/20 px-5 text-sm text-white">
               A2A Insightsへ戻る <ArrowRight size={15} aria-hidden="true" />
             </a>
           </div>
@@ -182,7 +182,7 @@ function RelatedArticles({ article }: { article: BlogArticle }) {
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         {related.map((item) => (
-          <a key={item.slug} href={`/blog/${item.slug}`} className="group rounded-2xl border border-white/10 bg-white/[0.025] p-5 transition-colors hover:border-cyan-300/25 hover:bg-white/[0.045] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300">
+          <a key={item.slug} href={`/blog/${item.slug}/`} className="group rounded-2xl border border-white/10 bg-white/[0.025] p-5 transition-colors hover:border-cyan-300/25 hover:bg-white/[0.045] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300">
             <div className="text-xs text-cyan-300">{item.category}</div>
             <h3 className="mt-3 text-lg font-light leading-snug text-white">{item.shortTitle}</h3>
             <div className="mt-5 inline-flex items-center gap-2 text-xs text-slate-400 group-hover:text-white">
