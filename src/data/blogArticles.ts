@@ -251,7 +251,6 @@ export interface BlogIndexArticle {
   readingTime: string;
   heroImage?: string;
   heroAlt?: string;
-  titlePosition?: 'top' | 'bottom';
   thumbnailIcon?: string;
   visualLabel?: string;
   featured: boolean;
@@ -283,7 +282,6 @@ const observationArticles: BlogIndexArticle[] = [
     readingTime: '3分',
     heroImage: '/blog/a2a-insights-launch-eyecatch.webp',
     heroAlt: 'ネットワーク上のAIエージェントを観測する青く発光した装置',
-    titlePosition: 'top',
     visualLabel: 'EDITORIAL NOTE',
     featured: false,
   },
