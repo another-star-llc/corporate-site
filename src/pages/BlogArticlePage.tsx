@@ -84,6 +84,19 @@ function Article({ article }: { article: BlogArticle }) {
                   <span>読了 {article.readingTime}</span>
                 </div>
               </div>
+
+              {/* 一覧のサムネイルと同じ画像。ファーストビュー内なので eager + 寸法指定で CLS を防ぐ。 */}
+              <figure className="mx-auto mt-14 max-w-4xl">
+                <img
+                  src={article.heroImage}
+                  alt={article.heroAlt}
+                  width={1672}
+                  height={941}
+                  loading="eager"
+                  fetchPriority="high"
+                  className="w-full rounded-2xl border border-white/10"
+                />
+              </figure>
             </div>
           </header>
 
