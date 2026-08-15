@@ -1,8 +1,12 @@
 import { useMemo, type ReactNode } from 'react';
-import { ArrowRight, Check, ExternalLink, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Check, ExternalLink } from 'lucide-react';
 import { BlogShell, Breadcrumbs } from '../components/BlogShell';
+import { ArticleCTA, RelatedArticles, TableOfContents } from '../components/ArticleSections';
 import { getBlogArticle, type BlogArticle } from '../data/blogArticles';
 import { usePageMetadata } from '../hooks/usePageMetadata';
+
+/** 解説記事の執筆者。JSON-LD の author と必ず同じ表記にすること。 */
+const ARTICLE_AUTHOR = '齊藤 慎之介';
 
 export function BlogArticlePage({ slug }: { slug: string }) {
   const article = getBlogArticle(slug);
@@ -27,6 +31,10 @@ export function BlogArticlePage({ slug }: { slug: string }) {
 }
 
 function Article({ article }: { article: BlogArticle }) {
+  const relatedLinks = article.relatedSlugs
+    .map(getBlogArticle)
+    .filter((item): item is BlogArticle => Boolean(item))
+    .map((item) => ({ href: `/blog/${item.slug}/`, category: item.category, title: item.shortTitle }));
   const jsonLd = useMemo(() => ([
     {
       '@context': 'https://schema.org',
@@ -36,7 +44,7 @@ function Article({ article }: { article: BlogArticle }) {
       image: `https://www.another-star.jp${article.heroImage}`,
       datePublished: article.publishedAt,
       dateModified: article.updatedAt,
-      author: { '@type': 'Organization', name: 'Another Star編集部' },
+      author: { '@type': 'Person', name: '齊藤 慎之介', url: 'https://www.another-star.jp/' },
       publisher: { '@type': 'Organization', name: 'Another Star合同会社' },
       mainEntityOfPage: `https://www.another-star.jp/blog/${article.slug}`,
       isPartOf: { '@type': 'Blog', name: 'A2A Insights' },
@@ -82,6 +90,8 @@ function Article({ article }: { article: BlogArticle }) {
                   <time dateTime={article.publishedAt}>{formatDate(article.publishedAt)}</time>
                   <span aria-hidden="true">•</span>
                   <span>読了 {article.readingTime}</span>
+                  <span aria-hidden="true">•</span>
+                  <span>{ARTICLE_AUTHOR}</span>
                 </div>
               </div>
 
@@ -117,7 +127,7 @@ function Article({ article }: { article: BlogArticle }) {
 
                 <details className="mt-6 rounded-2xl border border-white/10 bg-white/[0.025] p-5 lg:hidden">
                   <summary className="cursor-pointer text-sm text-white">目次</summary>
-                  <TableOfContents article={article} className="mt-4" />
+                  <TableOfContents toc={article.toc} className="mt-4" />
                 </details>
 
                 <div className="blog-prose mt-12">
@@ -142,12 +152,12 @@ function Article({ article }: { article: BlogArticle }) {
                 </section>
 
                 <ArticleCTA slug={article.slug} />
-                <RelatedArticles article={article} />
+                <RelatedArticles related={relatedLinks} />
               </div>
 
               <aside className="sticky top-28 hidden rounded-2xl border border-white/10 bg-white/[0.025] p-5 lg:block" aria-label="記事の目次">
                 <div className="text-xs tracking-[0.16em] uppercase text-slate-500">Contents</div>
-                <TableOfContents article={article} className="mt-5" />
+                <TableOfContents toc={article.toc} className="mt-5" />
               </aside>
             </div>
           </div>
@@ -157,63 +167,8 @@ function Article({ article }: { article: BlogArticle }) {
   );
 }
 
-function TableOfContents({ article, className = '' }: { article: BlogArticle; className?: string }) {
-  return (
-    <ol className={`space-y-3 text-sm leading-6 text-slate-400 ${className}`}>
-      {article.toc.map((item, index) => (
-        <li key={item.id}>
-          <a href={`#${item.id}`} className="grid grid-cols-[1.5rem_1fr] gap-2 transition-colors hover:text-cyan-200">
-            <span className="tabular-nums text-slate-600">{String(index + 1).padStart(2, '0')}</span>
-            <span>{item.label}</span>
-          </a>
-        </li>
-      ))}
-    </ol>
-  );
-}
 
-function RelatedArticles({ article }: { article: BlogArticle }) {
-  const related = article.relatedSlugs.map(getBlogArticle).filter((item): item is BlogArticle => Boolean(item));
-  return (
-    <section className="mt-16" aria-labelledby="related-heading">
-      <div className="mb-5 flex items-center gap-4">
-        <h2 id="related-heading" className="text-xs tracking-[0.18em] uppercase text-slate-400">次に読む</h2>
-        <span className="h-px flex-1 bg-white/10" />
-      </div>
-      <div className="grid gap-4 sm:grid-cols-2">
-        {related.map((item) => (
-          <a key={item.slug} href={`/blog/${item.slug}/`} className="group rounded-2xl border border-white/10 bg-white/[0.025] p-5 transition-colors hover:border-cyan-300/25 hover:bg-white/[0.045] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300">
-            <div className="text-xs text-cyan-300">{item.category}</div>
-            <h3 className="mt-3 text-lg font-light leading-snug text-white">{item.shortTitle}</h3>
-            <div className="mt-5 inline-flex items-center gap-2 text-xs text-slate-400 group-hover:text-white">
-              記事を読む <ArrowRight size={14} aria-hidden="true" />
-            </div>
-          </a>
-        ))}
-      </div>
-    </section>
-  );
-}
 
-function ArticleCTA({ slug }: { slug: string }) {
-  const isImplementation = slug === 'copilot-studio-a2a-agent';
-  return (
-    <aside className="mt-14 rounded-3xl border border-cyan-300/20 bg-[linear-gradient(135deg,rgba(8,145,178,0.13),rgba(79,70,229,0.08))] p-7 md:p-9">
-      <ShieldCheck size={25} className="text-cyan-300" aria-hidden="true" />
-      <h2 className="mt-5 text-2xl font-light text-white">
-        {isImplementation ? 'A2A連携の設計・検証をご相談ください' : 'AIエージェント間の通信に、信頼レイヤーを。'}
-      </h2>
-      <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
-        {isImplementation
-          ? '外部エージェントの認証、権限、監査、相互運用テストまで、企業導入に必要な論点を一緒に整理します。'
-          : 'Another Starは、外部AIエージェントを安全に発見・評価・連携するための信頼基盤を開発しています。'}
-      </p>
-      <a href={isImplementation ? 'mailto:contact@another-star.jp' : '/product'} className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-5 text-sm font-medium text-[#020611] transition-colors hover:bg-cyan-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300">
-        {isImplementation ? 'お問い合わせ' : 'プロダクトを見る'} <ArrowRight size={15} aria-hidden="true" />
-      </a>
-    </aside>
-  );
-}
 
 function WhatIsA2AContent() {
   return (

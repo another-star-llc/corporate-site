@@ -710,3 +710,80 @@ button, a, [role="button"] {
 input, textarea {
   cursor: text;
 }
+
+/*
+ * Markdown で書かれた記事（定点観測）向けの追補。
+ *
+ * .blog-prose 本体は解説記事の JSX（<section> や .blog-callout などで組んだもの）を
+ * 前提にしているため、素の Markdown が出力する要素には余白やリスト記号が付かない。
+ * Tailwind の preflight が list-style と見出しサイズを落とすので、ここで補う。
+ *
+ * :not(.report *) は、本文を生HTMLで自前デザインしている記事を対象外にするための除外。
+ */
+.blog-prose-md > :first-child { margin-top: 0; }
+
+.blog-prose-md h2:not(.report *) { margin-top: 4.5rem; }
+.blog-prose-md h3:not(.report *) { margin-top: 2.5rem; margin-bottom: 0.75rem; }
+.blog-prose-md h4:not(.report *) {
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 400;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.blog-prose-md ul:not(.report *) { list-style: disc; }
+.blog-prose-md ol:not(.report *) { list-style: decimal; }
+.blog-prose-md ul:not(.report *) ul { list-style: circle; }
+.blog-prose-md :is(ul, ol):not(.report *) {
+  margin-top: 1.35rem;
+  padding-left: 1.35rem;
+}
+.blog-prose-md li:not(.report *) + li { margin-top: 0.65rem; }
+.blog-prose-md li:not(.report *)::marker { color: rgb(100 116 139); }
+
+.blog-prose-md a:not(.report *) {
+  color: rgb(165 243 252);
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.25);
+  text-underline-offset: 4px;
+  transition: color 0.2s;
+}
+.blog-prose-md a:not(.report *):hover { color: #fff; }
+
+.blog-prose-md blockquote:not(.report *) {
+  margin-top: 1.5rem;
+  border-left: 2px solid rgb(34 211 238);
+  border-radius: 0 1rem 1rem 0;
+  background: rgba(8, 145, 178, 0.07);
+  padding: 1rem 1.4rem;
+}
+
+.blog-prose-md hr:not(.report *) {
+  margin: 3.5rem 0;
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.blog-prose-md img:not(.report *) {
+  max-width: 100%;
+  height: auto;
+  border-radius: 1rem;
+}
+
+.blog-prose-md table:not(.report *) {
+  width: 100%;
+  margin-top: 1.5rem;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.blog-prose-md :is(th, td):not(.report *) {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.6rem 0.85rem;
+  text-align: left;
+}
+.blog-prose-md th:not(.report *) {
+  background: rgba(255, 255, 255, 0.03);
+  color: #fff;
+  font-weight: 500;
+}

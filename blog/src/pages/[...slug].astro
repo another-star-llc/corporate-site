@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { BlogArticlePage } from '../../../src/pages/BlogArticlePage';
+import { BlogPostPage } from '../../../src/pages/BlogPostPage';
 import { blogArticles, getBlogArticle, blogIndexArticles } from '../../../src/data/blogArticles';
 
 export async function getStaticPaths() {
@@ -25,23 +26,39 @@ const Content = renderedPost?.Content;
 
 // ヒーロー画像は記事一覧と同じものを使う。定点観測記事は frontmatter ではなく
 // 一覧データ側に画像を持っているので、slug で引いて単一のソースを保つ。
-const postHero = post ? blogIndexArticles.find((a) => a.slug === post.slug) : undefined;
+const postMeta = post ? blogIndexArticles.find((a) => a.slug === post.slug) : undefined;
 
-const fmt = (d: Date) =>
-  d.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric' });
+// 目次は Markdown の h2 から自動生成する。本文を生HTMLで組んでいる記事は
+// ここが空になり、BlogPostPage 側でサイドバーなしの1カラムに切り替わる。
+const postToc = (renderedPost?.headings ?? [])
+  .filter((h) => h.depth === 2)
+  .map((h) => ({ id: h.slug, label: h.text }));
 
-const jsonLd = post ? {
+// 「次に読む」は同じブログ内の他の記事から新しい順に2件。
+const postRelated = post
+  ? blogIndexArticles
+      .filter((a) => a.slug !== post.slug)
+      .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
+      .slice(0, 2)
+      .map((a) => ({ href: a.href, category: a.category, title: a.shortTitle }))
+  : [];
+
+const POST_AUTHOR = '安田 直也';
+const iso = (d: Date) => d.toISOString().slice(0, 10);
+
+const jsonLd = post ? [
+  {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
   headline: post.data.title,
   description: post.data.description,
   datePublished: post.data.pubDate.toISOString(),
   ...(post.data.updatedDate && { dateModified: post.data.updatedDate.toISOString() }),
-  ...(postHero?.heroImage && { image: `https://www.another-star.jp${postHero.heroImage}` }),
+  ...(postMeta?.heroImage && { image: `https://www.another-star.jp${postMeta.heroImage}` }),
   inLanguage: 'ja',
   author: {
     '@type': 'Person',
-    name: '安田 直也',
+    name: POST_AUTHOR,
     url: 'https://www.another-star.jp/',
   },
   publisher: {
@@ -50,7 +67,18 @@ const jsonLd = post ? {
     url: 'https://www.another-star.jp/',
   },
   mainEntityOfPage: new URL(Astro.url.pathname, Astro.site).toString(),
-} : article ? [
+  isPartOf: { '@type': 'Blog', name: 'A2A Insights' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.another-star.jp/' },
+      { '@type': 'ListItem', position: 2, name: 'BLOG', item: 'https://www.another-star.jp/blog/' },
+      { '@type': 'ListItem', position: 3, name: postMeta?.shortTitle ?? post.data.title, item: `https://www.another-star.jp/blog/${post.slug}/` },
+    ],
+  },
+] : article ? [
   {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -60,7 +88,7 @@ const jsonLd = post ? {
     datePublished: article.publishedAt,
     dateModified: article.updatedAt,
     inLanguage: 'ja',
-    author: { '@type': 'Organization', name: 'Another Star編集部' },
+    author: { '@type': 'Person', name: '齊藤 慎之介', url: 'https://www.another-star.jp/' },
     publisher: { '@type': 'Organization', name: 'Another Star合同会社' },
     mainEntityOfPage: `https://www.another-star.jp/blog/${article.slug}/`,
     isPartOf: { '@type': 'Blog', name: 'A2A Insights' },
@@ -92,171 +120,30 @@ const jsonLd = post ? {
   </BaseLayout>
 ) : post && Content ? (
   <BaseLayout
-    title={`${post.data.title} | A2A Insights`}
+    title={`${postMeta?.shortTitle ?? post.data.title}｜A2A Insights | Another Star`}
     description={post.data.description}
     ogType="article"
     pubDate={post.data.pubDate}
     updatedDate={post.data.updatedDate}
-    image={postHero?.heroImage}
+    image={postMeta?.heroImage}
+    bare
   >
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-
-    <article>
-      <header class="post-header">
-        <div class="meta">
-          <time datetime={post.data.pubDate.toISOString()}>{fmt(post.data.pubDate)}</time>
-          {post.data.updatedDate && <span>（更新: {fmt(post.data.updatedDate)}）</span>}
-          {post.data.breaking && <span class="badge">臨時号</span>}
-          {post.data.tags.map((t) => <span class="tag">{t}</span>)}
-        </div>
-        <h1>{post.data.title}</h1>
-        {postHero?.heroImage && (
-          <img
-            class="hero"
-            src={postHero.heroImage}
-            alt={postHero.heroAlt ?? ''}
-            width="1672"
-            height="941"
-            loading="eager"
-            fetchpriority="high"
-          />
-        )}
-      </header>
-
-      <div class="post-body">
-        <Content />
-      </div>
-    </article>
-
-    <aside class="author">
-      <div class="author-name">安田 直也（Naoya Yasuda）</div>
-      <p>
-        Another Star合同会社 代表。AIエージェント間連携（A2A）のセキュリティ基盤を開発。
-        GENIAC-PRIZEみらいビジョン賞受賞。A2A時代の信頼基盤の社会実装に取り組む。
-      </p>
-      <p class="author-links">
-        <a href="/">Another Star合同会社</a>
-      </p>
-    </aside>
-
-    <p class="back"><a href="/blog/">← 記事一覧へ</a></p>
+    <BlogPostPage
+      slug={post.slug}
+      title={post.data.title}
+      shortTitle={postMeta?.shortTitle ?? post.data.title}
+      lead={post.data.description}
+      category={postMeta?.category ?? '定点観測'}
+      publishedAt={iso(post.data.pubDate)}
+      readingTime={postMeta?.readingTime ?? ''}
+      author={POST_AUTHOR}
+      heroImage={postMeta?.heroImage}
+      heroAlt={postMeta?.heroAlt}
+      toc={postToc}
+      related={postRelated}
+    >
+      <Content />
+    </BlogPostPage>
   </BaseLayout>
 ) : null}
-
-{/*
-  このスタイルは必ずテンプレート直下に置くこと。
-  三項演算子の中に <style> を書くと Astro のスタイル処理を通らず、そのまま HTML に
-  出力される。その結果 :global() がコンパイルされずに残り、ブラウザから見て不正な
-  セレクタになってルールごと破棄される。
-
-  記事本文は <Content /> が描画する別コンポーネントなので、スコープ付きでは届かない。
-  そのため is:global を使い、セレクタは .post-header / .post-body 配下に限定する。
-*/}
-<style is:global>
-  .post-header { margin-bottom: 2.5rem; }
-  .post-header h1 { font-size: 1.8rem; margin: 0.6rem 0 0; }
-  .post-header .hero {
-    display: block;
-    width: 100%;
-    height: auto;
-    margin-top: 1.75rem;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-  }
-  .post-header .meta {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-size: 0.85rem;
-    color: var(--text-dim);
-    flex-wrap: wrap;
-  }
-  .post-header .badge {
-    background: #7f1d1d;
-    color: #fecaca;
-    border-radius: 999px;
-    padding: 0.05rem 0.6rem;
-    font-size: 0.7rem;
-  }
-  .post-header .tag {
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 0.05rem 0.6rem;
-    font-size: 0.7rem;
-  }
-
-  /*
-    Tailwind の preflight が見出しを font-size:inherit、リストを list-style:none に
-    リセットするため、Markdown 本文の書式をここで組み立て直す。
-
-    :not(.report *) は、自前のデザインを持ち込む記事（本文を <div class="report"> で
-    囲むもの）を対象外にするための除外。既存記事の見た目を変えないための保険。
-  */
-  .post-body h2:not(.report *) {
-    font-size: 1.45rem;
-    font-weight: 400;
-    color: #fff;
-    margin-top: 3rem;
-    padding-bottom: 0.4rem;
-    border-bottom: 1px solid var(--border);
-  }
-  .post-body h3:not(.report *) {
-    font-size: 1.12rem;
-    font-weight: 500;
-    color: #e5e7eb;
-    margin: 2.2rem 0 0.65rem;
-  }
-  .post-body h4:not(.report *) {
-    font-size: 1rem;
-    font-weight: 500;
-    color: #e5e7eb;
-    margin: 1.8rem 0 0.5rem;
-  }
-  .post-body p:not(.report *) { margin: 1.25rem 0; }
-  .post-body ul:not(.report *) { list-style: disc; }
-  .post-body ol:not(.report *) { list-style: decimal; }
-  .post-body ul:not(.report *) ul { list-style: circle; }
-  .post-body ul:not(.report *),
-  .post-body ol:not(.report *) {
-    margin: 1.25rem 0;
-    padding-left: 1.5rem;
-  }
-  .post-body li:not(.report *) { margin: 0.5rem 0; }
-  .post-body li:not(.report *)::marker { color: var(--text-dim); }
-  .post-body strong:not(.report *) { color: #fff; font-weight: 500; }
-  .post-body hr:not(.report *) {
-    border: 0;
-    border-top: 1px solid var(--border);
-    margin: 3rem 0;
-  }
-  .post-body table:not(.report *) {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 1.5rem 0;
-    font-size: 0.9rem;
-  }
-  .post-body :is(th, td):not(.report *) {
-    border: 1px solid var(--border);
-    padding: 0.6rem 0.8rem;
-    text-align: left;
-  }
-  .post-body th:not(.report *) {
-    background: var(--bg-card);
-    color: #fff;
-    font-weight: 500;
-  }
-  .post-body img { max-width: 100%; height: auto; }
-
-  .author {
-    margin-top: 4rem;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.5rem 1.75rem;
-    background: var(--bg-card);
-    font-size: 0.9rem;
-    color: var(--text-dim);
-  }
-  .author-name { color: #fff; font-size: 1rem; margin-bottom: 0.3rem; }
-  .author p { margin: 0.3rem 0; }
-  .back { margin-top: 2.5rem; }
-</style>

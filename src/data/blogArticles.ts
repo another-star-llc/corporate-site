@@ -245,6 +245,8 @@ export interface BlogIndexArticle {
   slug: string;
   href: string;
   title: string;
+  /** パンくずや関連記事カードなど、狭い場所で使う短いタイトル。 */
+  shortTitle: string;
   description: string;
   category: BlogCategory;
   publishedAt: string;
@@ -261,6 +263,7 @@ const observationArticles: BlogIndexArticle[] = [
     slug: '2026-08-09-a2a-agents-liveness-x402',
     href: '/blog/2026-08-09-a2a-agents-liveness-x402/',
     title: '公開A2Aエージェント194件を調査：実応答67件、そのうち31件がx402に言及',
+    shortTitle: '公開A2Aエージェント194件の実測',
     description:
       'a2aregistryの公開APIを対象に、Agent Cardの疎通、ヘルスチェック、A2A message/sendの実動作を分けて調査した実測レポートです。',
     category: '定点観測',
@@ -275,6 +278,7 @@ const observationArticles: BlogIndexArticle[] = [
     slug: '2026-08-09-a2a-insights-launch',
     href: '/blog/2026-08-09-a2a-insights-launch/',
     title: 'A2A Insightsを始めます — A2Aプロトコルを日本語で定点観測する',
+    shortTitle: 'A2A Insightsを始めます',
     description:
       'A2Aの仕様変更、企業採用、セキュリティ情報を日本語で継続的に追跡する、A2A Insightsの開始案内です。',
     category: '定点観測',
@@ -292,6 +296,7 @@ export const blogIndexArticles: BlogIndexArticle[] = [
     slug: article.slug,
     href: `/blog/${article.slug}/`,
     title: article.title,
+    shortTitle: article.shortTitle,
     description: article.description,
     category: article.category,
     publishedAt: article.publishedAt,
