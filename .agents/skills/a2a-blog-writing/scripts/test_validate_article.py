@@ -160,6 +160,11 @@ draft: false
         errors = MODULE.validate_article(self.article, self.repo)
         self.assertIn("heroImageは文字列にしてください", errors)
 
+    def test_rejects_empty_author(self) -> None:
+        self.write_article(self.valid_body(), 'author: ""\n')
+        errors = MODULE.validate_article(self.article, self.repo)
+        self.assertIn("authorを使う場合は空でない文字列にしてください", errors)
+
 
 if __name__ == "__main__":
     unittest.main()

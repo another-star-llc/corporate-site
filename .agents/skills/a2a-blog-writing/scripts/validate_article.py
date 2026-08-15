@@ -130,8 +130,10 @@ def validate_article(
     ):
         if key in fields and not isinstance(fields[key], str):
             errors.append(f"{key}は文字列にしてください")
-    if "author" in fields and not isinstance(fields["author"], str):
-        errors.append("authorを使う場合は文字列にしてください")
+    if "author" in fields and (
+        not isinstance(fields["author"], str) or not fields["author"].strip()
+    ):
+        errors.append("authorを使う場合は空でない文字列にしてください")
 
     if isinstance(fields.get("shortTitle"), str) and len(fields["shortTitle"]) > 50:
         errors.append("shortTitleは50文字以内にしてください")
