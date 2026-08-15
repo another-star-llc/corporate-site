@@ -27,7 +27,7 @@ const Content = renderedPost?.Content;
 
 // Markdown記事の表示情報はfrontmatterを正本にする。
 const postMeta = post ? {
-  shortTitle: post.data.title,
+  shortTitle: post.data.shortTitle ?? post.data.title,
   category: post.data.category,
   readingTime: post.data.readingTime,
   heroImage: post.data.heroImage,
@@ -136,7 +136,7 @@ const jsonLd = post ? [
     <BlogPostPage
       slug={post.slug}
       title={post.data.title}
-      shortTitle={post.data.title}
+      shortTitle={postMeta!.shortTitle}
       lead={post.data.description}
       category={post.data.category}
       publishedAt={iso(post.data.pubDate)}

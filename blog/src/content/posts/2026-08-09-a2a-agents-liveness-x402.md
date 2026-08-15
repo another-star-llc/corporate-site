@@ -1,5 +1,6 @@
 ---
 title: "公開A2Aエージェント194件を調査：実応答67件、そのうち31件がx402に言及"
+shortTitle: "公開A2Aエージェント194件の実測"
 description: "a2aregistryの公開APIで確認できる登録エージェントは194件です。AgentCardの疎通、ヘルスチェック、A2A message/sendの実動作を分けて見ると、WORKINGは67件、x402への言及がありWORKINGのものは31件でした。"
 pubDate: 2026-08-09
 tags: ["実測レポート", "A2A", "x402"]

@@ -1,5 +1,6 @@
 ---
 title: "A2A Insightsを始めます — A2Aプロトコルを日本語で定点観測する"
+shortTitle: "A2A Insightsを始めます"
 description: "AIエージェント間連携プロトコルA2A（Agent2Agent）の仕様変更・企業採用・セキュリティ情報を、日本語で継続的に追跡するブログを開始します。"
 pubDate: 2026-08-09
 tags: ["お知らせ"]

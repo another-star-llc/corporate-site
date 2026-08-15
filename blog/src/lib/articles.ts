@@ -16,7 +16,7 @@ export async function getAllArticles(): Promise<BlogIndexArticle[]> {
     slug: post.slug,
     href: `/blog/${post.slug}/`,
     title: post.data.title,
-    shortTitle: post.data.title,
+    shortTitle: post.data.shortTitle ?? post.data.title,
     description: post.data.description,
     category: post.data.category,
     publishedAt: post.data.pubDate.toISOString().slice(0, 10),
