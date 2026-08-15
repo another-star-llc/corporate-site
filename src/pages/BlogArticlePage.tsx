@@ -114,10 +114,7 @@ function Article({ article }: { article: BlogArticle }) {
                 </div>
 
                 <section className="mt-16 border-t border-white/10 pt-10" aria-labelledby="sources-heading">
-                  <div className="flex items-center justify-between gap-4">
-                    <h2 id="sources-heading" className="text-2xl font-light text-white">参照した一次情報</h2>
-                    <span className="text-xs text-slate-500">確認日 {formatDate(article.updatedAt)}</span>
-                  </div>
+                  <h2 id="sources-heading" className="text-2xl font-light text-white">参照した一次情報</h2>
                   <ol className="mt-6 space-y-3">
                     {article.sources.map((source, index) => (
                       <li key={source.url} className="grid grid-cols-[1.5rem_1fr] gap-3 text-sm leading-6 text-slate-400">
