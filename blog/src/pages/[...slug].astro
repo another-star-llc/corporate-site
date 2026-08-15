@@ -140,57 +140,123 @@ const jsonLd = post ? {
     </aside>
 
     <p class="back"><a href="/blog/">← 記事一覧へ</a></p>
-
-  <style>
-    .post-header { margin-bottom: 2.5rem; }
-    .post-header h1 { font-size: 1.8rem; margin: 0.6rem 0 0; }
-    .post-header .hero {
-      display: block;
-      width: 100%;
-      height: auto;
-      margin-top: 1.75rem;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-    }
-    .meta {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-size: 0.85rem;
-      color: var(--text-dim);
-      flex-wrap: wrap;
-    }
-    .badge {
-      background: #7f1d1d;
-      color: #fecaca;
-      border-radius: 999px;
-      padding: 0.05rem 0.6rem;
-      font-size: 0.7rem;
-    }
-    .tag {
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 0.05rem 0.6rem;
-      font-size: 0.7rem;
-    }
-    .post-body :global(h2) {
-      margin-top: 2.5rem;
-      padding-bottom: 0.4rem;
-      border-bottom: 1px solid var(--border);
-    }
-    .post-body :global(img) { max-width: 100%; }
-    .author {
-      margin-top: 4rem;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.5rem 1.75rem;
-      background: var(--bg-card);
-      font-size: 0.9rem;
-      color: var(--text-dim);
-    }
-    .author-name { color: #fff; font-size: 1rem; margin-bottom: 0.3rem; }
-    .author p { margin: 0.3rem 0; }
-    .back { margin-top: 2.5rem; }
-  </style>
   </BaseLayout>
 ) : null}
+
+{/*
+  このスタイルは必ずテンプレート直下に置くこと。
+  三項演算子の中に <style> を書くと Astro のスタイル処理を通らず、そのまま HTML に
+  出力される。その結果 :global() がコンパイルされずに残り、ブラウザから見て不正な
+  セレクタになってルールごと破棄される。
+
+  記事本文は <Content /> が描画する別コンポーネントなので、スコープ付きでは届かない。
+  そのため is:global を使い、セレクタは .post-header / .post-body 配下に限定する。
+*/}
+<style is:global>
+  .post-header { margin-bottom: 2.5rem; }
+  .post-header h1 { font-size: 1.8rem; margin: 0.6rem 0 0; }
+  .post-header .hero {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-top: 1.75rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .post-header .meta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    flex-wrap: wrap;
+  }
+  .post-header .badge {
+    background: #7f1d1d;
+    color: #fecaca;
+    border-radius: 999px;
+    padding: 0.05rem 0.6rem;
+    font-size: 0.7rem;
+  }
+  .post-header .tag {
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.05rem 0.6rem;
+    font-size: 0.7rem;
+  }
+
+  /*
+    Tailwind の preflight が見出しを font-size:inherit、リストを list-style:none に
+    リセットするため、Markdown 本文の書式をここで組み立て直す。
+
+    :not(.report *) は、自前のデザインを持ち込む記事（本文を <div class="report"> で
+    囲むもの）を対象外にするための除外。既存記事の見た目を変えないための保険。
+  */
+  .post-body h2:not(.report *) {
+    font-size: 1.45rem;
+    font-weight: 400;
+    color: #fff;
+    margin-top: 3rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .post-body h3:not(.report *) {
+    font-size: 1.12rem;
+    font-weight: 500;
+    color: #e5e7eb;
+    margin: 2.2rem 0 0.65rem;
+  }
+  .post-body h4:not(.report *) {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #e5e7eb;
+    margin: 1.8rem 0 0.5rem;
+  }
+  .post-body p:not(.report *) { margin: 1.25rem 0; }
+  .post-body ul:not(.report *) { list-style: disc; }
+  .post-body ol:not(.report *) { list-style: decimal; }
+  .post-body ul:not(.report *) ul { list-style: circle; }
+  .post-body ul:not(.report *),
+  .post-body ol:not(.report *) {
+    margin: 1.25rem 0;
+    padding-left: 1.5rem;
+  }
+  .post-body li:not(.report *) { margin: 0.5rem 0; }
+  .post-body li:not(.report *)::marker { color: var(--text-dim); }
+  .post-body strong:not(.report *) { color: #fff; font-weight: 500; }
+  .post-body hr:not(.report *) {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 3rem 0;
+  }
+  .post-body table:not(.report *) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.9rem;
+  }
+  .post-body :is(th, td):not(.report *) {
+    border: 1px solid var(--border);
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+  }
+  .post-body th:not(.report *) {
+    background: var(--bg-card);
+    color: #fff;
+    font-weight: 500;
+  }
+  .post-body img { max-width: 100%; height: auto; }
+
+  .author {
+    margin-top: 4rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem 1.75rem;
+    background: var(--bg-card);
+    font-size: 0.9rem;
+    color: var(--text-dim);
+  }
+  .author-name { color: #fff; font-size: 1rem; margin-bottom: 0.3rem; }
+  .author p { margin: 0.3rem 0; }
+  .back { margin-top: 2.5rem; }
+</style>
