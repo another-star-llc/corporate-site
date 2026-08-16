@@ -24,30 +24,53 @@ const pages = [
   },
 ];
 
+async function git(...args) {
+  const { stdout } = await execFileAsync('git', args, { cwd: projectRoot });
+  return stdout.trim();
+}
+
+/**
+ * 履歴が切り詰められているクローンでの、信用できない日付の判定材料。
+ *
+ * Vercel は浅いクローンでビルドするため、切り詰めの境界にあるコミットは
+ * 「実際にそのファイルを変更したコミット」ではなく「履歴がそこで途切れている
+ * だけのコミット」の可能性がある。特に depth=1 では親が無く、git は全ファイルを
+ * そのコミットで追加されたものとして返すため、全ページに直近のデプロイ日が
+ * 付いてしまう。境界コミットは親を持たないコミットとして現れる。
+ */
+async function truncationBoundary() {
+  try {
+    if ((await git('rev-parse', '--is-shallow-repository')) !== 'true') return new Set();
+    return new Set((await git('rev-list', '--max-parents=0', 'HEAD')).split('\n').filter(Boolean));
+  } catch {
+    return new Set();
+  }
+}
+
 /**
  * ページを構成するソースの最終コミット日（YYYY-MM-DD）。
  *
  * lastmod は「間違った日付を書く」より「書かない」方が無害なので、
- * git が使えない環境や浅いクローンで辿れなかった場合は undefined を返す。
+ * git が使えない場合と、日付が信用できない場合は undefined を返す。
  * changefreq と priority は Google が無視するため出力しない。
  */
-async function lastCommitDate(sources) {
+async function lastCommitDate(sources, boundary) {
   try {
-    const { stdout } = await execFileAsync(
-      'git',
-      ['log', '-1', '--format=%cs', '--', ...sources],
-      { cwd: projectRoot },
-    );
-    const date = stdout.trim();
-    return /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : undefined;
+    const [hash, date] = (
+      await git('log', '-1', '--format=%H %cs', '--', ...sources)
+    ).split(' ');
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date ?? '')) return undefined;
+    return boundary.has(hash) ? undefined : date;
   } catch {
     return undefined;
   }
 }
 
+const boundary = await truncationBoundary();
+
 const entries = await Promise.all(
   pages.map(async (page) => {
-    const lastmod = await lastCommitDate(page.sources);
+    const lastmod = await lastCommitDate(page.sources, boundary);
     return [
       '  <url>',
       `    <loc>${page.loc}</loc>`,
