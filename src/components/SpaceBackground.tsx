@@ -284,9 +284,11 @@ export function SpaceBackground({
     scene.add(planetGroup);
 
     // 惑星のテクスチャは描画に時間がかかる（端末によっては 1 秒以上）ため、
-    // Web Worker で生成して、できたものから差し替える。それまでは基本色 1 色のテクスチャを使う。
+    // Web Worker で生成して、できたものから差し替える。それまでは 1 色のテクスチャを使う
+    // （完成したテクスチャは補助色が重なって明るく見えるので、基本色と補助色の中間色にする）。
     // 最初から map を持たせておくことで、差し替え時にシェーダーの再コンパイルが起きないようにする。
-    const createPlaceholderTexture = (color: RGB) => {
+    const createPlaceholderTexture = (base: RGB, secondary: RGB) => {
+      const color = base.map((value, i) => Math.round((value + secondary[i]) / 2));
       const texture = new THREE.DataTexture(new Uint8Array([...color, 255]), 1, 1);
       texture.needsUpdate = true;
       return texture;
@@ -308,7 +310,7 @@ export function SpaceBackground({
       // 生成が終わるまでは基本色のテクスチャを貼っておく
       const config = planetTextureConfigs[planetData.id];
       const material = new THREE.MeshPhongMaterial({
-        map: createPlaceholderTexture(config.base),
+        map: createPlaceholderTexture(config.base, config.secondary),
         emissive: planetData.emissive,
         emissiveIntensity: 0.3,
         shininess: 30,
@@ -648,6 +650,8 @@ export function SpaceBackground({
       cancelAnimationFrame(animationId);
       cancelPlanetTextures();
       planetMaterials.forEach((material) => {
+        // Texture.dispose() は ImageBitmap を解放しないため、明示的に閉じる。
+        if (material.map?.image instanceof ImageBitmap) material.map.image.close();
         material.map?.dispose();
         material.dispose();
       });
