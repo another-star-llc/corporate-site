@@ -119,6 +119,11 @@ def validate_article(
         if key not in fields or fields[key] == "" or fields[key] is None:
             errors.append(f"frontmatterに{key}を明示してください")
 
+    # slug を書くと公開URLがファイル名と変わり、ファイル名から組み立てている
+    # サイトマップの lastmod（blog/astro.config.mjs）と対応が取れなくなる。
+    if "slug" in fields:
+        errors.append("frontmatterにslugを書かないでください。公開URLはファイル名で決まります")
+
     for key in (
         "title",
         "shortTitle",

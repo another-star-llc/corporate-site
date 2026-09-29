@@ -165,6 +165,13 @@ draft: false
         errors = MODULE.validate_article(self.article, self.repo)
         self.assertIn("authorを使う場合は空でない文字列にしてください", errors)
 
+    def test_rejects_slug_override(self) -> None:
+        self.write_article(self.valid_body(), 'slug: "custom-url"\n')
+        errors = MODULE.validate_article(self.article, self.repo)
+        self.assertIn(
+            "frontmatterにslugを書かないでください。公開URLはファイル名で決まります", errors
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

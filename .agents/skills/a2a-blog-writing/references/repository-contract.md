@@ -9,7 +9,7 @@ blog/src/content/posts/<slug>.md
 blog/public/<slug>-eyecatch.webp
 ```
 
-`<slug>`は意味が安定する小文字ASCIIのkebab-caseにする。Markdownのファイル名が公開URL `/blog/<slug>/` になる。
+`<slug>`は意味が安定する小文字ASCIIのkebab-caseにする。Markdownのファイル名が公開URL `/blog/<slug>/` になる。frontmatterに`slug`を書かない（URLがファイル名と変わり、サイトマップの`lastmod`と対応しなくなる）。
 
 `src/data/blogArticles.ts`と`src/pages/BlogArticlePage.tsx`は既存の手組み解説記事を支える。新しいMarkdown記事をそこへ重複登録しない。専用React UIが不可欠な記事は、影響範囲を別Issueで合意してから例外として扱う。
 
