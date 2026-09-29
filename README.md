@@ -95,6 +95,10 @@ main へのマージで Vercel が本番にデプロイします。Pull Request 
 - ルーティング（`/product` や `/about` などの書き換え、末尾スラッシュのリダイレクト）は `vercel.json` で設定しています。**`/about` などのページを増やすときは、`src/data/companyPages.ts`（と `WindowContents.tsx` の本文）に加えて、`vercel.json` のパターンも更新してください**
 - PR のマージ時にブランチは自動で削除されます
 
+## 依存パッケージの更新
+
+- ブログ（`blog/package.json`）では `vite` を直接指定しています。Astro が要求する Vite のメジャーバージョンが上がったら、`vite` も同じ範囲に上げてください。そろえないと、Tailwind のプラグインが古い Vite を使ってビルドが失敗します（`createIdResolver is not a function`）
+
 ## ライセンス
 
 © 2025 Another Star合同会社. All rights reserved.
