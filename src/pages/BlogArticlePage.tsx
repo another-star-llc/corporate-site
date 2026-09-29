@@ -1,9 +1,8 @@
-import { useMemo, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { ArrowRight, Check, ExternalLink } from 'lucide-react';
 import { BlogShell, Breadcrumbs } from '../components/BlogShell';
 import { ArticleCTA, AdjacentArticles, TableOfContents, type RelatedLink } from '../components/ArticleSections';
 import { getBlogArticle, type BlogArticle } from '../data/blogArticles';
-import { usePageMetadata } from '../hooks/usePageMetadata';
 
 /** 解説記事の既定執筆者。記事ごとに変える場合は blogArticles.ts の author を指定する。 */
 const DEFAULT_ARTICLE_AUTHOR = '齊藤 慎之介';
@@ -37,40 +36,6 @@ export function BlogArticlePage({ slug, prev, next }: BlogArticlePageProps) {
 }
 
 function Article({ article, prev, next }: { article: BlogArticle } & Pick<BlogArticlePageProps, 'prev' | 'next'>) {
-  const jsonLd = useMemo(() => ([
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BlogPosting',
-      headline: article.title,
-      description: article.description,
-      image: `https://www.another-star.jp${article.heroImage}`,
-      datePublished: article.publishedAt,
-      dateModified: article.updatedAt,
-      author: { '@type': 'Person', name: article.author ?? DEFAULT_ARTICLE_AUTHOR, url: 'https://www.another-star.jp/' },
-      publisher: { '@type': 'Organization', name: 'Another Star合同会社' },
-      mainEntityOfPage: `https://www.another-star.jp/blog/${article.slug}`,
-      isPartOf: { '@type': 'Blog', name: 'A2A Insights' },
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.another-star.jp/' },
-        { '@type': 'ListItem', position: 2, name: 'BLOG', item: 'https://www.another-star.jp/blog' },
-        { '@type': 'ListItem', position: 3, name: article.shortTitle, item: `https://www.another-star.jp/blog/${article.slug}` },
-      ],
-    },
-  ]), [article]);
-
-  usePageMetadata({
-    title: `${article.shortTitle}｜A2A Insights | Another Star`,
-    description: article.description,
-    canonicalPath: `/blog/${article.slug}`,
-    image: article.heroImage,
-    type: 'article',
-    jsonLd,
-  });
-
   return (
     <BlogShell>
       <main id="main-content">
