@@ -48,6 +48,8 @@ const pages = [
       'src/pages/CompanyPage.tsx',
       'src/components/WindowContents.tsx',
       'src/data/companyPages.ts',
+      'src/assets',
+      'src/index.css',
     ],
   })),
 ];

@@ -23,6 +23,8 @@ const manifest = JSON.parse(await readFile(manifestPath, 'utf8'));
 
 // SSR では画像の import が /src/assets/... を返すため、ビルド後のファイル名に置き換える。
 // 置き換えないと本番で 404 になり、ハイドレーションでも属性は修正されない。
+// assetsInlineLimit 未満の画像はクライアント側で data URI になりマニフェストに載らないため、
+// その場合はここで止まる（本文側で使う画像を追加したときに気づけるようにしている）。
 function resolveBuiltAssets(html, label) {
   return html.replace(/\/(src\/assets\/[^"'\s)]+)/g, (match, source) => {
     const entry = manifest[decodeURI(source)];
@@ -33,9 +35,9 @@ function resolveBuiltAssets(html, label) {
   });
 }
 
-function renderRoot(element, label) {
+function renderRoot(element, label, rootAttributes = '') {
   const html = renderToString(React.createElement(React.StrictMode, null, element));
-  return `<div id="root">${resolveBuiltAssets(html, label)}</div>`;
+  return `<div id="root"${rootAttributes}>${resolveBuiltAssets(html, label)}</div>`;
 }
 
 function injectRoot(html, renderedRoot, label) {
@@ -101,7 +103,12 @@ try {
     await mkdir(path.dirname(outputPath), { recursive: true });
     await writeFile(
       outputPath,
-      injectRoot(head, renderRoot(React.createElement(CompanyPage, { page }), output), output),
+      injectRoot(
+        head,
+        // クライアントはパスではなくこの値で表示するページを決める（/members/index.html でも一致させるため）。
+        renderRoot(React.createElement(CompanyPage, { page }), output, ` data-page="${page.slug}"`),
+        output,
+      ),
     );
   }
 
