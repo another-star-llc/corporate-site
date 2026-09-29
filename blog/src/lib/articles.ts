@@ -13,8 +13,8 @@ import { blogIndexArticles, type BlogIndexArticle } from '../../../src/data/blog
 export async function getAllArticles(): Promise<BlogIndexArticle[]> {
   const posts = await getCollection('posts', ({ data }) => !data.draft);
   const contentArticles = posts.map((post) => ({
-    slug: post.slug,
-    href: `/blog/${post.slug}/`,
+    slug: post.id,
+    href: `/blog/${post.id}/`,
     title: post.data.title,
     shortTitle: post.data.shortTitle ?? post.data.title,
     description: post.data.description,

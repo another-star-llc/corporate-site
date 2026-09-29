@@ -15,7 +15,7 @@ blog/public/<slug>-eyecatch.webp
 
 ## frontmatter
 
-作業時点の`blog/src/content/config.ts`を必ず読み、現行スキーマだけを使う。OpenClawまたは自動化が作る新規記事では、既定値へ暗黙に依存せず次を明示する。
+作業時点の`blog/src/content.config.ts`を必ず読み、現行スキーマだけを使う。OpenClawまたは自動化が作る新規記事では、既定値へ暗黙に依存せず次を明示する。
 
 ```yaml
 ---
@@ -50,7 +50,7 @@ draft: false
 | `breaking` | 現行の一覧・詳細では未使用。表示実装を追加するまでは`false` |
 | `draft` | 公開対象は`false`。レビュー中に`true`を使った場合は公開前に解除する |
 
-`author`は作業時点の`blog/src/content/config.ts`と`blog/src/pages/[...slug].astro`が両方対応している場合だけ使う。現行mainではレンダラーが著者を管理するため、自動生成frontmatterへ追加しない。
+`author`は作業時点の`blog/src/content.config.ts`と`blog/src/pages/[...slug].astro`が両方対応している場合だけ使う。現行mainではレンダラーが著者を管理するため、自動生成frontmatterへ追加しない。
 
 検証スクリプトはOpenClaw出力を安定させるため、1行のscalarと`tags: ["A2A", "実装"]`形式のinline JSON配列を受け付ける。block-style配列や複数行scalarは使わない。
 

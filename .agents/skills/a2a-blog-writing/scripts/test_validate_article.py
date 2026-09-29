@@ -34,7 +34,7 @@ class ValidateArticleTest(unittest.TestCase):
         self.public = self.repo / "blog/public"
         self.posts.mkdir(parents=True)
         self.public.mkdir(parents=True)
-        (self.repo / "blog/src/content/config.ts").touch()
+        (self.repo / "blog/src/content.config.ts").touch()
         self.article = self.posts / "sample-article.md"
         self.image = self.public / "sample-article-eyecatch.webp"
         self.image.write_bytes(webp_vp8x(1672, 941))

@@ -10,14 +10,15 @@
     "build": "astro build && node scripts/strip-null-bytes.mjs"
   },
   "dependencies": {
-    "@astrojs/react": "^4.3.0",
-    "@astrojs/rss": "^4.0.11",
-    "@astrojs/sitemap": "3.2.1",
-    "@tailwindcss/vite": "^4.0.0",
-    "astro": "^4.16.18",
+    "@astrojs/react": "^7.0.0",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.4",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.3.5",
     "prismjs": "^1.30.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "tailwindcss": "^4.0.0"
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.3.1"
   }
 }
