@@ -3,12 +3,30 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import path from 'node:path';
 import process from 'node:process';
+import { createServer } from 'vite';
 
 const execFileAsync = promisify(execFile);
 
 const site = 'https://www.another-star.jp';
 const projectRoot = process.cwd();
 const output = 'dist/sitemap.xml';
+
+// /about などのページ一覧は TypeScript の正本から読む（Node 単体では .ts を読めないため Vite 経由）。
+async function loadCompanyPages() {
+  const vite = await createServer({
+    root: projectRoot,
+    appType: 'custom',
+    logLevel: 'error',
+    server: { middlewareMode: true, ws: false },
+  });
+  try {
+    return (await vite.ssrLoadModule('/src/data/companyPages.ts')).companyPages;
+  } finally {
+    await vite.close();
+  }
+}
+
+const companyPages = await loadCompanyPages();
 
 // ブログ配下は blog/ 側の @astrojs/sitemap が記事ごとの lastmod 付きで出すため、
 // ここでは扱わない。robots.txt が両方のサイトマップを指している。
@@ -22,6 +40,16 @@ const pages = [
     loc: `${site}/product`,
     sources: ['product/index.html', 'src/pages/ProductPage.tsx'],
   },
+  // /about などはトップのモーダルと本文を共有しているため、本文の変更もページの更新として扱う。
+  ...companyPages.map((page) => ({
+    loc: `${site}/${page.slug}`,
+    sources: [
+      'company/index.html',
+      'src/pages/CompanyPage.tsx',
+      'src/components/WindowContents.tsx',
+      'src/data/companyPages.ts',
+    ],
+  })),
 ];
 
 async function git(...args) {

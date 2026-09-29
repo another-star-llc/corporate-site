@@ -1,8 +1,9 @@
-import { useState, useCallback, useRef, type ReactNode } from 'react';
+import { useState, useCallback, useRef, type MouseEvent, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { SpaceBackground } from './SpaceBackground';
 import { ChicWindow } from './ChicWindow';
 import { getWindowContent } from './WindowContents';
+import { companyPathForWindow } from '../data/companyPages';
 import { useHeroFadeProgress, useScrollLock } from '../hooks';
 import {
   Target,
@@ -26,6 +27,12 @@ interface WindowState {
 }
 
 type FocusPlanetSide = 'left' | 'right' | null;
+
+// メニューは /about などへの通常のリンクとして出し（クローラ・新規タブ用）、
+// 修飾キーなしのクリックだけ従来どおりモーダルで開く。
+function isModifiedClick(e: MouseEvent<HTMLAnchorElement>) {
+  return e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey;
+}
 
 export function MainInterface() {
   const [windows, setWindows] = useState<WindowState[]>([]);
@@ -165,9 +172,14 @@ export function MainInterface() {
               BLOG
             </a>
             {menuItems.map(item => (
-              <button
+              <a
                 key={item.id}
-                onClick={() => handleNavClick(item.id)}
+                href={companyPathForWindow(item.id)}
+                onClick={(e) => {
+                  if (isModifiedClick(e)) return;
+                  e.preventDefault();
+                  handleNavClick(item.id);
+                }}
                 className={`text-xs tracking-[0.15em] uppercase transition-colors duration-200 ${
                   focusPlanetId === item.id
                     ? 'text-white'
@@ -175,7 +187,7 @@ export function MainInterface() {
                 }`}
               >
                 {item.label}
-              </button>
+              </a>
             ))}
             <button
               onClick={scrollToNews}
@@ -222,9 +234,12 @@ export function MainInterface() {
                 BLOG
               </a>
               {menuItems.map(item => (
-                <button
+                <a
                   key={item.id}
-                  onClick={() => {
+                  href={companyPathForWindow(item.id)}
+                  onClick={(e) => {
+                    if (isModifiedClick(e)) return;
+                    e.preventDefault();
                     handleNavClick(item.id);
                     setIsMobileMenuOpen(false);
                   }}
@@ -235,7 +250,7 @@ export function MainInterface() {
                   }`}
                 >
                   {item.label}
-                </button>
+                </a>
               ))}
               <button
                 onClick={scrollToNews}
