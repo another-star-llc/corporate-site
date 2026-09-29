@@ -17,9 +17,15 @@
       "source": "/product/",
       "destination": "/product",
       "permanent": true
+    },
+    {
+      "source": "/:page(about|mission|members|systems|contact)/",
+      "destination": "/:page",
+      "permanent": true
     }
   ],
   "rewrites": [
-    { "source": "/product", "destination": "/product/index.html" }
+    { "source": "/product", "destination": "/product/index.html" },
+    { "source": "/:page(about|mission|members|systems|contact)", "destination": "/:page/index.html" }
   ]
 }
