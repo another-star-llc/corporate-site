@@ -1,7 +1,10 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { z } from 'astro/zod';
+import { glob } from 'astro/loaders';
 
 const posts = defineCollection({
-  type: 'content',
+  // 記事ファイル名（拡張子なし）がそのまま id になり、公開URL /blog/<id>/ に使われる。
+  loader: glob({ pattern: '*.md', base: './src/content/posts' }),
   schema: z.object({
     title: z.string(),
     description: z.string(),

@@ -16,7 +16,7 @@ description: Plan, write, revise, validate, and prepare PR-ready Japanese A2A In
 
 さらに、作業時点の実装を正本として次を確認する。
 
-- `blog/src/content/config.ts`
+- `blog/src/content.config.ts`
 - `blog/src/pages/[...slug].astro`
 - `src/pages/BlogPostPage.tsx`
 - `blog/src/content/posts/`の関連性が高い記事と新しい記事を2〜3本

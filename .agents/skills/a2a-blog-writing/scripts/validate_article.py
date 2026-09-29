@@ -236,7 +236,7 @@ def _repo_root(article: Path, explicit: Path | None) -> Path:
     if explicit:
         return explicit.resolve()
     for parent in (article.resolve().parent, *article.resolve().parents):
-        if (parent / "blog/src/content/config.ts").is_file():
+        if (parent / "blog/src/content.config.ts").is_file():
             return parent
     raise ValueError("--repo-rootを指定するか、corporate-site配下の記事を渡してください")
 
