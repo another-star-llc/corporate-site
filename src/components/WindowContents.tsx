@@ -157,7 +157,10 @@ export function PeopleContent() {
               </div>
               <div className={`${cardClass} px-4 py-3`}>
                 <div className={`${labelClass} mb-1`}>経験</div>
-                <p className={subTextClass}>日系中華系SIer企業でのリード開発</p>
+                <div className="space-y-2">
+                  <p className={subTextClass}>メガバンクのFDEとしてAIエージェントの認可を担当</p>
+                  <p className={subTextClass}>日系中華系SIer企業でのリード開発</p>
+                </div>
               </div>
             </div>
           }
