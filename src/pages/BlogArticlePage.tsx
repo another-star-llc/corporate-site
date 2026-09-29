@@ -2,10 +2,7 @@ import type { ReactNode } from 'react';
 import { ArrowRight, Check, ExternalLink } from 'lucide-react';
 import { BlogShell, Breadcrumbs } from '../components/BlogShell';
 import { ArticleCTA, AdjacentArticles, TableOfContents, type RelatedLink } from '../components/ArticleSections';
-import { getBlogArticle, type BlogArticle } from '../data/blogArticles';
-
-/** 解説記事の既定執筆者。記事ごとに変える場合は blogArticles.ts の author を指定する。 */
-const DEFAULT_ARTICLE_AUTHOR = '齊藤 慎之介';
+import { getArticleAuthor, getBlogArticle, type BlogArticle } from '../data/blogArticles';
 
 export interface BlogArticlePageProps {
   slug: string;
@@ -58,7 +55,7 @@ function Article({ article, prev, next }: { article: BlogArticle } & Pick<BlogAr
                   <span aria-hidden="true">•</span>
                   <span>読了 {article.readingTime}</span>
                   <span aria-hidden="true">•</span>
-                  <span>{article.author ?? DEFAULT_ARTICLE_AUTHOR}</span>
+                  <span>{getArticleAuthor(article)}</span>
                 </div>
               </div>
 

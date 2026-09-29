@@ -3,7 +3,7 @@ import { getCollection, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { BlogArticlePage } from '../../../src/pages/BlogArticlePage';
 import { BlogPostPage } from '../../../src/pages/BlogPostPage';
-import { blogArticles, getBlogArticle, getAdjacentArticles } from '../../../src/data/blogArticles';
+import { blogArticles, getArticleAuthor, getBlogArticle, getAdjacentArticles } from '../../../src/data/blogArticles';
 import { getAllArticles } from '../lib/articles';
 
 export async function getStaticPaths() {
@@ -92,7 +92,7 @@ const jsonLd = post ? [
     datePublished: article.publishedAt,
     dateModified: article.updatedAt,
     inLanguage: 'ja',
-    author: { '@type': 'Person', name: article.author ?? '齊藤 慎之介', url: 'https://www.another-star.jp/' },
+    author: { '@type': 'Person', name: getArticleAuthor(article), url: 'https://www.another-star.jp/' },
     publisher: { '@type': 'Organization', name: 'Another Star合同会社' },
     mainEntityOfPage: `https://www.another-star.jp/blog/${article.slug}/`,
     isPartOf: { '@type': 'Blog', name: 'A2A Insights' },
