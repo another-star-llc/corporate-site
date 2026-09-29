@@ -2,16 +2,10 @@ import { useMemo, useState } from 'react';
 import { ArrowRight, Clock3 } from 'lucide-react';
 import { BlogShell, Breadcrumbs } from '../components/BlogShell';
 import { blogIndexArticles, type BlogIndexArticle } from '../data/blogArticles';
-import { usePageMetadata } from '../hooks/usePageMetadata';
-
-const pageDescription =
-  'A2Aをめぐる市場構造、技術標準、企業導入の実務を、公式仕様と一次情報から読み解くAnother Starの専門メディアです。';
 
 export function BlogIndexPage({
-  manageMetadata = true,
   articles: allArticles = blogIndexArticles,
 }: {
-  manageMetadata?: boolean;
   articles?: BlogIndexArticle[];
 }) {
   const categories = useMemo(
@@ -23,29 +17,6 @@ export function BlogIndexPage({
     ? allArticles
     : allArticles.filter((article) => article.category === activeCategory);
   const featured = allArticles.find((article) => article.featured) ?? allArticles[0];
-  const jsonLd = useMemo(() => ({
-    '@context': 'https://schema.org',
-    '@type': 'Blog',
-    name: 'BLOG',
-    description: pageDescription,
-    url: 'https://www.another-star.jp/blog',
-    publisher: { '@type': 'Organization', name: 'Another Star合同会社' },
-    blogPost: allArticles.map((article) => ({
-      '@type': 'BlogPosting',
-      headline: article.title,
-      url: article.href.startsWith('http') ? article.href : `https://www.another-star.jp${article.href}`,
-      datePublished: article.publishedAt,
-    })),
-  }), [allArticles]);
-
-  usePageMetadata({
-    enabled: manageMetadata,
-    title: 'BLOG｜Another Star',
-    description: pageDescription,
-    canonicalPath: '/blog',
-    jsonLd,
-  });
-
   return (
     <BlogShell>
       <main id="main-content">
