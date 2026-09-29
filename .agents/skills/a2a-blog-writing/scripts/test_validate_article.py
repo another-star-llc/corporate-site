@@ -165,6 +165,29 @@ draft: false
         errors = MODULE.validate_article(self.article, self.repo)
         self.assertIn("authorを使う場合は空でない文字列にしてください", errors)
 
+    def test_rejects_slug_override(self) -> None:
+        self.write_article(self.valid_body(), 'slug: "custom-url"\n')
+        errors = MODULE.validate_article(self.article, self.repo)
+        self.assertIn(
+            "frontmatterにslugを書かないでください。公開URLはファイル名で決まります", errors
+        )
+
+    def test_rejects_slug_override_in_other_yaml_forms(self) -> None:
+        for line in ('slug : custom-url\n', '"slug": custom-url\n', "'slug': custom-url\n"):
+            with self.subTest(line=line):
+                self.write_article(self.valid_body(), line)
+                errors = MODULE.validate_article(self.article, self.repo)
+                self.assertIn(
+                    "frontmatterにslugを書かないでください。公開URLはファイル名で決まります", errors
+                )
+
+    def test_allows_keys_that_only_start_with_slug(self) -> None:
+        self.write_article(self.valid_body(), 'slugline: "見出し"\n')
+        errors = MODULE.validate_article(self.article, self.repo)
+        self.assertNotIn(
+            "frontmatterにslugを書かないでください。公開URLはファイル名で決まります", errors
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
