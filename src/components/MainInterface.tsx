@@ -1,6 +1,11 @@
-import { useState, useCallback, useRef, type MouseEvent, type ReactNode } from 'react';
+import { useState, useCallback, useEffect, useRef, lazy, Suspense, type MouseEvent, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { SpaceBackground } from './SpaceBackground';
+// 3D 表示（three.js）は約 350KB あるため別チャンクに分け、初回表示を妨げないようにする。
+// 読み込み自体はこのモジュールの評価時に始めておき、表示の開始を遅らせない。
+const spaceBackgroundModule = typeof window === 'undefined' ? undefined : import('./SpaceBackground');
+const SpaceBackground = lazy(() =>
+  (spaceBackgroundModule ?? import('./SpaceBackground')).then((m) => ({ default: m.SpaceBackground })),
+);
 import { ChicWindow } from './ChicWindow';
 import { getWindowContent } from './WindowContents';
 import { companyPathForWindow } from '../data/companyPages';
@@ -47,6 +52,11 @@ export function MainInterface() {
   const overlayOpacity = heroFadeProgress * 0.8;
 
   useScrollLock(hasOpenWindow);
+
+  // prerender とハイドレーション直後は 3D を描かず、マウント後に差し込む。
+  // サーバーの HTML とクライアントの初回描画を一致させるため（どちらも黒背景のみ）。
+  const [canRenderSpace, setCanRenderSpace] = useState(false);
+  useEffect(() => setCanRenderSpace(true), []);
 
   const scrollToNews = () => {
     setWindows([]);
@@ -144,13 +154,17 @@ export function MainInterface() {
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
     >
-      <SpaceBackground
-        onPlanetClick={(id, screenPos) => { setFocusPlanetId(id); openWindow(id, screenPos); }}
-        onPlanetHover={() => {}}
-        onEmptyClick={() => { setFocusPlanetId(null); setFocusPlanetSide(null); setWindows([]); }}
-        focusPlanetId={focusPlanetId}
-        focusPlanetSide={focusPlanetSide}
-      />
+      {canRenderSpace && (
+        <Suspense fallback={null}>
+          <SpaceBackground
+            onPlanetClick={(id, screenPos) => { setFocusPlanetId(id); openWindow(id, screenPos); }}
+            onPlanetHover={() => {}}
+            onEmptyClick={() => { setFocusPlanetId(null); setFocusPlanetSide(null); setWindows([]); }}
+            focusPlanetId={focusPlanetId}
+            focusPlanetSide={focusPlanetSide}
+          />
+        </Suspense>
+      )}
 
       {/* ヘッダーナビゲーション */}
       <header className="fixed top-0 left-0 right-0 z-[1000]">
