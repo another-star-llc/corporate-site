@@ -21,6 +21,9 @@ const posts = defineCollection({
     // 臨時号（重大ニュース即日号）フラグ
     breaking: z.boolean().default(false),
     draft: z.boolean().default(false),
+    // slug を書くと公開URLがファイル名と変わり、サイトマップの lastmod（astro.config.mjs）と対応しなくなる。
+    // 書き方に関係なくビルドで止めるため、値があればエラーにする。
+    slug: z.never().optional(),
   }),
 });
 

@@ -39,6 +39,8 @@ PLACEHOLDERS = re.compile(r"TODO|TBD|ここに(?:本文|安田)|要確認のま�
 SLUG = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 FRONTMATTER = re.compile(r"\A---\r?\n(.*?)\r?\n---\r?\n?", re.DOTALL)
 FIELD = re.compile(r"^([A-Za-z][A-Za-z0-9]*):[ \t]*(.*)$", re.MULTILINE)
+# FIELD が拾わない YAML の書き方（`slug :`、`"slug":`）でも Astro は slug として読むため、別に検出する。
+SLUG_KEY = re.compile(r"""^["']?slug["']?[ \t]*:""", re.MULTILINE)
 PUB_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 READING_TIME = re.compile(r"^[1-9]\d*分$")
 REFERENCE_LINK = re.compile(r"\[[^\]]+\]\(https://[^)\s]+\)")
@@ -68,6 +70,8 @@ def _parse_markdown(path: Path) -> tuple[dict[str, object], str, list[str]]:
 
     raw_frontmatter = match.group(1)
     fields = {key: _scalar(raw) for key, raw in FIELD.findall(raw_frontmatter)}
+    if "slug" not in fields and SLUG_KEY.search(raw_frontmatter):
+        fields["slug"] = ""
     return fields, text[match.end() :], []
 
 
