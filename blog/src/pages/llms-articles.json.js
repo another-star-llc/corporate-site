@@ -8,11 +8,10 @@ import { getAllArticles } from '../lib/articles';
  * このファイル自体は公開物から削除する。
  */
 export async function GET() {
-  const articles = (await getAllArticles()).map(({ href, title, description, publishedAt }) => ({
+  const articles = (await getAllArticles()).map(({ href, title, description }) => ({
     href,
     title,
     description,
-    publishedAt,
   }));
 
   return new Response(JSON.stringify(articles), {

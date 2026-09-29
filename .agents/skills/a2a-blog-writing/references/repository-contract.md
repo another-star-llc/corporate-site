@@ -125,6 +125,7 @@ npm run build
 - `dist/blog/index.html`
 - `dist/blog/rss.xml`
 - `dist/blog/sitemap-0.xml`
+- `dist/llms.txt`（記事一覧に新しい記事のURLが自動で入っていること。llms.txt は手で編集しない）
 - title、description、canonical、OG画像、JSON-LD
 - heroの比率、長いH1、H2目次、表の横スクロール
 - カテゴリ、CTA、前後記事ナビ

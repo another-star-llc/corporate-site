@@ -23,9 +23,13 @@ if (llms.split(marker).length !== 2) {
   throw new Error(`llms: dist/llms.txt に挿入位置の目印がちょうど1つありません: ${marker}`);
 }
 
-// llmstxt.org の「- [名前](URL): 説明」の形式。説明は改行を含めない。
+// llmstxt.org の「- [名前](URL): 説明」の形式。改行は1つの空白にまとめる。
+const oneLine = (text) => text.replace(/\s+/g, ' ').trim();
+// タイトルの [ ] \ はリンクの記法を壊すのでエスケープする（例: 「[速報] ...」）。
+const linkText = (text) => oneLine(text).replace(/[[\]\\]/g, '\\$&');
+
 const list = articles
-  .map(({ href, title, description }) => `- [${title}](${site}${href}): ${description.replace(/\s+/g, ' ')}`)
+  .map(({ href, title, description }) => `- [${linkText(title)}](${site}${href}): ${oneLine(description)}`)
   .join('\n');
 
 await writeFile(llmsPath, llms.replace(marker, () => list));
