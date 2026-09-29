@@ -1,11 +1,5 @@
-import { useState, useCallback, useEffect, useRef, lazy, Suspense, type MouseEvent, type ReactNode } from 'react';
+import { Component, useState, useCallback, useEffect, useRef, lazy, Suspense, type MouseEvent, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-// 3D 表示（three.js）は約 350KB あるため別チャンクに分け、初回表示を妨げないようにする。
-// 読み込み自体はこのモジュールの評価時に始めておき、表示の開始を遅らせない。
-const spaceBackgroundModule = typeof window === 'undefined' ? undefined : import('./SpaceBackground');
-const SpaceBackground = lazy(() =>
-  (spaceBackgroundModule ?? import('./SpaceBackground')).then((m) => ({ default: m.SpaceBackground })),
-);
 import { ChicWindow } from './ChicWindow';
 import { getWindowContent } from './WindowContents';
 import { companyPathForWindow } from '../data/companyPages';
@@ -32,6 +26,32 @@ interface WindowState {
 }
 
 type FocusPlanetSide = 'left' | 'right' | null;
+
+// 3D 表示（three.js、約 490KB）は別チャンクに分け、ホームの初回読み込みから外す。
+// 読み込みはこのモジュールの評価時に始め、マウントまでの待ち時間を減らす。
+// 失敗した場合は、lazy の中でもう一度 import する（先に始めた読み込みの失敗を使い回さない）。
+const loadSpaceBackground = () => import('./SpaceBackground');
+const preloadedSpaceBackground = typeof window === 'undefined' ? undefined : loadSpaceBackground();
+preloadedSpaceBackground?.catch(() => {});
+const SpaceBackground = lazy(() =>
+  (preloadedSpaceBackground ?? Promise.reject())
+    .catch(loadSpaceBackground)
+    .then((m) => ({ default: m.SpaceBackground })),
+);
+
+// 3D の読み込みに失敗しても（回線不良、デプロイ直後の古いファイルなど）、
+// ホームのメニュー・本文は表示したままにし、3D だけを出さない。
+class SpaceBackgroundBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+  state = { failed: false };
+
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+
+  render() {
+    return this.state.failed ? null : this.props.children;
+  }
+}
 
 // メニューは /about などへの通常のリンクとして出し（クローラ・新規タブ用）、
 // 修飾キーなしのクリックだけ従来どおりモーダルで開く。
@@ -155,15 +175,17 @@ export function MainInterface() {
       transition={{ duration: 1 }}
     >
       {canRenderSpace && (
-        <Suspense fallback={null}>
-          <SpaceBackground
-            onPlanetClick={(id, screenPos) => { setFocusPlanetId(id); openWindow(id, screenPos); }}
-            onPlanetHover={() => {}}
-            onEmptyClick={() => { setFocusPlanetId(null); setFocusPlanetSide(null); setWindows([]); }}
-            focusPlanetId={focusPlanetId}
-            focusPlanetSide={focusPlanetSide}
-          />
-        </Suspense>
+        <SpaceBackgroundBoundary>
+          <Suspense fallback={null}>
+            <SpaceBackground
+              onPlanetClick={(id, screenPos) => { setFocusPlanetId(id); openWindow(id, screenPos); }}
+              onPlanetHover={() => {}}
+              onEmptyClick={() => { setFocusPlanetId(null); setFocusPlanetSide(null); setWindows([]); }}
+              focusPlanetId={focusPlanetId}
+              focusPlanetSide={focusPlanetSide}
+            />
+          </Suspense>
+        </SpaceBackgroundBoundary>
       )}
 
       {/* ヘッダーナビゲーション */}
