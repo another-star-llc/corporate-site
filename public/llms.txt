@@ -65,8 +65,8 @@ AIエージェント同士が人の確認を介さずに直接連携すると、
 
 ## オープンソースと知財
 
-- OSSコアを **Apache 2.0** で公開しています。
-- 独自技術の特許を出願手続き中です。
+- OSSコアを **Apache 2.0** で公開しています: [secure-ai-agent-matching-platform](https://github.com/another-star-llc/secure-ai-agent-matching-platform)
+- 独自技術の特許を2026年10月に出願する予定です。
 
 ---
 
