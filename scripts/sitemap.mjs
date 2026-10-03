@@ -60,6 +60,58 @@ async function git(...args) {
 }
 
 /**
+ * 浅いクローンなら、足りない履歴を取得する。
+ *
+ * Vercel は浅いクローンでビルドするため、そのままでは各ページの最終コミット日が
+ * 取れず、本番の sitemap.xml から lastmod が消えていた（#49）。リポジトリは公開なので
+ * 認証なしで取得できる。origin が無い場合は、Vercel が渡す環境変数から URL を組み立てる。
+ * 取得できなくてもビルドは止めない（その場合は下の判定で lastmod を省く）。
+ */
+async function fetchFullHistory() {
+  try {
+    if ((await git('rev-parse', '--is-shallow-repository')) !== 'true') return;
+  } catch {
+    return;
+  }
+
+  // Vercel のクローンには origin が無いため、本番では主に環境変数から組み立てた URL で取得する。
+  // ビルド対象のコミットそのものである SHA を優先し（ブランチ削除後の再デプロイや fork の PR でも取れる）、
+  // 取れなければブランチ名で試す。
+  const {
+    VERCEL_GIT_REPO_OWNER: owner,
+    VERCEL_GIT_REPO_SLUG: slug,
+    VERCEL_GIT_COMMIT_SHA: sha,
+    VERCEL_GIT_COMMIT_REF: ref,
+  } = process.env;
+  const attempts = [['origin']];
+  if (owner && slug) {
+    const url = `https://github.com/${owner}/${slug}.git`;
+    if (sha) attempts.push([url, sha]);
+    if (ref) attempts.push([url, ref]);
+  }
+
+  for (const target of attempts) {
+    try {
+      await execFileAsync(
+        'git',
+        // 通信が止まったら git 自身に打ち切らせ、ref 名がオプションとして解釈されないよう -- で区切る。
+        ['-c', 'http.lowSpeedLimit=1000', '-c', 'http.lowSpeedTime=20', 'fetch', '--quiet', '--unshallow', '--', ...target],
+        {
+          cwd: projectRoot,
+          timeout: 60_000,
+          // 認証を求めるプロンプトで止まらず、すぐ次の方法に進む
+          env: { ...process.env, GIT_TERMINAL_PROMPT: '0' },
+        },
+      );
+      return;
+    } catch {
+      // 次の取得方法を試す
+    }
+  }
+  console.warn('sitemap: git の履歴を取得できなかったため、浅いクローンのまま lastmod を判定します');
+}
+
+/**
  * 履歴が切り詰められているクローンでの、信用できない日付の判定材料。
  *
  * Vercel は浅いクローンでビルドするため、切り詰めの境界にあるコミットは
@@ -96,6 +148,7 @@ async function lastCommitDate(sources, boundary) {
   }
 }
 
+await fetchFullHistory();
 const boundary = await truncationBoundary();
 
 const entries = await Promise.all(
