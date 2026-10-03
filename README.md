@@ -95,6 +95,8 @@ main へのマージで Vercel が本番にデプロイします。Pull Request 
 - ルーティング（`/product` や `/about` などの書き換え、末尾スラッシュのリダイレクト）は `vercel.json` で設定しています。**`/about` などのページを増やすときは、`src/data/companyPages.ts`（と `WindowContents.tsx` の本文）に加えて、`vercel.json` のパターンも更新してください**
 - PR のマージ時にブランチは自動で削除されます
 
+- ファイル名にハッシュが入る `/assets/*`（サイト本体）と `/blog/_astro/*`（ブログ）は、1年間キャッシュする設定にしています（`vercel.json` の `headers`）。**`public/assets/` や `blog/public/_astro/` にファイルを置かないでください。** ハッシュのないファイルが1年間キャッシュされ、更新が反映されなくなります
+
 ## 依存パッケージの更新
 
 - ブログ（`blog/package.json`）では `vite` を直接指定しています。Astro が要求する Vite のメジャーバージョンが上がったら、`vite` も同じ範囲に上げてください。そろえないと、Tailwind のプラグインが古い Vite を使ってビルドが失敗します（`createIdResolver is not a function`）
