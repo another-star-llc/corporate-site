@@ -22,6 +22,36 @@
       "source": "/:page(about|mission|members|systems|contact)/",
       "destination": "/:page",
       "permanent": true
+    },
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/:page(product|about|mission|members|systems|contact)/index.html",
+      "destination": "/:page",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/index.html",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/:slug([^/.]+)/index.html",
+      "destination": "/blog/:slug/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/:slug([^/.]+)",
+      "destination": "/blog/:slug/",
+      "permanent": true
     }
   ],
   "rewrites": [
