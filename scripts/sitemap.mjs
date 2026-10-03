@@ -60,6 +60,39 @@ async function git(...args) {
 }
 
 /**
+ * 浅いクローンなら、足りない履歴を取得する。
+ *
+ * Vercel は浅いクローンでビルドするため、そのままでは各ページの最終コミット日が
+ * 取れず、本番の sitemap.xml から lastmod が消えていた（#49）。リポジトリは公開なので
+ * 認証なしで取得できる。origin が無い場合は、Vercel が渡す環境変数から URL を組み立てる。
+ * 取得できなくてもビルドは止めない（その場合は下の判定で lastmod を省く）。
+ */
+async function fetchFullHistory() {
+  try {
+    if ((await git('rev-parse', '--is-shallow-repository')) !== 'true') return;
+  } catch {
+    return;
+  }
+
+  const { VERCEL_GIT_REPO_OWNER: owner, VERCEL_GIT_REPO_SLUG: slug, VERCEL_GIT_COMMIT_REF: ref } = process.env;
+  const attempts = [['origin']];
+  if (owner && slug && ref) attempts.push([`https://github.com/${owner}/${slug}.git`, ref]);
+
+  for (const target of attempts) {
+    try {
+      await execFileAsync('git', ['fetch', '--quiet', '--unshallow', ...target], {
+        cwd: projectRoot,
+        timeout: 60_000,
+      });
+      return;
+    } catch {
+      // 次の取得方法を試す
+    }
+  }
+  console.warn('sitemap: git の履歴を取得できなかったため、浅いクローンのまま lastmod を判定します');
+}
+
+/**
  * 履歴が切り詰められているクローンでの、信用できない日付の判定材料。
  *
  * Vercel は浅いクローンでビルドするため、切り詰めの境界にあるコミットは
@@ -96,6 +129,7 @@ async function lastCommitDate(sources, boundary) {
   }
 }
 
+await fetchFullHistory();
 const boundary = await truncationBoundary();
 
 const entries = await Promise.all(
