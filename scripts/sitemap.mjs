@@ -74,16 +74,35 @@ async function fetchFullHistory() {
     return;
   }
 
-  const { VERCEL_GIT_REPO_OWNER: owner, VERCEL_GIT_REPO_SLUG: slug, VERCEL_GIT_COMMIT_REF: ref } = process.env;
+  // Vercel のクローンには origin が無いため、本番では主に環境変数から組み立てた URL で取得する。
+  // ビルド対象のコミットそのものである SHA を優先し（ブランチ削除後の再デプロイや fork の PR でも取れる）、
+  // 取れなければブランチ名で試す。
+  const {
+    VERCEL_GIT_REPO_OWNER: owner,
+    VERCEL_GIT_REPO_SLUG: slug,
+    VERCEL_GIT_COMMIT_SHA: sha,
+    VERCEL_GIT_COMMIT_REF: ref,
+  } = process.env;
   const attempts = [['origin']];
-  if (owner && slug && ref) attempts.push([`https://github.com/${owner}/${slug}.git`, ref]);
+  if (owner && slug) {
+    const url = `https://github.com/${owner}/${slug}.git`;
+    if (sha) attempts.push([url, sha]);
+    if (ref) attempts.push([url, ref]);
+  }
 
   for (const target of attempts) {
     try {
-      await execFileAsync('git', ['fetch', '--quiet', '--unshallow', ...target], {
-        cwd: projectRoot,
-        timeout: 60_000,
-      });
+      await execFileAsync(
+        'git',
+        // 通信が止まったら git 自身に打ち切らせ、ref 名がオプションとして解釈されないよう -- で区切る。
+        ['-c', 'http.lowSpeedLimit=1000', '-c', 'http.lowSpeedTime=20', 'fetch', '--quiet', '--unshallow', '--', ...target],
+        {
+          cwd: projectRoot,
+          timeout: 60_000,
+          // 認証を求めるプロンプトで止まらず、すぐ次の方法に進む
+          env: { ...process.env, GIT_TERMINAL_PROMPT: '0' },
+        },
+      );
       return;
     } catch {
       // 次の取得方法を試す
