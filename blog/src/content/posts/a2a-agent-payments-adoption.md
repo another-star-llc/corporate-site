@@ -2,6 +2,7 @@
 title: "エージェント間決済とAnother Starの構想"
 shortTitle: "エージェント間決済と当社の構想"
 description: "AIエージェントが仕事や資源を売買するための規格とサービスは、どこまで整っているのか。決済の現在地と、相手の選定から成果確認までを支えるAnother Starの製品構想を紹介します。"
+author: "広松太一"
 pubDate: 2026-10-11
 tags: ["A2A", "エージェント経済", "AP2", "x402", "MPP"]
 category: "技術解説"

@@ -47,7 +47,7 @@ const toLink = (a?: { href: string; category: string; shortTitle: string }) =>
 const allArticles = await getAllArticles();
 const adjacent = getAdjacentArticles(post ? post.slug : article!.slug, allArticles);
 
-const POST_AUTHOR = '安田 直也';
+const postAuthor = post?.data.author ?? '安田 直也';
 const iso = (d: Date) => d.toISOString().slice(0, 10);
 
 const jsonLd = post ? [
@@ -62,7 +62,7 @@ const jsonLd = post ? [
   inLanguage: 'ja',
   author: {
     '@type': 'Person',
-    name: POST_AUTHOR,
+    name: postAuthor,
     url: 'https://www.another-star.jp/',
   },
   publisher: {
@@ -141,7 +141,7 @@ const jsonLd = post ? [
       category={post.data.category}
       publishedAt={iso(post.data.pubDate)}
       readingTime={post.data.readingTime}
-      author={POST_AUTHOR}
+      author={postAuthor}
       heroImage={post.data.heroImage}
       heroAlt={post.data.heroAlt}
       toc={postToc}
