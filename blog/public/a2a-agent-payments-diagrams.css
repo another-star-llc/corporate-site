@@ -482,3 +482,24 @@
  .agent-payment-diagrams .scene h3 { font-size: 18px; }
  .agent-payment-diagrams .b7-risk-grid { grid-template-columns: 1fr; }
 }
+.blog-prose-md details.payment-note {
+ margin: 1.5rem 0 2rem;
+ padding: 0 1.25rem;
+ border: 1px solid rgba(148, 183, 204, .25);
+ border-radius: 12px;
+ background: rgba(148, 183, 204, .04);
+}
+.blog-prose-md details.payment-note > summary {
+ padding: 1rem 0;
+ color: #b5dbe5;
+ font-size: 1rem;
+ line-height: 1.6;
+ cursor: pointer;
+}
+.blog-prose-md details.payment-note > summary:focus-visible {
+ outline: 2px solid #85cfdf;
+ outline-offset: 4px;
+}
+.blog-prose-md details.payment-note[open] { padding-bottom: .75rem; }
+.blog-prose-md details.payment-note p,
+.blog-prose-md details.payment-note li { font-size: 1rem; }
