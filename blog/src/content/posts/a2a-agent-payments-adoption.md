@@ -95,7 +95,7 @@ StripeのMachine paymentsでは、エージェントからのカード決済や�
 
 AWSも、外部サービスへの支払いを支援するAmazon Bedrock AgentCore paymentsを2026年8月18日に一般提供し、x402とMPPに対応しています。決済サービスを利用する選択肢は増えていますが、支払いの結果と、依頼した仕事が完了したかどうかは、それぞれ確認する必要があります。[AWS一般提供発表](https://aws.amazon.com/about-aws/whats-new/2026/08/bedrock-agentcore-payments-ga/)
 
-では、実際にどれだけ使われているのでしょうか。公表されているのは決済件数、対応店舗数、協力組織数などで、継続して仕事を買う顧客の数とは区別して読む必要があります。
+各社は決済件数、対応店舗数、協力組織数を公表しています。一方、エージェントを通じて継続的に仕事を購入する顧客が何人いるかは、これらの発表では明らかになっていません。
 
 <div class="blog-table-wrap" tabindex="0" role="region" aria-label="普及を示す数字とその限界。横にスクロールできます">
 
