@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 800" role="img" aria-labelledby="title desc">
+  <title id="title">規格接続と自社の取引基盤</title>
+  <desc id="desc">必要な規格に接続し、自社基盤で注文、承認、予算、権限、台帳、配分、検収、回復を保持する。決済製品の結果を照合して状態を更新する。</desc>
+  <defs><linearGradient id="bg" x2="100%" y2="100%"><stop stop-color="#111e37"/><stop offset="1" stop-color="#070d1c"/></linearGradient><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0 8 4 0 8" fill="none" stroke="#67e8f9"/></marker></defs>
+  <rect width="640" height="800" rx="24" fill="url(#bg)"/>
+  <g font-family="system-ui, sans-serif" text-anchor="middle" fill="#f8fafc">
+    <text x="320" y="55" font-size="26" font-weight="700">交換する接続と、保持する状態</text>
+    <text x="320" y="87" font-size="17" fill="#a5b4cc">接続先に必要な規格だけを採用する設計案</text>
+    <g fill="#182944" stroke="#446180"><rect x="40" y="116" width="176" height="64" rx="12"/><rect x="232" y="116" width="176" height="64" rx="12"/><rect x="424" y="116" width="176" height="64" rx="12"/></g>
+    <g font-size="20"><text x="128" y="155">A2A / AP2</text><text x="320" y="155">x402 / MPP</text><text x="512" y="155">UCP / ACP</text></g>
+    <path d="M320 191V221" stroke="#67e8f9" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="40" y="235" width="560" height="288" rx="18" fill="#142c40" stroke="#3da2b5"/>
+    <text x="320" y="282" font-size="28" font-weight="700">自社の取引基盤</text><text x="320" y="311" font-size="17" fill="#a5dbe4">同じ注文IDで対応付ける</text>
+    <g fill="#1c3650" stroke="#446180"><rect x="68" y="337" width="240" height="65" rx="10"/><rect x="332" y="337" width="240" height="65" rx="10"/><rect x="68" y="421" width="240" height="65" rx="10"/><rect x="332" y="421" width="240" height="65" rx="10"/></g>
+    <g font-size="22"><text x="188" y="378">注文・承認</text><text x="452" y="378">予算・権限</text><text x="188" y="462">台帳・配分</text><text x="452" y="462">検収・回復</text></g>
+    <path d="M320 535V565M320 612V638" stroke="#67e8f9" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="320" y="597" font-size="20" fill="#a5dbe4">送信予定・冪等性・結果の照合</text>
+    <rect x="40" y="651" width="560" height="98" rx="14" fill="#202247" stroke="#686ac4"/>
+    <text x="320" y="692" font-size="24">決済製品・決済網</text><text x="320" y="725" font-size="20" fill="#c7d2fe">課金 / 送金 / 返金</text>
+    <text x="320" y="779" font-size="17" fill="#cbd5e1">外部の処理結果を照合して、台帳と状態を更新する</text>
+  </g>
+</svg>

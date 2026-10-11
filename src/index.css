@@ -787,3 +787,8 @@ input, textarea {
   color: #fff;
   font-weight: 500;
 }
+
+/* Keep horizontally scrollable Markdown tables flush with their frame. */
+.blog-prose-md .blog-table-wrap table {
+  margin-top: 0;
+}

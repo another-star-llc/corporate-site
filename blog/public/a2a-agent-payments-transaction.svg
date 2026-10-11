@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 680" role="img" aria-labelledby="title desc">
+  <title id="title">10ドルの取引と売上配分</title>
+  <desc id="desc">利用者の10ドルを決済基盤で処理し、仲介者1ドル、提供事業者9ドルへ配分する設計例。納品と検収は別に確認する。</desc>
+  <defs><linearGradient id="bg" x2="100%" y2="100%"><stop stop-color="#111e37"/><stop offset="1" stop-color="#070d1c"/></linearGradient><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0 8 4 0 8" fill="none" stroke="#67e8f9"/></marker></defs>
+  <rect width="640" height="680" rx="24" fill="url(#bg)"/>
+  <g font-family="system-ui, sans-serif" text-anchor="middle" fill="#f8fafc">
+    <text x="320" y="55" font-size="26" font-weight="700">1件の注文に、資金と成果を結ぶ</text>
+    <text x="320" y="87" font-size="16" fill="#a5b4cc">仲介料10％の設計例・税と決済費用は省略</text>
+    <rect x="40" y="116" width="560" height="94" rx="14" fill="#132b40" stroke="#277b94"/>
+    <text x="320" y="151" font-size="20">利用者の支払い</text><text x="320" y="188" font-size="32" font-weight="700">$10</text>
+    <path d="M320 218V244" stroke="#67e8f9" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="40" y="258" width="560" height="82" rx="14" fill="#142b3d" stroke="#277b94"/>
+    <text x="320" y="307" font-size="23">決済基盤で処理・結果を確認</text>
+    <path d="M320 350V376H170V399" fill="none" stroke="#67e8f9" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M320 376H470V399" fill="none" stroke="#67e8f9" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="40" y="414" width="260" height="120" rx="14" fill="#202247" stroke="#686ac4"/>
+    <rect x="340" y="414" width="260" height="120" rx="14" fill="#123237" stroke="#368b88"/>
+    <text x="170" y="449" font-size="21">仲介者</text><text x="170" y="491" font-size="34" font-weight="700">$1</text><text x="170" y="518" font-size="17" fill="#c7d2fe">10％</text>
+    <text x="470" y="449" font-size="21">提供事業者</text><text x="470" y="491" font-size="34" font-weight="700">$9</text><text x="470" y="518" font-size="17" fill="#99f6e4">90％</text>
+    <rect x="40" y="566" width="560" height="82" rx="14" fill="none" stroke="#64748b" stroke-dasharray="6 5"/>
+    <text x="320" y="599" font-size="22">納品 → 検収 → 利用者へ</text><text x="320" y="629" font-size="17" fill="#cbd5e1">支払成功と、成果の合格を別々に確認する</text>
+  </g>
+</svg>
