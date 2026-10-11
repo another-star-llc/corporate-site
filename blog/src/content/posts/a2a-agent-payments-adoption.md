@@ -1,10 +1,10 @@
 ---
-title: "エージェント間取引とAnother Starの製品構想"
-shortTitle: "エージェント間取引と信頼基盤"
+title: "エージェント間決済とAnother Starの構想"
+shortTitle: "エージェント間決済と当社の構想"
 description: "AIエージェントが仕事や資源を売買するための規格とサービスは、どこまで整っているのか。決済の現在地と、相手の選定から成果確認までを支えるAnother Starの製品構想を紹介します。"
 pubDate: 2026-10-11
 tags: ["A2A", "エージェント経済", "AP2", "x402", "MPP"]
-category: "製品構想"
+category: "技術解説"
 readingTime: "17分"
 heroImage: "/blog/a2a-agent-payments-adoption-eyecatch.webp"
 heroAlt: "外部の調査エージェントからAnother Starを介して利用者へ決済要求と成果物を届ける構想。10ドルの支払いを、合意した仲介料1ドルと事業者の受取分9ドルに配分する例"
