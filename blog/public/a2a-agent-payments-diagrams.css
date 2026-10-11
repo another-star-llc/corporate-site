@@ -1,3 +1,7 @@
+.blog-site:has(.agent-payment-diagrams) h1 {
+ text-wrap: balance;
+ word-break: auto-phrase;
+}
 /* Selected diagrams from the supplied research HTML; scoped to this article. */
 .agent-payment-diagrams { margin: 2rem 0; line-height: 1.75; font-size: 15px; color-scheme: light; }
 .agent-payment-diagrams :is(h3,h4,p,strong) { color: inherit; margin: 0; font-weight: inherit; }
