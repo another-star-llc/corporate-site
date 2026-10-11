@@ -49,35 +49,35 @@ A2AはAgent-to-Agent、つまりエージェント間のやり取りを指しま
 
 *工程を分けた説明図です。配分・納品・検収の順序は契約と決済方式によって変わります。ASはAnother Starを指します。*
 
-<div class="blog-table-wrap" tabindex="0" role="region" aria-label="主要規格の役割と制約。横にスクロールできます">
+<div class="blog-table-wrap" tabindex="0" role="region" aria-label="主要規格の役割。横にスクロールできます">
 
-| 規格 | 主に扱うもの | 取引全体との関係 |
-| --- | --- | --- |
-| A2A | 依頼、仕事の状態、成果物 | 依頼と進捗・成果の受け渡しを共通化する。決済情報は拡張などで追加する |
-| AP2（Agent Payments Protocol） | 購入・支払の承認、支払資格、検証、結果の証跡 | 何を承認して払ったかを結び付ける。配分や成果の合否は別に扱う |
-| x402 | 有料資源への支払要求、支払情報、検証・精算の接続 | 対応する決済方式で処理する。仲介料や返金の条件は方式ごとに確認する |
-| MPP（Machine Payments Protocol） | 共通の支払要求と、選択した支払方法への接続 | カードやウォレットの対応範囲は、方法・製品ごとに異なる |
-| UCP（Universal Commerce Protocol） | 商品、購入条件、支払情報、注文・履行情報 | 商品を購入する手続きを接続する。仲介売上の配分は別に設計する |
-| ACP（Agentic Commerce Protocol） | 買い手AIと店舗の購入手続き・注文 | 必要な店舗や販路と接続する。独自の仕事の検収は別に設計する |
-| A2A x402拡張 | 同じTaskへの支払い待ち・支払状態の関連付け | 仕事と支払いを対応付ける。支払完了と仕事の完了は独立する |
+| 規格 | 役割 |
+| --- | --- |
+| A2A | 依頼、仕事の進捗、成果物をやり取りする。決済情報は拡張で追加する |
+| AP2（Agent Payments Protocol） | 購入・支払いの承認と、その証跡を扱う |
+| x402 | 有料サービスの支払要求から検証・精算へつなぐ |
+| MPP（Machine Payments Protocol） | 共通の支払要求を、カードやウォレットなどの決済方法へつなぐ |
+| UCP（Universal Commerce Protocol） | 商品、購入条件、支払情報、注文の履行状況をやり取りする |
+| ACP（Agentic Commerce Protocol） | 買い手AIと店舗の購入手続き・注文をやり取りする |
+| A2A x402拡張 | 仕事を表すTaskに支払いの状態を関連付ける。仕事の完了とは別に管理する |
 
 </div>
 
-支払いの承認を扱うAP2、決済処理につなぐx402やMPP、店舗の購入手続きを扱うUCPやACPは、それぞれ取引の一部を共通化する規格です。当社は接続先に合わせてこれらを使い、依頼先の評価や成果の確認、問題が起きたときの対応を製品として担う構想です。
+当社は接続先に合わせてこれらの規格を使い、依頼先の評価や成果の確認、問題が起きたときの対応を製品として担う構想です。
 
 複数のエージェントに仕事を任せるには、追加の管理も必要です。たとえばAP2 v0.2では、購入を代行するエージェントから別のエージェントへの承認の再委任は仕様の範囲外です。仕事を引き継ぐ際の予算や権限まで、既存規格だけで管理できるわけではありません。[AP2公式仕様](https://ap2-protocol.org/ap2/specification/)
 
 ### 決済サービスの利用条件
 
-StripeのMachine paymentsでは、エージェントからのカード決済やステーブルコイン決済を受け付けられます。ステーブルコインは、米ドルなどの法定通貨への価値連動を目指す暗号資産です。事業として見ると、どの規格を使うかに加えて、一件いくらの仕事を、誰に販売できるかが問題になります。[Stripe Machine payments](https://docs.stripe.com/payments/machine)
+StripeのMachine paymentsでは、エージェントからのカード決済やステーブルコイン決済を受け付けられます。ステーブルコインは、米ドルなどの法定通貨への価値連動を目指す暗号資産です。決済方法によって、最低額や提供地域が異なります。[Stripe Machine payments](https://docs.stripe.com/payments/machine)
 
-<div class="blog-table-wrap" tabindex="0" role="region" aria-label="決済サービスの条件と事業への影響。横にスクロールできます">
+<div class="blog-table-wrap" tabindex="0" role="region" aria-label="Stripe Machine paymentsの最低額と条件。横にスクロールできます">
 
-| 利用条件 | 事業への影響 |
+| 決済方法 | 最低額・条件 |
 | --- | --- |
-| Stripeの機械向けカード決済は最低0.50ドル | それ未満の仕事を一件ずつ決済する用途には使えない |
-| ステーブルコイン決済は最低0.01 USDC。MPP sessionsは1セント未満の利用を計量し、最低0.01 USDCで精算 | 少額のデータ利用などをまとめて精算する設計が可能 |
-| 提供地域や利用資格は製品ごとに異なる | 想定する買い手と提供事業者が利用できる経路を選ぶ |
+| カード（SPT） | 0.50 USD |
+| ステーブルコイン | 0.01 USDC |
+| MPP sessions | 1セント未満の利用を計量し、最低0.01 USDCでまとめて精算 |
 
 </div>
 
@@ -100,17 +100,15 @@ AWSも、外部サービスへの支払いを支援するAmazon Bedrock AgentCor
 
 <div class="blog-table-wrap" tabindex="0" role="region" aria-label="普及を示す数字とその限界。横にスクロールできます">
 
-| 公表された数字 | 示す対象 | その数字だけでは分からないこと |
+| 公表値 | 集計・公表条件 | 分からないこと |
 | --- | --- | --- |
 | x402：約1億960万件・約1,500万ドル | Visa掲載の調整後集計。Artemisのデータに基づく2026年4月21日までの値 | 独立したAI利用者数、継続顧客数、10月時点の最新利用量 |
-| UCP：数十万のブランド・小売 | Googleが2026年9月16日に公表したdirect checkoutの対応範囲 | 実売上がある店舗数、エージェント間の仕事の件数 |
-| AP2：60超の協力組織 | 発表時の支持・協業の広がり | 本番の決済件数や稼働事業者数 |
+| [UCP：数十万のブランド・小売](https://blog.google/products-and-platforms/products/shopping/google-shopping-updates-holiday-shopping/) | Googleが2026年9月16日に公表したdirect checkoutの対応範囲 | 実売上がある店舗数、エージェント間の仕事の件数 |
+| [AP2：60超の協力組織](https://cloud.google.com/blog/products/ai-machine-learning/announcing-agents-to-payments-ap2-protocol) | 発表時の支持・協業の広がり | 本番の決済件数や稼働事業者数 |
 
 </div>
 
 x402の集計は、識別された見せかけの取引やテスト活動を除いた値です。別の学術研究は、Base上の異なる期間・母集団を分析し、関連者内取引などの混在を指摘しています。[Visaの調査](https://www.visa.com/en-us/thought-leadership/innovation/agentic-payments-from-the-ground-up)、[How Agentic Is Agentic Commerce?](https://arxiv.org/abs/2607.12575)
-
-UCPとAP2の数字も、それぞれ接続可能な範囲と協力組織数として読む必要があります。[GoogleのUCP発表](https://blog.google/products-and-platforms/products/shopping/google-shopping-updates-holiday-shopping/)、[Google CloudのAP2発表](https://cloud.google.com/blog/products/ai-machine-learning/announcing-agents-to-payments-ap2-protocol)
 
 支払いを実行できる製品は登場していますが、独立した買い手が継続して仕事を購入する市場の大きさや、仲介事業の採算までは、こうした数字から判断できません。
 
