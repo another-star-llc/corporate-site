@@ -5,7 +5,7 @@ description: "AIエージェントが仕事や資源を売買するための規�
 pubDate: 2026-10-11
 tags: ["A2A", "エージェント経済", "AP2", "x402", "MPP"]
 category: "技術解説"
-readingTime: "20分"
+readingTime: "17分"
 heroImage: "/blog/a2a-agent-payments-adoption-eyecatch.webp"
 heroAlt: "外部の調査エージェントからAnother Starを介して利用者へ決済要求と成果物を届ける構想。10ドルの支払いを、合意した仲介料1ドルと事業者の受取分9ドルに配分する例"
 featured: false
@@ -182,57 +182,10 @@ Another Starは、依頼先を紹介した後も、納品や支払いの確認�
 
 資金を保留できるか、いつ事業者へ配分するか、返金できるかは、接続する決済サービスの条件に合わせて設計します。自社システムで予算を予約するだけでは、利用者の資金を確保したことにはなりません。[Stripeの支払枠確保](https://docs.stripe.com/payments/place-a-hold-on-a-payment-method)
 
-## 事業化に向けた検証
+Another Starは、依頼先の選定から納品・支払いの確認、問題が起きたときの対応までを支え、企業が外部エージェントに仕事を任せられるサービスを目指します。
 
-事業として成り立つには、利用者が繰り返し仕事を買い、提供事業者が仲介料を払ってでも参加を続け、その収入で当社の運用費用を賄えることが必要です。購入後にもう一度使われるか、直接依頼するより手間が減ったか、一件の取引にいくらかかったかを確かめていきます。
+## 参考資料
 
-### 需要・顧客価値・採算
-
-<div class="blog-table-wrap" tabindex="0" role="region" aria-label="仲介事業の仮説と検証項目。横にスクロールできます">
-
-| 検証する仮説 | 確認すること |
-| --- | --- |
-| 外部の仕事を買う需要がある | どの仕事に実際の支払いが発生し、同じ利用者が再購入するか |
-| 選定・評価が役に立つ | 相手探しや条件調整の手間、品質条件を満たさない納品を減らせるか |
-| 取引管理の支援に料金を払う理由がある | 直接接続と比べ、支払・検収・失敗対応の負担が減るか |
-| 提供事業者が参加を続ける | 受注と運用負担を踏まえて、仲介料を受け入れられるか |
-| 取引ごとの採算が合う | 仲介料から決済・評価・監視・返金・人の対応費用を引いて利益が残るか |
-| 人の承認を減らしても支出と取引を管理できる | 予算超過、二重課金、未照合入金、未精算額を抑えられるか |
-
-</div>
-
-仲介料10％の例なら、10ドルの取引から得る1ドルの範囲で、こうした費用を賄えるかを確かめます。小口取引では、交渉や検収のたびに人が対応すると、仲介料を対応費用が上回りかねません。複数回の利用をまとめて精算する方法や成果確認の自動化が有効か、どの仕事に人の判断を残すべきかも、商品ごとに検証する必要があります。
-
-### 取引を広げる条件
-
-初期の検証では、事業者・商品・支払経路を限定し、一件の注文について、代金の受領、売上配分、納品、検収、必要時の返金まで確認することを想定しています。実際の買い手が利用できるカードやウォレットを起点に、必要な規格を選びます。この範囲で継続購入の有無と、一件あたりの対応時間・費用を測ります。
-
-複数社への発注や従量利用へ進む際には、元の依頼と再委任先の仕事の対応、利用量、相手ごとの支出上限、一部の仕事だけが失敗した場合の対応を確認します。さらに多段委任へ広げるには、元の権限と予算が引き継がれ、取引が分岐・変更されても、問題が起きた際にどこまで停止し、誰が費用を負担するかを把握できることが条件になります。
-
-Another Starが目指すのは、企業が外部エージェントへ仕事を任せ、注文した成果を受け取れるサービスです。相手を紹介した後も、納品や支払いを追い、仕事が止まったときには対応できるようにしたい。その支援が継続して選ばれ、仲介料を払う理由になるかを、実際の有償取引で確かめていきます。
-
-## 参照した一次情報
-
-本文のリンクに加え、設計・採用時に参照する主な仕様と製品文書をまとめます。研究論文は将来像や課題を考える材料であり、市場の到来時期・規模を実証する資料としては扱っていません。
-
-- [A2A Protocol Specification（A2A）](https://a2a-protocol.org/latest/specification/)
-- [AP2 Specification v0.2・役割と再委任の範囲（AP2）](https://ap2-protocol.org/ap2/specification/)
-- [AP2 FAQ・x402との関係（AP2）](https://ap2-protocol.org/faq/)
-- [Agentic AI標準化作業の発足（FIDO Alliance）](https://fidoalliance.org/fido-alliance-to-develop-standards-for-trusted-ai-agent-interactions/)
-- [x402の仕様と実装（x402 Foundation）](https://github.com/x402-foundation/x402)
-- [HTTP Payment Authentication draft -01（IETF Datatracker）](https://datatracker.ietf.org/doc/draft-httpauth-payment/)
-- [Tempo ChargeとSplit Payments（paymentauth.org）](https://paymentauth.org/draft-tempo-charge-00.html)
-- [UCP Checkout A2A Binding・2026-08-25版（UCP）](https://ucp.dev/2026-08-25/specification/shopping/checkout/a2a/)
-- [UCP Split Payments Extension（UCP）](https://ucp.dev/2026-08-25/specification/payment/extensions/split-payments/)
-- [ACPの仕様と運営（ACP）](https://github.com/agentic-commerce-protocol/agentic-commerce-protocol)
-- [A2A x402拡張v0.1（Google Agentic Commerce）](https://github.com/google-agentic-commerce/a2a-x402/blob/main/spec/v0.1/spec.md)
-- [Machine payments・最低額と提供地域（Stripe）](https://docs.stripe.com/payments/machine)
-- [SPTの提供条件（Stripe）](https://docs.stripe.com/agentic-commerce/concepts/shared-payment-tokens.md?agent-seller=seller)
-- [Link Agent Wallet（Stripe）](https://docs.stripe.com/agentic-commerce/agents/link-agent-wallet)
-- [Connectの返金と紛争処理（Stripe）](https://docs.stripe.com/connect/marketplace/tasks/refunds-disputes)
-- [Manual payouts（Stripe）](https://docs.stripe.com/connect/manual-payouts)
-- [AgentCore payments一般提供（AWS）](https://aws.amazon.com/about-aws/whats-new/2026/08/bedrock-agentcore-payments-ga/)
-- [Agentic payments from the ground up（Visa）](https://www.visa.com/en-us/thought-leadership/innovation/agentic-payments-from-the-ground-up)
-- [How Agentic Is Agentic Commerce?（arXiv）](https://arxiv.org/abs/2607.12575)
-- [Virtual Agent Economies（arXiv）](https://arxiv.org/abs/2509.10147)
-- [Intelligent AI Delegation（arXiv）](https://arxiv.org/abs/2602.11865)
+- 決済規格：[x402](https://github.com/x402-foundation/x402)、[MPPの基礎仕様](https://datatracker.ietf.org/doc/draft-httpauth-payment/)
+- 購入手続き：[UCP](https://ucp.dev/2026-08-25/specification/shopping/checkout/a2a/)、[ACP](https://github.com/agentic-commerce-protocol/agentic-commerce-protocol)
+- 関連研究：[Virtual Agent Economies](https://arxiv.org/abs/2509.10147)、[Intelligent AI Delegation](https://arxiv.org/abs/2602.11865)
