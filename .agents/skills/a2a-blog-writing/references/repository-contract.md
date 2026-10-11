@@ -9,13 +9,13 @@ blog/src/content/posts/<slug>.md
 blog/public/<slug>-eyecatch.webp
 ```
 
-`<slug>`は意味が安定する小文字ASCIIのkebab-caseにする。Markdownのファイル名が公開URL `/blog/<slug>/` になる。
+`<slug>`は意味が安定する小文字ASCIIのkebab-caseにする。Markdownのファイル名が公開URL `/blog/<slug>/` になる。frontmatterに`slug`を書かない（URLがファイル名と変わり、サイトマップの`lastmod`と対応しなくなる）。
 
 `src/data/blogArticles.ts`と`src/pages/BlogArticlePage.tsx`は既存の手組み解説記事を支える。新しいMarkdown記事をそこへ重複登録しない。専用React UIが不可欠な記事は、影響範囲を別Issueで合意してから例外として扱う。
 
 ## frontmatter
 
-作業時点の`blog/src/content/config.ts`を必ず読み、現行スキーマだけを使う。OpenClawまたは自動化が作る新規記事では、既定値へ暗黙に依存せず次を明示する。
+作業時点の`blog/src/content.config.ts`を必ず読み、現行スキーマだけを使う。OpenClawまたは自動化が作る新規記事では、既定値へ暗黙に依存せず次を明示する。
 
 ```yaml
 ---
@@ -125,6 +125,7 @@ npm run build
 - `dist/blog/index.html`
 - `dist/blog/rss.xml`
 - `dist/blog/sitemap-0.xml`
+- `dist/llms.txt`（記事一覧に新しい記事のURLが自動で入っていること。llms.txt は手で編集しない）
 - title、description、canonical、OG画像、JSON-LD
 - heroの比率、長いH1、H2目次、表の横スクロール
 - カテゴリ、CTA、前後記事ナビ

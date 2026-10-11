@@ -28,6 +28,14 @@ export interface BlogArticle {
   sources: BlogSource[];
 }
 
+/** 解説記事の既定執筆者。記事ごとに変える場合は各記事の author を指定する。 */
+export const DEFAULT_ARTICLE_AUTHOR = '齊藤 慎之介';
+
+/** 解説記事の執筆者。ページの表示と JSON-LD の両方がこれを使い、食い違わないようにする。 */
+export function getArticleAuthor(article: Pick<BlogArticle, 'author'>): string {
+  return article.author ?? DEFAULT_ARTICLE_AUTHOR;
+}
+
 export const blogArticles: BlogArticle[] = [
   {
     slug: 'what-is-a2a',

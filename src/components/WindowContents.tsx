@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { createContext, useContext, type ReactNode } from 'react';
 
 import naoyaYasudaImg from '../assets/naoya_yasuda.png';
 import saitoImg from '../assets/saito_shinnnosuke.jpeg';
@@ -17,9 +17,13 @@ function ContentShell({ children }: { children: ReactNode }) {
   return <div className="px-6 py-6 sm:px-7 sm:py-7">{children}</div>;
 }
 
+// モーダルでは h2、単独ページ（/about など）では h1 として出す。見た目は同じ。
+export const ContentHeadingLevelContext = createContext<'h1' | 'h2'>('h2');
+
 function ContentHeading({ children }: { children: ReactNode }) {
+  const Heading = useContext(ContentHeadingLevelContext);
   return (
-    <h2 className="text-[2rem] text-white font-light tracking-[0.04em] mb-6 leading-tight">{children}</h2>
+    <Heading className="text-[2rem] text-white font-light tracking-[0.04em] mb-6 leading-tight">{children}</Heading>
   );
 }
 
@@ -153,7 +157,10 @@ export function PeopleContent() {
               </div>
               <div className={`${cardClass} px-4 py-3`}>
                 <div className={`${labelClass} mb-1`}>経験</div>
-                <p className={subTextClass}>日系中華系SIer企業でのリード開発</p>
+                <div className="space-y-2">
+                  <p className={subTextClass}>メガバンクでのAIエージェント認可設計</p>
+                  <p className={subTextClass}>日系中華系SIer企業でのリード開発</p>
+                </div>
               </div>
             </div>
           }

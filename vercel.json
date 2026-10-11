@@ -17,9 +17,55 @@
       "source": "/product/",
       "destination": "/product",
       "permanent": true
+    },
+    {
+      "source": "/:page(about|mission|members|systems|contact)/",
+      "destination": "/:page",
+      "permanent": true
+    },
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/:page(product|about|mission|members|systems|contact)/index.html",
+      "destination": "/:page",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/index.html",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/:slug([^/.]+)/index.html",
+      "destination": "/blog/:slug/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/:slug([^/.]+)",
+      "destination": "/blog/:slug/",
+      "permanent": true
     }
   ],
   "rewrites": [
-    { "source": "/product", "destination": "/product/index.html" }
+    { "source": "/product", "destination": "/product/index.html" },
+    { "source": "/:page(about|mission|members|systems|contact)", "destination": "/:page/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    },
+    {
+      "source": "/blog/_astro/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    }
   ]
 }

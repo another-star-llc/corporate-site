@@ -1,32 +1,37 @@
 {
   "name": "another-star-website",
   "private": true,
+  "engines": {
+    "node": "22.x"
+  },
   "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "trap 'kill 0' EXIT INT TERM; npm run dev:blog & npm run dev:site",
     "dev:site": "vite",
     "dev:blog": "npm --prefix blog run dev",
-    "build": "tsc && vite build && npm run prerender && npm run build:blog",
+    "build": "tsc && vite build && npm run prerender && npm run sitemap && npm run build:blog && npm run llms",
     "prerender": "node scripts/prerender.mjs",
+    "sitemap": "node scripts/sitemap.mjs",
+    "llms": "node scripts/llms.mjs",
     "build:blog": "npm --prefix blog install --no-audit --no-fund && npm --prefix blog run build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "lucide-react": "^0.469.0",
+    "motion": "^12.38.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "motion": "^12.23.26",
-    "lucide-react": "^0.469.0",
     "three": "^0.170.0"
   },
   "devDependencies": {
-    "@types/react": "^18.3.12",
+    "@tailwindcss/vite": "^4.2.2",
+    "@types/react": "^18.3.28",
     "@types/react-dom": "^18.3.1",
     "@types/three": "^0.170.0",
     "@vitejs/plugin-react": "^4.3.4",
+    "tailwindcss": "^4.2.2",
     "typescript": "^5.7.2",
-    "vite": "^6.0.5",
-    "tailwindcss": "^4.0.0",
-    "@tailwindcss/vite": "^4.0.0"
+    "vite": "^6.0.5"
   }
 }

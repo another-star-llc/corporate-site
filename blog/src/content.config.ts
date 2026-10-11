@@ -1,7 +1,10 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { z } from 'astro/zod';
+import { glob } from 'astro/loaders';
 
 const posts = defineCollection({
-  type: 'content',
+  // 記事ファイル名（拡張子なし）がそのまま id になり、公開URL /blog/<id>/ に使われる。
+  loader: glob({ pattern: '*.md', base: './src/content/posts' }),
   schema: z.object({
     title: z.string(),
     description: z.string(),
@@ -19,6 +22,9 @@ const posts = defineCollection({
     // 臨時号（重大ニュース即日号）フラグ
     breaking: z.boolean().default(false),
     draft: z.boolean().default(false),
+    // slug を書くと公開URLがファイル名と変わり、サイトマップの lastmod（astro.config.mjs）と対応しなくなる。
+    // 書き方に関係なくビルドで止めるため、値があればエラーにする。
+    slug: z.never().optional(),
   }),
 });
 

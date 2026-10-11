@@ -1,8 +1,8 @@
-import { useState, useCallback, useRef, type ReactNode } from 'react';
+import { Component, useState, useCallback, useEffect, useRef, lazy, Suspense, type MouseEvent, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { SpaceBackground } from './SpaceBackground';
 import { ChicWindow } from './ChicWindow';
 import { getWindowContent } from './WindowContents';
+import { companyPathForWindow } from '../data/companyPages';
 import { useHeroFadeProgress, useScrollLock } from '../hooks';
 import {
   Target,
@@ -27,6 +27,38 @@ interface WindowState {
 
 type FocusPlanetSide = 'left' | 'right' | null;
 
+// 3D 表示（three.js、約 490KB）は別チャンクに分け、ホームの初回読み込みから外す。
+// 読み込みはこのモジュールの評価時に始め、マウントまでの待ち時間を減らす。
+// 失敗した場合は、lazy の中でもう一度 import する（先に始めた読み込みの失敗を使い回さない）。
+const loadSpaceBackground = () => import('./SpaceBackground');
+const preloadedSpaceBackground = typeof window === 'undefined' ? undefined : loadSpaceBackground();
+preloadedSpaceBackground?.catch(() => {});
+const SpaceBackground = lazy(() =>
+  (preloadedSpaceBackground ?? Promise.reject())
+    .catch(loadSpaceBackground)
+    .then((m) => ({ default: m.SpaceBackground })),
+);
+
+// 3D の読み込みに失敗しても（回線不良、デプロイ直後の古いファイルなど）、
+// ホームのメニュー・本文は表示したままにし、3D だけを出さない。
+class SpaceBackgroundBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+  state = { failed: false };
+
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+
+  render() {
+    return this.state.failed ? null : this.props.children;
+  }
+}
+
+// メニューは /about などへの通常のリンクとして出し（クローラ・新規タブ用）、
+// 修飾キーなしのクリックだけ従来どおりモーダルで開く。
+function isModifiedClick(e: MouseEvent<HTMLAnchorElement>) {
+  return e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey;
+}
+
 export function MainInterface() {
   const [windows, setWindows] = useState<WindowState[]>([]);
   const [highestZIndex, setHighestZIndex] = useState(100);
@@ -40,6 +72,11 @@ export function MainInterface() {
   const overlayOpacity = heroFadeProgress * 0.8;
 
   useScrollLock(hasOpenWindow);
+
+  // prerender とハイドレーション直後は 3D を描かず、マウント後に差し込む。
+  // サーバーの HTML とクライアントの初回描画を一致させるため（どちらも黒背景のみ）。
+  const [canRenderSpace, setCanRenderSpace] = useState(false);
+  useEffect(() => setCanRenderSpace(true), []);
 
   const scrollToNews = () => {
     setWindows([]);
@@ -137,13 +174,19 @@ export function MainInterface() {
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
     >
-      <SpaceBackground
-        onPlanetClick={(id, screenPos) => { setFocusPlanetId(id); openWindow(id, screenPos); }}
-        onPlanetHover={() => {}}
-        onEmptyClick={() => { setFocusPlanetId(null); setFocusPlanetSide(null); setWindows([]); }}
-        focusPlanetId={focusPlanetId}
-        focusPlanetSide={focusPlanetSide}
-      />
+      {canRenderSpace && (
+        <SpaceBackgroundBoundary>
+          <Suspense fallback={null}>
+            <SpaceBackground
+              onPlanetClick={(id, screenPos) => { setFocusPlanetId(id); openWindow(id, screenPos); }}
+              onPlanetHover={() => {}}
+              onEmptyClick={() => { setFocusPlanetId(null); setFocusPlanetSide(null); setWindows([]); }}
+              focusPlanetId={focusPlanetId}
+              focusPlanetSide={focusPlanetSide}
+            />
+          </Suspense>
+        </SpaceBackgroundBoundary>
+      )}
 
       {/* ヘッダーナビゲーション */}
       <header className="fixed top-0 left-0 right-0 z-[1000]">
@@ -165,9 +208,14 @@ export function MainInterface() {
               BLOG
             </a>
             {menuItems.map(item => (
-              <button
+              <a
                 key={item.id}
-                onClick={() => handleNavClick(item.id)}
+                href={companyPathForWindow(item.id)}
+                onClick={(e) => {
+                  if (isModifiedClick(e)) return;
+                  e.preventDefault();
+                  handleNavClick(item.id);
+                }}
                 className={`text-xs tracking-[0.15em] uppercase transition-colors duration-200 ${
                   focusPlanetId === item.id
                     ? 'text-white'
@@ -175,7 +223,7 @@ export function MainInterface() {
                 }`}
               >
                 {item.label}
-              </button>
+              </a>
             ))}
             <button
               onClick={scrollToNews}
@@ -222,9 +270,12 @@ export function MainInterface() {
                 BLOG
               </a>
               {menuItems.map(item => (
-                <button
+                <a
                   key={item.id}
-                  onClick={() => {
+                  href={companyPathForWindow(item.id)}
+                  onClick={(e) => {
+                    if (isModifiedClick(e)) return;
+                    e.preventDefault();
                     handleNavClick(item.id);
                     setIsMobileMenuOpen(false);
                   }}
@@ -235,7 +286,7 @@ export function MainInterface() {
                   }`}
                 >
                   {item.label}
-                </button>
+                </a>
               ))}
               <button
                 onClick={scrollToNews}

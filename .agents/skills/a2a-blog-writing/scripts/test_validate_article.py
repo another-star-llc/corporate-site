@@ -34,7 +34,7 @@ class ValidateArticleTest(unittest.TestCase):
         self.public = self.repo / "blog/public"
         self.posts.mkdir(parents=True)
         self.public.mkdir(parents=True)
-        (self.repo / "blog/src/content/config.ts").touch()
+        (self.repo / "blog/src/content.config.ts").touch()
         self.article = self.posts / "sample-article.md"
         self.image = self.public / "sample-article-eyecatch.webp"
         self.image.write_bytes(webp_vp8x(1672, 941))
@@ -164,6 +164,29 @@ draft: false
         self.write_article(self.valid_body(), 'author: ""\n')
         errors = MODULE.validate_article(self.article, self.repo)
         self.assertIn("authorを使う場合は空でない文字列にしてください", errors)
+
+    def test_rejects_slug_override(self) -> None:
+        self.write_article(self.valid_body(), 'slug: "custom-url"\n')
+        errors = MODULE.validate_article(self.article, self.repo)
+        self.assertIn(
+            "frontmatterにslugを書かないでください。公開URLはファイル名で決まります", errors
+        )
+
+    def test_rejects_slug_override_in_other_yaml_forms(self) -> None:
+        for line in ('slug : custom-url\n', '"slug": custom-url\n', "'slug': custom-url\n"):
+            with self.subTest(line=line):
+                self.write_article(self.valid_body(), line)
+                errors = MODULE.validate_article(self.article, self.repo)
+                self.assertIn(
+                    "frontmatterにslugを書かないでください。公開URLはファイル名で決まります", errors
+                )
+
+    def test_allows_keys_that_only_start_with_slug(self) -> None:
+        self.write_article(self.valid_body(), 'slugline: "見出し"\n')
+        errors = MODULE.validate_article(self.article, self.repo)
+        self.assertNotIn(
+            "frontmatterにslugを書かないでください。公開URLはファイル名で決まります", errors
+        )
 
 
 if __name__ == "__main__":

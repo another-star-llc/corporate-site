@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <!--
+      /about /mission /members /systems /contact 共通のテンプレート。
+      __PAGE_*__ は scripts/prerender.mjs が src/data/companyPages.ts の値で置き換え、
+      dist/<slug>/index.html として書き出す。このファイル自体は公開しない。
+    -->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0QHYFTBBB2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-0QHYFTBBB2');
+    </script>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#0b2149" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="__PAGE_DESCRIPTION__" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="__PAGE_URL__" />
+    <link rel="alternate" type="text/plain" title="llms.txt" href="/llms.txt" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="__PAGE_TITLE__" />
+    <meta property="og:description" content="__PAGE_DESCRIPTION__" />
+    <meta property="og:url" content="__PAGE_URL__" />
+    <meta property="og:site_name" content="Another Star合同会社" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:image" content="https://www.another-star.jp/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="ANOTHER STAR — もうひとつの星を、ともに創る。" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="__PAGE_TITLE__" />
+    <meta name="twitter:description" content="__PAGE_DESCRIPTION__" />
+    <meta name="twitter:image" content="https://www.another-star.jp/og-image.png" />
+    <meta name="twitter:image:alt" content="ANOTHER STAR — もうひとつの星を、ともに創る。" />
+    <title>__PAGE_TITLE__</title>
+    <script type="application/ld+json">__PAGE_JSON_LD__</script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/company.tsx"></script>
+  </body>
+</html>
