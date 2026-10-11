@@ -262,7 +262,7 @@ body,
   margin-top: 1.4rem;
 }
 
-.blog-prose strong {
+.blog-prose strong:not(.report *) {
   color: #fff;
   font-weight: 550;
 }
