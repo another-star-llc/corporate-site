@@ -65,6 +65,7 @@ const ogImage = new URL(image, Astro.site);
     <meta name="twitter:image" content={ogImage} />
     <link rel="alternate" type="application/rss+xml" title="A2A Insights" href="/blog/rss.xml" />
     <link rel="sitemap" href="/blog/sitemap-index.xml" />
+    <slot name="head" />
   </head>
   <body class:list={{ 'bare-layout': bare }}>
     {bare ? (

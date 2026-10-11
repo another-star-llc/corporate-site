@@ -20,7 +20,6 @@ Another Starは、企業が外部エージェントを探して仕事を任せ�
 
 > 規格・製品の情報は2026年10月時点です。当社の決済連携・取引管理は構想段階で、将来の市場像や価格、仲介料10％は説明のための仮定です。
 
-<link rel="stylesheet" href="/blog/a2a-agent-payments-diagrams.css">
 
 ## エージェントが売買する未来
 

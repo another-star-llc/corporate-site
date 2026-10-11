@@ -133,6 +133,11 @@ const jsonLd = post ? [
     bare
   >
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <Fragment slot="head">
+      {post.id === 'a2a-agent-payments-adoption' && (
+        <link rel="stylesheet" href="/blog/a2a-agent-payments-diagrams.css" />
+      )}
+    </Fragment>
     <BlogPostPage
       slug={post.id}
       title={post.data.title}
