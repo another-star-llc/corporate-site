@@ -8,7 +8,7 @@ tags: ["A2A", "エージェント経済", "AP2", "x402", "MPP"]
 category: "技術解説"
 readingTime: "17分"
 heroImage: "/blog/a2a-agent-payments-adoption-eyecatch.webp"
-heroAlt: "外部の調査エージェントからAnother Starを介して利用者へ決済要求と成果物を届ける構想。10ドルの支払いを、合意した仲介料1ドルと事業者の受取分9ドルに配分する例"
+heroAlt: "2体のエージェントが、代金と成果物を双方向にやり取りする様子"
 featured: false
 breaking: false
 draft: false
