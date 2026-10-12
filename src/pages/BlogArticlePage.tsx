@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { ArrowRight, Check, ExternalLink } from 'lucide-react';
 import { BlogShell, Breadcrumbs } from '../components/BlogShell';
-import { ArticleCTA, AdjacentArticles, TableOfContents, type RelatedLink } from '../components/ArticleSections';
+import { ArticleCTA, AdjacentArticles, ShareButtons, TableOfContents, type RelatedLink } from '../components/ArticleSections';
 import { getArticleAuthor, getBlogArticle, type BlogArticle } from '../data/blogArticles';
 
 export interface BlogArticlePageProps {
@@ -115,6 +115,8 @@ function Article({ article, prev, next }: { article: BlogArticle } & Pick<BlogAr
                     ))}
                   </ol>
                 </section>
+
+                <ShareButtons slug={article.slug} title={article.title} />
 
                 <ArticleCTA slug={article.slug} />
                 <AdjacentArticles prev={prev} next={next} />

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { BlogShell, Breadcrumbs } from '../components/BlogShell';
-import { ArticleCTA, AdjacentArticles, TableOfContents, type RelatedLink } from '../components/ArticleSections';
+import { ArticleCTA, AdjacentArticles, ShareButtons, TableOfContents, type RelatedLink } from '../components/ArticleSections';
 
 export interface BlogPostPageProps {
   slug: string;
@@ -104,6 +104,8 @@ export function BlogPostPage({
                 )}
 
                 <div className="blog-prose blog-prose-md">{children}</div>
+
+                <ShareButtons slug={slug} title={title} />
 
                 <ArticleCTA slug={slug} />
                 <AdjacentArticles prev={prev} next={next} />
