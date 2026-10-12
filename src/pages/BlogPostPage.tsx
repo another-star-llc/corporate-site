@@ -71,6 +71,7 @@ export function BlogPostPage({
                   <span aria-hidden="true">•</span>
                   <span>{author}</span>
                 </div>
+                <ShareButtons slug={slug} title={title} compact />
               </div>
 
               {heroImage && (
