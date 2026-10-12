@@ -102,4 +102,4 @@ main へのマージで Vercel が本番にデプロイします。Pull Request 
 
 ## ライセンス
 
-© 2025 Another Star合同会社. All rights reserved.
+© 2025–2026 Another Star合同会社. All rights reserved.
