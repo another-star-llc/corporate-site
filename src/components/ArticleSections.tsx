@@ -30,6 +30,47 @@ export function ArticleCTA({ slug }: { slug: string }) {
   );
 }
 
+const shareLinkClassName =
+  'inline-flex min-h-11 items-center gap-2 rounded-full border border-white/20 px-5 text-sm text-white transition-colors hover:border-cyan-300/40 hover:text-cyan-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300';
+
+/**
+ * 記事末尾の共有リンク（X・はてなブックマーク）。
+ * どちらも公式の JS（widgets.js / bookmark_button.js）は読み込まず、ただのリンクにしている
+ * （外部JSを増やさず、見た目をサイトに合わせるため）。
+ */
+export function ShareButtons({ slug, title }: { slug: string; title: string }) {
+  // canonical と同じ URL（trailingSlash: 'always'）。
+  const url = `https://www.another-star.jp/blog/${slug}/`;
+  return (
+    <div className="mt-14 flex flex-wrap gap-3">
+      {/* X の Web Intent。widgets.js なしでは text・url がページから自動で補われないため、明示して渡す。 */}
+      <a
+        href={`https://x.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Xでポスト"
+        className={shareLinkClassName}
+      >
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
+          <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+        </svg>
+        Xでポスト
+      </a>
+      {/* リンク先は、公式ボタンが使うエントリーページ（/entry/s/…）ではなく、追加画面を開く add?mode=confirm にしている。 */}
+      <a
+        href={`https://b.hatena.ne.jp/add?mode=confirm&url=${encodeURIComponent(url)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="はてなブックマークに追加"
+        className={shareLinkClassName}
+      >
+        <span className="font-bold tracking-tight" aria-hidden="true">B!</span>
+        はてなブックマークに追加
+      </a>
+    </div>
+  );
+}
+
 /**
  * 発行順で前後にある記事への導線。
  * 手書きの関連記事指定だとどの記事でも同じ顔ぶれになりがちなので、発行順で機械的に出す。
