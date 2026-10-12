@@ -90,7 +90,7 @@ export function AboutContent() {
       </div>
 
       <div className="grid grid-cols-2 gap-2">
-        <InfoBlock label="設立">2025年7月22日</InfoBlock>
+        <InfoBlock label="設立">2025年7月14日</InfoBlock>
         <InfoBlock label="資本金">50万円</InfoBlock>
       </div>
       <div className="mt-2">
