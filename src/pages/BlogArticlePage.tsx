@@ -57,6 +57,7 @@ function Article({ article, prev, next }: { article: BlogArticle } & Pick<BlogAr
                   <span aria-hidden="true">•</span>
                   <span>{getArticleAuthor(article)}</span>
                 </div>
+                <ShareButtons slug={article.slug} title={article.title} compact />
               </div>
 
               {/* 一覧のサムネイルと同じ画像。ファーストビュー内なので eager + 寸法指定で CLS を防ぐ。 */}
