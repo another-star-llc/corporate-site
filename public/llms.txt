@@ -84,7 +84,7 @@ A2Aの仕様変更・企業での採用・セキュリティ情報を、一次�
 - **正式名称**: Another Star合同会社（Another Star LLC）
 - **設立**: 2025年7月14日
 - **所在地**: 〒107-0062 東京都港区南青山3丁目1番36号 青山丸竹ビル6F
-- **代表**: 安田 直也（代表社員）
+- **代表**: 安田 直也（代表社員 兼 CTO）
 - **公式サイト**: https://www.another-star.jp/
 - **受賞**: NEDO GENIAC-PRIZE 2025 みらいビジョン賞（特別賞）受賞（発表: https://prtimes.jp/main/html/rd/p/000000002.000180278.html ）
 - **お問い合わせ**: contact@another-star.jp
