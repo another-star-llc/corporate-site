@@ -12,7 +12,7 @@ const logMessages = [
   { type: 'system', color: 'blue', text: 'Scanning sector...' },
   { type: 'system', color: 'cyan', text: 'Navigation ready' },
   // メンバー紹介
-  { type: 'member', color: 'purple', text: 'MEMBERS: Naoya Yasuda - CEO / Software Engineer' },
+  { type: 'member', color: 'purple', text: 'MEMBERS: Naoya Yasuda - CEO & CTO / Software Engineer' },
   { type: 'member', color: 'pink', text: 'MEMBERS: Shinnosuke Saito - COO / AI Engineer' },
   { type: 'member', color: 'teal', text: 'MEMBERS: Taichi Hiromatsu - AI Safety Architect' },
   { type: 'member', color: 'indigo', text: 'MEMBERS: Koji Sato - Documentation Specialist' },

@@ -147,7 +147,7 @@ export function PeopleContent() {
         <PersonCard
           img={naoyaYasudaImg}
           name="安田 直也"
-          role="共同創業者 / 代表社員"
+          role="共同創業者 / 代表社員 兼 CTO"
           description="複数のSIerを経てフリーランスのFDEとして活動。並行して公正取引委員会にてデジタルアナリストを兼務。"
           detail={
             <div className="grid grid-cols-2 gap-2">
